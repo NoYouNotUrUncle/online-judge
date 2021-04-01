@@ -1,7 +1,7 @@
 DMOJOWO: Modern Owoline Judge OWO what? OWO [![Build Status](https://github.com/DMOJ/online-judge/workflows/build/badge.svg)](https://github.com/DMOJ/online-judge/actions/) [![Slack](https://slack.dmoj.ca/badge.svg)](https://slack.dmoj.ca)
 =====
 
-UWU
+UWU PR time ??
 
 Lakshy Bad 
 
