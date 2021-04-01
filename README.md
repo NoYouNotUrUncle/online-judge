@@ -3,7 +3,7 @@ DMOJOWO: Modern Owoline Judge OWO what? OWO [![Build Status](https://github.com/
 
 UWU
 
-Lakshy Bad sdasdasd
+Lakshy Bad 
 
 A modern [open-source](https://github.com/DMOJ/online-judge/blob/master/LICENSE) online judge and contest platform system. It has been used to host hundreds of competitions, including several national olympiads.
 
