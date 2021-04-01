@@ -41,6 +41,47 @@
         .problem-info-entry {
             padding-top: 0.5em;
         }
+
+        .vote-form{
+            background-color: rgb(255,255,255);
+            padding: 40px;
+            border-radius: 25px;
+            justify-content: center;
+            align-items: center;
+            margin: auto;
+            text-align: center;
+        }
+
+        .vote-form-info{
+            font-size: 24px;
+            font-weight: bold;
+            padding:10px
+        }
+
+        .vote-form-value{
+            font-size: 24px;
+        }
+
+        .vote-form-text{
+            font-size: 18px;
+        }
+
+        .voting-form-error {
+            font-size: 18px;
+            color: red;
+        }
+
+        .vote-button{
+            float:right;
+        }
+
+        .form-button {
+            cursor: pointer;
+        }
+
+        .errorlist {
+            list-style: none;
+        }
     </style>
 {% endblock %}
 
@@ -126,6 +167,109 @@
     {% endif %}
     <div><a href="{{ url('chronological_submissions', problem.code) }}">{{ _('All submissions') }}</a></div>
     <div><a href="{{ url('ranked_submissions', problem.code) }}">{{ _('Best submissions') }}</a></div>
+
+    {% if not in_contest %}
+        <hr style="padding-top: 0.1em">
+        {% include 'lightbox.html' %}
+    {% endif %}
+
+    {% if can_vote %}
+        <div class="vote-form" id="id_vote_form">
+            {% if has_voted %}
+                <span class="vote-form-info">{{ _('Current Vote:') }}</span>
+                <span class="vote-form-value">{{ voted_points|floatformat }}</span>
+                <br/> <br/>
+                <span class="vote-form-text">{{  _('Change your vote below!') }}</span>
+            {% else %}
+                <span class="vote-form-text">{{ _("Cast your vote on this problem's weightage below!") }}</span>
+            {% endif %}
+            <br/> <br/>
+            <form method="post"> {% csrf_token %}
+                <span class="vote-form-info">{{ _('Points') }}</span>
+                <input class="vote-form-value" type="number" step="any" name="points" id="id_points" value={{ points_placeholder }}>
+                {% if has_errors and 'points' in problem_points_vote_form.errors %}
+                    <br/>
+                    <span class="voting-form-error">{{ _(problem_points_vote_form.errors['points'][0]) }}</span>
+                    <br/>
+                {% else %}
+                    <br/> <br/>
+                {% endif %}
+                <span class="vote-form-info">{{ _('Note') }}</span>
+                <br/>
+                <textarea class="vote-form-text" name="note" id="id_note" rows="6" cols="80">{{ note_placeholder }}</textarea>
+                {% if has_errors and 'note' in problem_points_vote_form.errors %}
+                    <br/>
+                    <span class="voting-form-error">{{  _(problem_points_vote_form.errors['note'][0]) }}</span>
+                    <br/>
+                {% else %}
+                    <br/> <br/>
+                {% endif %}
+                <input type="submit" value="{{  _('Vote') }}" class="vote-button"/>
+                <input type="hidden" name="vote_confirmation"/>
+            </form>
+        </div>
+
+        <a class="form-button" id="id_vote_button">{% if has_voted %}Change vote{% else %}Vote on problem points{% endif %}</a>
+        {% if has_voted %}
+            <form method="post" id="id_delete_vote_form"> {% csrf_token %}
+                <a class="form-button" id="id_delete_vote_button">{{   _('Delete vote') }}</a>
+                <input type="hidden" name="delete_confirmation"/>
+            </form>
+        {% endif %}
+
+        <script defer>
+            //clear default upon the first click of the note box
+            let cleared_default = false
+            const note_field = document.getElementById('id_note')
+            note_field.onclick = function(){
+                {% if not has_voted %}
+                    if(!cleared_default){
+                        cleared_default = true
+                        note_field.innerHTML = ''
+                    }
+                {% endif %}
+            }
+
+            const voting_lightbox = createLightbox('id_voting_lightbox', 'id_vote_form')
+
+            {% if has_errors %}
+                activateLightbox(voting_lightbox)
+            {% endif %}
+
+            const vote_button = document.getElementById('id_vote_button')
+            vote_button.onclick = function() {
+                activateLightbox(voting_lightbox)
+            }
+
+            {% if has_voted %}
+                const delete_vote_form = document.getElementById('id_delete_vote_form')
+                const delete_vote_button = document.getElementById('id_delete_vote_button')
+                delete_vote_button.onclick = function(){
+                    delete_vote_form.submit()
+                }
+            {% endif %}
+        </script>
+    {% endif %}
+
+    {% if not in_contest %}
+        <script>
+            let vote_stats_lightbox = null
+        </script>
+
+        {% include 'voting-stats.html' %}
+        <a class="form-button" id="id_vote_stats_button">Voting statistics</a>
+
+        <script defer>
+            vote_stats_lightbox = createLightbox('id_vote_stats_lightbox', 'id_vote_stats')
+
+            const vote_stats_button = document.getElementById('id_vote_stats_button')
+            vote_stats_button.onclick = function() {
+                activateLightbox(vote_stats_lightbox)
+                startVotingStatsAnimation()
+            }
+        </script>
+    {% endif %}
+
     {% if (editorial and editorial.is_accessible_by(request.user)) and not request.in_contest %}
         <hr>
         <div><a href="{{ url('problem_editorial', problem.code) }}">{{ _('Read editorial') }}</a></div>

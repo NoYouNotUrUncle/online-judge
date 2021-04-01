@@ -1,4 +1,5 @@
 import logging
+import math
 import os
 import shutil
 from datetime import timedelta
@@ -7,7 +8,7 @@ from random import randrange
 
 from django.conf import settings
 from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
-from django.core.exceptions import ObjectDoesNotExist, PermissionDenied
+from django.core.exceptions import ObjectDoesNotExist, PermissionDenied, ValidationError
 from django.db import transaction
 from django.db.models import Count, F, Prefetch, Q
 from django.db.utils import ProgrammingError
@@ -25,8 +26,8 @@ from django.views.generic.base import TemplateResponseMixin
 from django.views.generic.detail import SingleObjectMixin
 
 from judge.comments import CommentedDetailView
-from judge.forms import ProblemCloneForm, ProblemSubmitForm
-from judge.models import ContestSubmission, Judge, Language, Problem, ProblemGroup, \
+from judge.forms import ProblemCloneForm, ProblemPointsVoteForm, ProblemSubmitForm
+from judge.models import ContestSubmission, Judge, Language, Problem, ProblemGroup, ProblemPointsVote, \
     ProblemTranslation, ProblemType, RuntimeVersion, Solution, Submission, SubmissionSource, \
     TranslatedProblemForeignKeyQuerySet
 from judge.pdf_problems import DefaultPdfMaker, HAS_PDF
@@ -157,6 +158,18 @@ class ProblemDetail(ProblemMixin, SolvedProblemMixin, CommentedDetailView):
     def get_comment_page(self):
         return 'p:%s' % self.object.code
 
+    def can_vote(self, user, problem):
+        if not user.is_authenticated:  # reject anons
+            return False
+        banned = user.profile.is_banned_from_voting_problem_points  # banned from voting site wide
+        in_contest = user.profile.current_contest is not None  # whether or not they're in contest
+        # already ac'd this q, not in contest, and also not banned
+        ac = Submission.objects.filter(user=user.profile, problem=problem, result='AC').exists()
+        return ac and not in_contest and not banned
+
+    def default_note(self):
+        return _('A short justification for this problem\'s points value.')
+
     def get_context_data(self, **kwargs):
         context = super(ProblemDetail, self).get_context_data(**kwargs)
         user = self.request.user
@@ -213,7 +226,116 @@ class ProblemDetail(ProblemMixin, SolvedProblemMixin, CommentedDetailView):
                                           context['description'], 'problem')
         context['meta_description'] = self.object.summary or metadata[0]
         context['og_image'] = self.object.og_image or metadata[1]
+
+        context['can_vote'] = self.can_vote(user, self.object)  # if this problem is votable by this user
+        # the vote this user has already cast on this problem
+        if context['can_vote']:
+            vote = ProblemPointsVote.objects.filter(voter=user.profile, problem=self.object)
+        # whether or not they've already voted
+        context['has_voted'] = context['can_vote'] and vote.exists()
+        if context['has_voted']:
+            context['voted_points'] = vote.first().points  # the previous vote's points
+            context['voted_note'] = vote.first().note
+
+        if 'problem_points_vote_form' not in context:
+            context['problem_points_vote_form'] = ProblemPointsVoteForm({})
+
+        if 'has_errors' not in context:
+            context['has_errors'] = False
+
+        if 'points_placeholder' not in context:  # placeholder for the points
+            if context['has_voted']:  # if voted, the vote
+                context['points_placeholder'] = context['voted_points']
+            else:  # otherwise a *nice* default
+                context['points_placeholder'] = 69.42069
+
+        if 'note_placeholder' not in context:
+            if context['has_voted']:
+                context['note_placeholder'] = context['voted_note']
+            else:
+                context['note_placeholder'] = self.default_note()
+
+        all_votes = sorted([v.points for v in ProblemPointsVote.objects.filter(problem=self.object)])
+        context['has_votes'] = len(all_votes) > 0
+        if context['has_votes']:
+            context['mean_vote'] = sum(all_votes) / len(all_votes)
+            context['num_votes'] = len(all_votes)
+            context['min_vote'] = all_votes[0]
+            context['max_vote'] = all_votes[-1]
+
+            # provides index and value of the median of some range of the data
+            def median(left_index, right_index, data):
+                size = right_index - left_index + 1
+                index = left_index + (size - 1) / 2
+                value = None
+                if size % 2 == 1:
+                    value = data[int(index)]
+                else:
+                    value = (data[math.floor(index)] + data[math.ceil(index)]) / 2
+                return index, value
+
+            median_data = median(0, len(all_votes) - 1, all_votes)
+            context['median_vote'] = median_data[1]
+            median_index = median_data[0]
+
+            context['enough_data_for_plot'] = len(all_votes) > 2
+            if context['enough_data_for_plot']:
+                # box and whisker plot data
+                q1 = median(0, math.ceil(median_index - 1), all_votes)  # first quartile
+                q3 = median(math.floor(median_index + 1), len(all_votes) - 1, all_votes)  # second quartile
+                context['first_quartile'] = q1[1]
+                context['third_quartile'] = q3[1]
+
+            context['in_contest'] = contest_problem is not None
+
+            if context['can_vote']:
+                context['all_votes'] = all_votes
+
+            context['max_possible_vote'] = settings.DMOJ_PROBLEM_MAX_USER_POINTS_VOTE
+            context['min_possible_vote'] = settings.DMOJ_PROBLEM_MIN_USER_POINTS_VOTE
+
         return context
+
+    def post(self, request, *args, **kwargs):
+        self.object = self.get_object()
+
+        if 'vote_confirmation' in request.POST:  # deal with request as problem points vote
+            if not self.can_vote(request.user, self.object):  # not allowed to vote for some reason
+                return HttpResponseForbidden()
+            else:
+                form = ProblemPointsVoteForm(request.POST)
+                try:
+                    if form.is_valid():
+                        # delete any pre existing votes (will be replaced by new one)
+                        ProblemPointsVote.objects.filter(voter=request.user.profile, problem=self.object).delete()
+                        vote = form.save(commit=False)
+                        vote.voter = request.user.profile
+                        vote.problem = self.object
+                        if vote.note == self.default_note() or vote.note.strip() == '':
+                            vote.note = ' '  # correct to blank
+                        vote.save()
+                        return self.get(request, *args, **kwargs)
+                    else:
+                        raise ValidationError  # go to invalid case
+                except ValidationError:
+                    context = self.get_context_data(
+                        object=self.object,
+                        comment_request=request,  # comment needs this to initialize
+                        problem_points_vote_form=form,  # extra context for the form re-rendering
+                        has_errors=True,
+                        points_placeholder=request.POST['points'],
+                        note_placeholder=request.POST['note'],
+                    )
+                    return self.render_to_response(context)
+
+        elif 'delete_confirmation' in request.POST:
+            if not request.user.is_authenticated:  # un authed person tries to find a way to delete
+                return HttpResponseForbidden()
+            # delete anything that matches (if nothing matches it doesn't matter)
+            ProblemPointsVote.objects.filter(voter=request.user.profile, problem=self.object).delete()
+            return self.get(request, *args, **kwargs)
+        else:  # forward to next level of post request (comment post request as of writing)
+            return super(ProblemDetail, self).post(request, *args, **kwargs)
 
 
 class LatexError(Exception):
