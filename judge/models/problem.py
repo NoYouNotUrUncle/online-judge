@@ -130,6 +130,7 @@ class Problem(models.Model):
                                help_text=_('Points awarded for problem completion. '
                                            "Points are displayed with a 'p' suffix if partial."),
                                validators=[MinValueValidator(settings.DMOJ_PROBLEM_MIN_PROBLEM_POINTS)])
+    community_points = models.FloadField() #The community decided points value for this problem
     partial = models.BooleanField(verbose_name=_('allows partial points'), default=False)
     allowed_languages = models.ManyToManyField(Language, verbose_name=_('allowed languages'),
                                                help_text=_('List of allowed submission languages.'))
