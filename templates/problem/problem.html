@@ -275,7 +275,14 @@
             </div>
         </div>
     {% endif %}
+
     <hr style="padding-top: 0.3em">
+
+    <form method="POST"> {% csrf_token %}
+    {{ problem_points_vote_form.as_p }}
+    <input type="submit" value="VOTE" />
+    </form>
+
 {% endblock %}
 
 {% block description %}

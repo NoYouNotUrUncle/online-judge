@@ -25,9 +25,9 @@ from django.views.generic.base import TemplateResponseMixin
 from django.views.generic.detail import SingleObjectMixin
 
 from judge.comments import CommentedDetailView
-from judge.forms import ProblemCloneForm, ProblemSubmitForm
+from judge.forms import ProblemCloneForm, ProblemSubmitForm, ProblemPointsVoteForm
 from judge.models import ContestSubmission, Judge, Language, Problem, ProblemGroup, \
-    ProblemTranslation, ProblemType, RuntimeVersion, Solution, Submission, SubmissionSource, \
+    ProblemTranslation, ProblemType, RuntimeVersion, Solution, Submission, SubmissionSource, ProblemPointsVote, \
     TranslatedProblemForeignKeyQuerySet
 from judge.pdf_problems import DefaultPdfMaker, HAS_PDF
 from judge.utils.diggpaginator import DiggPaginator
@@ -157,6 +157,14 @@ class ProblemDetail(ProblemMixin, SolvedProblemMixin, CommentedDetailView):
     def get_comment_page(self):
         return 'p:%s' % self.object.code
 
+    def can_vote(self, user):
+        if not user.is_authenticated: #reject anons
+            return False
+        banned = user.profile.is_banned_from_voting_problem_points  # banned from voting site wide
+        in_contest = user.profile.current_contest is not None #whether or not they're in contest
+        #already ac'd this q, not in contest, and also not banned
+        return self.object.id in user_completed_ids(user) and not in_contest and not banned
+
     def get_context_data(self, **kwargs):
         context = super(ProblemDetail, self).get_context_data(**kwargs)
         user = self.request.user
@@ -213,7 +221,46 @@ class ProblemDetail(ProblemMixin, SolvedProblemMixin, CommentedDetailView):
                                           context['description'], 'problem')
         context['meta_description'] = self.object.summary or metadata[0]
         context['og_image'] = self.object.og_image or metadata[1]
+
+        context['can_vote'] = self.can_vote(user) #if this problem is votable by this user
+        #the vote this user has already cast on this problem
+        vote = ProblemPointsVote.objects.filter(voter=user.profile, problem=self.object)
+        #whether or not they've already voted
+        context['has_voted'] = context['can_vote'] and vote.exists()
+        if context['has_voted']:
+            context['voted_points'] = vote.first().points #the previous vote's points
+        else:
+            context['voted_points'] = 4.2069 #default
+
+        context['problem_points_vote_form'] = ProblemPointsVoteForm()
+
         return context
+
+    def post(self, request, *args, **kwargs):
+        self.object = self.get_object()
+
+        #check if this POST request is actually referring to a problem points vote
+        is_points_vote = True
+
+        if is_points_vote: #deal with request as problem points vote
+            if not self.can_vote(request.user): #not allowed to vote for some reason
+                return HttpResponseForbidden()
+            else:
+                form = ProblemPointsVoteForm(request, request.POST)
+                if form.is_valid():
+                    #delete any pre existing votes (replace with new one)
+                    ProblemPointsVote.objects.filter(voter=request.user.profile, problem=self.object).exists().delete()
+                    vote = form.save(commit=False)
+                    vote.voter = request.user
+                    vote.problem = self.object
+                    vote.save()
+                    return self.get(request, *args, **kwargs) #re-render as if it was a get request
+                else:
+                    context = self.get_context_data(object=self.object, problem_points_vote_form=form)
+                    return self.render_to_response(context)
+
+        else: #forward to next level of post request (comment post request as of writing)
+            return super(ProblemDetail, self).post(request, *args, **kwargs)
 
 
 class LatexError(Exception):

@@ -20,6 +20,8 @@ from judge.utils.subscription import newsletter_id
 from judge.widgets import HeavyPreviewPageDownWidget, MathJaxPagedownWidget, PagedownWidget, Select2MultipleWidget, \
     Select2Widget
 
+from judge.models import ProblemPointsVote
+
 two_factor_validators_by_length = {
     6: {
         'regex_validator': RegexValidator('^[0-9]{6}$',
@@ -272,3 +274,15 @@ class ContestCloneForm(Form):
         if Contest.objects.filter(key=key).exists():
             raise ValidationError(_('Contest with key already exists.'))
         return key
+
+class ProblemPointsVoteForm(ModelForm):
+    class Meta:
+        model = ProblemPointsVote
+        fields = ['points','note']
+
+    def __init__(self, request, *args, **kwargs):
+        self.request = request
+        super(ProblemPointsVoteForm, self).__init__(*args, **kwargs)
+
+    def clean(self):
+        return super(ProblemPointsVoteForm, self).clean()
