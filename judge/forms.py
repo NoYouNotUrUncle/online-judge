@@ -279,10 +279,3 @@ class ProblemPointsVoteForm(ModelForm):
     class Meta:
         model = ProblemPointsVote
         fields = ['points','note']
-
-    def __init__(self, request, *args, **kwargs):
-        self.request = request
-        super(ProblemPointsVoteForm, self).__init__(*args, **kwargs)
-
-    def clean(self):
-        return super(ProblemPointsVoteForm, self).clean()
