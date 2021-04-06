@@ -100,11 +100,11 @@ class CommentedDetailView(TemplateResponseMixin, SingleObjectMixin, View):
 
     def get(self, request, *args, **kwargs):
         self.object = self.get_object()
-        kwargs['object'] = self.object
-        kwargs['comment_form'] = CommentForm(request, initial={'page': self.get_comment_page(), 'parent': None})
-        print(kwargs)
-        self.object = self.get_object()
-        return self.render_to_response(self.get_context_data(**kwargs))
+        return self.render_to_response(self.get_context_data(
+            object=self.object,
+            comment_form=CommentForm(request, initial={'page': self.get_comment_page(), 'parent': None}),
+            a='wef'
+        ))
 
     def get_context_data(self, **kwargs):
         context = super(CommentedDetailView, self).get_context_data(**kwargs)
