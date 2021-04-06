@@ -260,6 +260,7 @@ class ProblemDetail(ProblemMixin, SolvedProblemMixin, CommentedDetailView):
                     else:
                         raise ValidationError #go to invalid case
                 except:
+                    print(form.errors)
                     return self.get(request, *args, problem_points_vote_form=form)
 
         else: #forward to next level of post request (comment post request as of writing)
