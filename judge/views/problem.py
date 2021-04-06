@@ -37,7 +37,7 @@ from judge.utils.problems import contest_attempted_ids, contest_completed_ids, h
 from judge.utils.strings import safe_float_or_none, safe_int_or_none
 from judge.utils.tickets import own_ticket_filter
 from judge.utils.views import QueryStringSortMixin, SingleObjectFormView, TitleMixin, add_file_response, generic_message
-
+from django.core.exceptions import ValidationError
 
 def get_contest_problem(problem, profile):
     try:
@@ -248,16 +248,19 @@ class ProblemDetail(ProblemMixin, SolvedProblemMixin, CommentedDetailView):
                 return HttpResponseForbidden()
             else:
                 form = ProblemPointsVoteForm(request.POST)
-                if form.is_valid():
-                    #delete any pre existing votes (will be replaced by new one)
-                    ProblemPointsVote.objects.filter(voter=request.user.profile, problem=self.object).delete()
-                    vote = form.save(commit=False)
-                    vote.voter = request.user.profile
-                    vote.problem = self.object
-                    print(vote.id)
-                    vote.save()
-                    return self.get(request, *args, **kwargs) #re-render as if it was a get request
-                else:
+                try:
+                    valid = form.is_valid()
+                    if valid:
+                        # delete any pre existing votes (will be replaced by new one)
+                        ProblemPointsVote.objects.filter(voter=request.user.profile, problem=self.object).delete()
+                        vote = form.save(commit=False)
+                        vote.voter = request.user.profile
+                        vote.problem = self.object
+                        vote.save()
+                        return self.get(request, *args, **kwargs)  # re-render as if it was a get request
+                    else:
+                        raise ValidationError #go to invalid case
+                except:
                     context = self.get_context_data(object=self.object, problem_points_vote_form=form)
                     return self.render_to_response(context)
 
