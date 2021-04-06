@@ -245,7 +245,7 @@ class ProblemDetail(ProblemMixin, SolvedProblemMixin, CommentedDetailView):
         self.object = self.get_object()
 
         #check if this POST request is actually referring to a problem points vote
-        is_points_vote = True
+        is_points_vote = 'vote_confirmation' in request.POST
 
         if is_points_vote: #deal with request as problem points vote
             if not self.can_vote(request.user, self.object): #not allowed to vote for some reason
