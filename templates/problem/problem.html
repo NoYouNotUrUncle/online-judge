@@ -278,11 +278,21 @@
 
     <hr style="padding-top: 0.3em">
 
-    <form method="POST"> {% csrf_token %}
-    {{ problem_points_vote_form.as_p }}
-    <input type="submit" value="VOTE" />
-    </form>
-
+    {% if can_vote %}
+        {% if has_voted %}
+            <span class="pi-name">Current Vote: </span>
+            <span class="pi-value">{{ voted_points|floatformat }}</span>
+            <br>
+            <span class="pi-value">Change your vote below!</span>
+        {% else %}
+            <span class="pi-value">Cast your vote on this problem's weightage below!</span>
+        {% endif %}
+        <form method="POST"> {% csrf_token %}
+            {{ problem_points_vote_form.as_p }}
+        </form>
+    {% else %}
+        <span class="pi-name">Can't vote !!</span>
+    {% endif %}
 {% endblock %}
 
 {% block description %}
