@@ -247,7 +247,7 @@ class ProblemDetail(ProblemMixin, SolvedProblemMixin, CommentedDetailView):
             if not self.can_vote(request.user, self.object): #not allowed to vote for some reason
                 return HttpResponseForbidden()
             else:
-                form = ProblemPointsVoteForm(request, request.POST)
+                form = ProblemPointsVoteForm(request.POST)
                 if form.is_valid():
                     #delete any pre existing votes (will be replaced by new one)
                     ProblemPointsVote.objects.filter(voter=request.user.profile, problem=self.object).exists().delete()
