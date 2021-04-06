@@ -287,7 +287,7 @@
             <span class="pi-name">Cast your vote on this problem's weightage below!</span>
         {% endif %}
         <p>
-            <form> {% csrf_token %}
+            <form method="post"> {% csrf_token %}
                 {{ problem_points_vote_form.as_p() }}
                 <input type="submit" value="VOTE!"/>
             </form>
