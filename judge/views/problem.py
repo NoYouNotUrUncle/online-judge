@@ -233,7 +233,8 @@ class ProblemDetail(ProblemMixin, SolvedProblemMixin, CommentedDetailView):
         else:
             context['voted_points'] = 4.2069 #default
 
-        context['problem_points_vote_form'] = ProblemPointsVoteForm({})
+        if 'problem_points_vote_form' not in context:
+            context['problem_points_vote_form'] = ProblemPointsVoteForm({})
 
         return context
 
