@@ -260,12 +260,22 @@ class ProblemDetail(ProblemMixin, SolvedProblemMixin, CommentedDetailView):
                         vote.voter = request.user.profile
                         vote.problem = self.object
                         vote.save()
-                        return self.get(request, *args, **kwargs)  # re-render as if it was a get request
+                        context = self.get_context_data(
+                            object=self.object,
+                            comment_request=request, #comment needs this to initialize
+                        )
+                        return self.render_to_response(context)
                     else:
                         raise ValidationError #go to invalid case
                 except:
-                    print(form.errors)
-                    return self.get(request, *args, problem_points_vote_form=form, has_errors=True)
+                    print(form.errors or None)
+                    context = self.get_context_data(
+                        object=self.object,
+                        comment_request=request, #comment needs this to initialize
+                        problem_points_vote_form=form, #extra context
+                        has_errors=True,
+                    )
+                    return self.render_to_response(context)
 
         else: #forward to next level of post request (comment post request as of writing)
             return super(ProblemDetail, self).post(request, *args, **kwargs)

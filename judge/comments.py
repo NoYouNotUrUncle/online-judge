@@ -102,7 +102,7 @@ class CommentedDetailView(TemplateResponseMixin, SingleObjectMixin, View):
         self.object = self.get_object()
         return self.render_to_response(self.get_context_data(
             object=self.object,
-            comment_form=CommentForm(request, initial={'page': self.get_comment_page(), 'parent': None}),
+            comment_request=request
         ))
 
     def get_context_data(self, **kwargs):
@@ -120,5 +120,9 @@ class CommentedDetailView(TemplateResponseMixin, SingleObjectMixin, View):
                                       not profile.submission_set.filter(points=F('problem__points')).exists())
         context['comment_list'] = queryset
         context['vote_hide_threshold'] = settings.DMOJ_COMMENT_VOTE_HIDE_THRESHOLD
+
+        # if we have to create a new comment form, the form's 'request' is guaranteed to have been given by GET or POST
+        if 'comment_form' not in context:
+            context['comment_form'] = CommentForm(context['comment_request'], initial={'page': self.get_comment_page(), 'parent': None})
 
         return context
