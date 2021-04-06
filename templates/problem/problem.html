@@ -286,9 +286,10 @@
         {% else %}
             <span class="pi-name">Cast your vote on this problem's weightage below!</span>
         {% endif %}
-        <!--<form method="POST"> {% csrf_token %}-->
+        <form> {% csrf_token %}
             {{ problem_points_vote_form.as_p }}
-        <!--</form>-->
+            <input type="submit" value="VOTE!"/>
+        </form>
     {% endif %}
 {% endblock %}
 
