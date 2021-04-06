@@ -236,6 +236,9 @@ class ProblemDetail(ProblemMixin, SolvedProblemMixin, CommentedDetailView):
         if 'problem_points_vote_form' not in context:
             context['problem_points_vote_form'] = ProblemPointsVoteForm({})
 
+        if 'has_errors' not in context:
+            context['has_errors'] = False
+
         return context
 
     def post(self, request, *args, **kwargs):
@@ -262,7 +265,7 @@ class ProblemDetail(ProblemMixin, SolvedProblemMixin, CommentedDetailView):
                         raise ValidationError #go to invalid case
                 except:
                     print(form.errors)
-                    return self.get(request, *args, problem_points_vote_form=form)
+                    return self.get(request, *args, problem_points_vote_form=form, has_errors=True)
 
         else: #forward to next level of post request (comment post request as of writing)
             return super(ProblemDetail, self).post(request, *args, **kwargs)

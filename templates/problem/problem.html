@@ -279,6 +279,7 @@
     {% if can_vote %}
         <hr style="padding-top: 0.3em">
         {% if has_voted %}
+            <span class="pi-name">{{ has_errors }}</span>
             <span class="pi-name">Current Vote: </span>
             <span class="pi-value">{{ voted_points|floatformat }}</span>
             <br>
