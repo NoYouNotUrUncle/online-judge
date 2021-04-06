@@ -103,7 +103,6 @@ class CommentedDetailView(TemplateResponseMixin, SingleObjectMixin, View):
         return self.render_to_response(self.get_context_data(
             object=self.object,
             comment_form=CommentForm(request, initial={'page': self.get_comment_page(), 'parent': None}),
-            a='wef'
         ))
 
     def get_context_data(self, **kwargs):
