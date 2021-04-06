@@ -99,6 +99,7 @@ class CommentedDetailView(TemplateResponseMixin, SingleObjectMixin, View):
         return self.render_to_response(context)
 
     def get(self, request, *args, **kwargs):
+        print(kwargs)
         self.object = self.get_object()
         return self.render_to_response(self.get_context_data(
             object=self.object,
