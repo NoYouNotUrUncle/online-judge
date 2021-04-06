@@ -288,7 +288,7 @@
         {% endif %}
         <p>
             <form> {% csrf_token %}
-                {{ problem_points_vote_form.as_p }}
+                {{ problem_points_vote_form.as_p() }}
                 <input type="submit" value="VOTE!"/>
             </form>
         </p>
