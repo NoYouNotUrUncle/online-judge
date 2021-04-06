@@ -287,14 +287,14 @@
         {% else %}
             <span class="pi-name">Cast your vote on this problem's weightage below!</span>
         {% endif %}
-        <form method="post"> {% csrf_token %}
-            <input type="number" name="points" step="any" id="id_points"/>
-            <span class="voting-form-error" name="note-error">rendering?</span>
-            <textarea name="note" cols="20" rows="10" maxlength="2048" id="id_note"/>
-            <span class="voting-form-error" name="note-error">rendering?</span>
-            <input type="submit" value="VOTE!"/>
-            <input type="hidden" name="vote_confirmation"/>
-        </form>
+        <p>
+            <form method="post"> {% csrf_token %}
+                <input type="number" name="points" step="any" id="id_points"/>
+                <textarea name="note" cols="20" rows="10" maxlength="2048" id="id_note"/>
+                <input type="submit" value="VOTE!"/>
+                <input type="hidden" name="vote_confirmation"/>
+            </form>
+        </p>
     {% endif %}
 {% endblock %}
 
