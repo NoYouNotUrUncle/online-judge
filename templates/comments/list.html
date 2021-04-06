@@ -156,7 +156,8 @@
                         <div id="comment-form-body">{{ comment_form.body }}</div>
                     </div>
                     <hr>
-                    <input style="float:right" type="submit" name="post_button" id="post_buttonn" value="{{ _('Post!') }}" class="button">
+                    <input style="float:right" type="submit" value="{{ _('Post!') }}" class="button">
+                    <input type="hidden" name="post_confirmation" value="post_pressed"/>
                 </form>
             {% endif %}
         </div>

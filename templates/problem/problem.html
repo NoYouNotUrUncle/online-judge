@@ -289,7 +289,8 @@
         <p>
             <form method="post"> {% csrf_token %}
                 {{ problem_points_vote_form.as_p() }}
-                <input type="submit" name="vote_button" id="vote_buttonn" value="VOTE!"/>
+                <input type="submit" value="VOTE!"/>
+                <input type="hidden" name="vote_confirmation" value="vote_pressed"/>
             </form>
         </p>
     {% endif %}
