@@ -41,6 +41,10 @@
         .problem-info-entry {
             padding-top: 0.5em;
         }
+
+        .voting-form-error {
+            color: red
+        }
     </style>
 {% endblock %}
 
@@ -289,7 +293,10 @@
         {% endif %}
         <p>
             <form method="post"> {% csrf_token %}
-                {{ problem_points_vote_form.as_p() }}
+                <input type="number" name="points" step="any" id="id_points"/>
+                <span class="voting-form-error" name="note-error">rendering?</span>
+                <textarea name="note" cols="20" rows="10" maxlength="2048" id="id_note"/>
+                <span class="voting-form-error" name="note-error">rendering?</span>
                 <input type="submit" value="VOTE!"/>
                 <input type="hidden" name="vote_confirmation"/>
             </form>
