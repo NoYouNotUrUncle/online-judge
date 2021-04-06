@@ -254,6 +254,7 @@ class ProblemDetail(ProblemMixin, SolvedProblemMixin, CommentedDetailView):
                     vote = form.save(commit=False)
                     vote.voter = request.user
                     vote.problem = self.object
+                    print(vote.id)
                     vote.save()
                     return self.get(request, *args, **kwargs) #re-render as if it was a get request
                 else:
