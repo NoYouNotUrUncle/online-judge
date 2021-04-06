@@ -249,8 +249,7 @@ class ProblemDetail(ProblemMixin, SolvedProblemMixin, CommentedDetailView):
             else:
                 form = ProblemPointsVoteForm(request.POST)
                 try:
-                    valid = form.is_valid()
-                    if valid:
+                    if form.is_valid():
                         # delete any pre existing votes (will be replaced by new one)
                         ProblemPointsVote.objects.filter(voter=request.user.profile, problem=self.object).delete()
                         vote = form.save(commit=False)
