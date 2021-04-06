@@ -290,7 +290,6 @@
         <p>
             <form method="post"> {% csrf_token %}
                 <input type="number" name="points" step="any" id="id_points"/>
-                <textarea name="note" cols="20" rows="10" maxlength="2048" id="id_note"/>
                 <input type="submit" value="VOTE!"/>
                 <input type="hidden" name="vote_confirmation"/>
             </form>
