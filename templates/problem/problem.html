@@ -46,10 +46,6 @@
             color: red;
         }
 
-        .vote-button {
-
-        }
-
         .voting-lightbox {
             position: fixed;
             z-index: 1000;
@@ -153,7 +149,7 @@
 
     {% if can_vote %}
         <hr style="padding-top: 0.1em">
-        <span class ="vote-button" id="id_vote_button">Vote problem points value</span>
+        <span class ="unselectable button full" id="id_vote_button">Vote problem points value</span>
         <script defer>
             const voting_lightbox = document.createElement("div")
             voting_lightbox.id = "lightbox"
