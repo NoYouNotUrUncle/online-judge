@@ -292,12 +292,20 @@
             <span class="pi-name">Cast your vote on this problem's weightage below!</span>
         {% endif %}
 
-            <form method="post"> {% csrf_token %}
-                <input type="number" name="points" step="any" id="id_points"/>
-                <textarea name="note" id="id_note" rows="10" cols="20"></textarea>
-                <input type="submit" value="VOTE!"/>
-                <input type="hidden" name="vote_confirmation"/>
-            </form>
+        <form method="post"> {% csrf_token %}
+            <span>Points:</span>
+            <input type="number" name="points" step="any" id="id_points"/>
+            {% has_errors %}
+                <span>yolo</span>
+            {% endif %}
+            <span>Note:</span>
+            <textarea name="note" id="id_note" rows="10" cols="20"></textarea>
+            {% has_errors %}
+                <span>yolo</span>
+            {% endif %}
+            <input type="submit" value="VOTE!"/>
+            <input type="hidden" name="vote_confirmation"/>
+        </form>
 
     {% endif %}
 {% endblock %}
