@@ -45,6 +45,22 @@
         .voting-form-error {
             color: red;
         }
+
+        #voting_lightbox {
+            position: fixed;
+            z-index: 1000;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.8);
+            display: none;
+        }
+
+        #voting_lightbox.active {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
     </style>
 {% endblock %}
 
@@ -133,7 +149,16 @@
 
     {% if can_vote %}
         <hr style="padding-top: 0.1em">
-        <span>text</span>
+        <span id="id_vote_button" onclick="on_vote_button_clicked()">Vote problem points value</span>
+        <script defer>
+            const voting_lightbox = document.createElement("div")
+            voting_lightbox.id = "lightbox"
+            document.body.appendChild(voting_lightbox)
+
+            function on_vote_button_clicked() {
+                voting_lightbox.classList.add("active")
+            }
+        </script>
         <!--
         {% if has_voted %}
             <span class="pi-name">Current Vote:   </span>
