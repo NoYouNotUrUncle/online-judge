@@ -244,10 +244,7 @@ class ProblemDetail(ProblemMixin, SolvedProblemMixin, CommentedDetailView):
     def post(self, request, *args, **kwargs):
         self.object = self.get_object()
 
-        #check if this POST request is actually referring to a problem points vote
-        is_points_vote = 'vote_confirmation' in request.POST
-
-        if is_points_vote: #deal with request as problem points vote
+        if 'vote_confirmation' in request.POST: #deal with request as problem points vote
             if not self.can_vote(request.user, self.object): #not allowed to vote for some reason
                 return HttpResponseForbidden()
             else:
@@ -277,6 +274,14 @@ class ProblemDetail(ProblemMixin, SolvedProblemMixin, CommentedDetailView):
                     )
                     return self.render_to_response(context)
 
+        elif 'delete_confirmation' in request.POST:
+            #delete anything that matches
+            ProblemPointsVote.objects.filter(voter=request.user.profile, problem=self.object).delete()
+            context = self.get_context_data(
+                object=self.object,
+                comment_request=request,  # comment needs this to initialize
+            )
+            return self.render_to_response(context)
         else: #forward to next level of post request (comment post request as of writing)
             return super(ProblemDetail, self).post(request, *args, **kwargs)
 

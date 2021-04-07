@@ -303,9 +303,16 @@
             {% if has_errors %}
                 <span>yolo</span>
             {% endif %}
-            <input type="submit" value="VOTE!"/>
+            <input type="submit" value="VOTE"/>
             <input type="hidden" name="vote_confirmation"/>
         </form>
+
+        {% if has_voted %}
+            <form method="post"> {% csrf_token %}
+                <input type="submit" value="Delete Vote"/>
+                <input type="hidden" name="delete_confirmation"/>
+            </form>
+        {% endif %}
 
     {% endif %}
 {% endblock %}
