@@ -279,7 +279,23 @@
             </div>
         </div>
     {% endif %}
+{% endblock %}
 
+{% block description %}
+    {% cache 86400 'problem_html' problem.id MATH_ENGINE LANGUAGE_CODE %}
+        {{ description|markdown(problem.markdown_style, MATH_ENGINE)|reference|str|safe }}
+    {% endcache %}
+
+    {% with license=problem.license %}
+        {% if license %}
+            <span class="license">
+            <a href="{{ url('license', license.key) }}">{{ license.display or license.name }}</a>
+        </span>
+        {% endif %}
+    {% endwith %}
+{% endblock %}
+
+{% block post_description_end %}
     {% if can_vote %}
         <hr style="padding-top: 0.3em">
         {% if has_voted %}
@@ -313,26 +329,8 @@
                 <input type="hidden" name="delete_confirmation"/>
             </form>
         {% endif %}
-
     {% endif %}
-{% endblock %}
 
-{% block description %}
-    {% cache 86400 'problem_html' problem.id MATH_ENGINE LANGUAGE_CODE %}
-        {{ description|markdown(problem.markdown_style, MATH_ENGINE)|reference|str|safe }}
-    {% endcache %}
-
-    {% with license=problem.license %}
-        {% if license %}
-            <span class="license">
-            <a href="{{ url('license', license.key) }}">{{ license.display or license.name }}</a>
-        </span>
-        {% endif %}
-    {% endwith %}
-{% endblock %}
-
-{% block post_description_end %}
-    <hr style="padding-top: 0.3em">
     {% if request.user.is_authenticated and not request.profile.mute %}
         <a href="{{ url('new_problem_ticket', problem.code) }}" class="button clarify">
             {%- if contest_problem and contest_problem.contest.use_clarifications and request.profile.current_contest.live -%}
