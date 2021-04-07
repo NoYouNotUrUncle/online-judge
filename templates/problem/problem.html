@@ -295,12 +295,12 @@
             <span>Points:</span>
             <input type="number" name="points" step="any" id="id_points"/>
             {% if has_errors and 'points' in problem_points_vote_form.errors %}
-                <span class="voting-form-error">{{ problem_points_vote_form['points'] }}</span>
+                <span class="voting-form-error">{{ problem_points_vote_form.errors['points'] }}</span>
             {% endif %}
             <span>Note:</span>
             <textarea name="note" id="id_note" rows="10" cols="20"></textarea>
             {% if has_errors and 'note' in problem_points_vote_form.errors %}
-                <span class="voting-form-error">{{ problem_points_vote_form['note'] }}</span>
+                <span class="voting-form-error">{{ problem_points_vote_form.errors['note'] }}</span>
             {% endif %}
             <input type="submit" value="Vote"/>
             <input type="hidden" name="vote_confirmation"/>
