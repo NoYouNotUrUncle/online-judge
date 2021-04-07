@@ -47,8 +47,7 @@
         }
 
         .vote-button{
-            background:none;
-            border:none;
+
         }
 
         #voting_lightbox {
@@ -57,7 +56,7 @@
             top: 0;
             width: 100%;
             height: 100%;
-            background-color: rgba(0,0,0,0.8);
+            background-color: rgba(255,0,0,0.8);
             display: none;
         }
 
@@ -154,13 +153,14 @@
 
     {% if can_vote %}
         <hr style="padding-top: 0.1em">
-        <button class ="vote-button" id="id_vote_button" onclick="on_vote_button_clicked()">Vote problem points value</button>
+        <button class ="vote-button" id="id_vote_button">Vote problem points value</button>
         <script defer>
             const voting_lightbox = document.createElement("div")
             voting_lightbox.id = "lightbox"
             document.body.appendChild(voting_lightbox)
 
-            function on_vote_button_clicked() {
+            const vote_button = document.getElementById("id_vote_button")
+            vote_button.onclick = function() {
                 voting_lightbox.classList.add("active")
             }
         </script>
