@@ -46,11 +46,11 @@
             color: red;
         }
 
-        .vote-button{
+        .vote-button {
 
         }
 
-        #voting_lightbox {
+        .voting-lightbox {
             position: fixed;
             z-index: 1000;
             top: 0;
@@ -60,7 +60,7 @@
             display: none;
         }
 
-        #voting_lightbox.active {
+        .voting-lightbox-active {
             display: flex;
             justify-content: center;
             align-items: center;
@@ -157,11 +157,12 @@
         <script defer>
             const voting_lightbox = document.createElement("div")
             voting_lightbox.id = "lightbox"
+            voting_lightbox.classList.add("voting-lightbox")
             document.body.appendChild(voting_lightbox)
 
             const vote_button = document.getElementById("id_vote_button")
             vote_button.onclick = function() {
-                voting_lightbox.classList.add("active")
+                voting_lightbox.classList.add("voting-lightbox-active")
             }
         </script>
         <!--
