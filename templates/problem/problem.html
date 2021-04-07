@@ -41,6 +41,10 @@
         .problem-info-entry {
             padding-top: 0.5em;
         }
+
+        .voting-form-error {
+            color: red;
+        }
     </style>
 {% endblock %}
 
@@ -290,6 +294,7 @@
         <p>
             <form method="post"> {% csrf_token %}
                 <input type="number" name="points" step="any" id="id_points"/>
+                <textarea name="note" id="id_note" rows="10" cols="20"></textarea>
                 <input type="submit" value="VOTE!"/>
                 <input type="hidden" name="vote_confirmation"/>
             </form>
