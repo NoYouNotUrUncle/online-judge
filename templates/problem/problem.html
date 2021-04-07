@@ -130,6 +130,47 @@
     {% endif %}
     <div><a href="{{ url('chronological_submissions', problem.code) }}">{{ _('All submissions') }}</a></div>
     <div><a href="{{ url('ranked_submissions', problem.code) }}">{{ _('Best submissions') }}</a></div>
+
+    {% if can_vote %}
+        <hr style="padding-top: 0.1em">
+        <span>text</span>
+        <!--
+        {% if has_voted %}
+            <span class="pi-name">Current Vote:   </span>
+            <span class="pi-value">{{ voted_points|floatformat }}</span>
+            <span class="pi-name">Change your vote below!</span>
+        {% else %}
+            <span class="pi-name">Cast your vote on this problem's weightage below!</span>
+        {% endif %}
+
+        <form method="post"> {% csrf_token %}
+            <span>Points: </span>
+            <input type="number" name="points" step="any" id="id_points" placeholder={{ points_placeholder }}>
+            {% if has_errors and 'points' in problem_points_vote_form.errors %}
+                <span class="voting-form-error">{{ problem_points_vote_form.errors['points'] }}</span>
+            {% endif %}
+            <br/>
+            <span>Note:</span>
+            <br/>
+            <textarea name="note" id="id_note" rows="2" cols="80">{{ note_placeholder }}</textarea>
+            {% if has_errors and 'note' in problem_points_vote_form.errors %}
+                <span class="voting-form-error">{{ problem_points_vote_form.errors['note'] }}</span>
+            {% endif %}
+            <input type="submit" value="Vote"/>
+            <input type="hidden" name="vote_confirmation"/>
+        </form>
+
+        {% if has_voted %}
+            <hr style="padding-top: 0.1em">
+            <form method="post"> {% csrf_token %}
+                <input type="submit" value="Delete Vote"/>
+                <input type="hidden" name="delete_confirmation"/>
+            </form>
+        {% endif %}
+        <hr style="padding-top: 0.1em">
+        -->
+    {% endif %}
+
     {% if (editorial and editorial.is_accessible_by(request.user)) and not request.in_contest %}
         <hr>
         <div><a href="{{ url('problem_editorial', problem.code) }}">{{ _('Read editorial') }}</a></div>
@@ -296,42 +337,6 @@
 {% endblock %}
 
 {% block post_description_end %}
-    {% if can_vote %}
-        {% if has_voted %}
-            <span class="pi-name">Current Vote:   </span>
-            <span class="pi-value">{{ voted_points|floatformat }}</span>
-            <span class="pi-name">Change your vote below!</span>
-        {% else %}
-            <span class="pi-name">Cast your vote on this problem's weightage below!</span>
-        {% endif %}
-
-        <form method="post"> {% csrf_token %}
-            <span>Points: </span>
-            <input type="number" name="points" step="any" id="id_points" placeholder={{ points_placeholder }}>
-            {% if has_errors and 'points' in problem_points_vote_form.errors %}
-                <span class="voting-form-error">{{ problem_points_vote_form.errors['points'] }}</span>
-            {% endif %}
-            <br/>
-            <span>Note:</span>
-            <br/>
-            <textarea name="note" id="id_note" rows="2" cols="80">{{ note_placeholder }}</textarea>
-            {% if has_errors and 'note' in problem_points_vote_form.errors %}
-                <span class="voting-form-error">{{ problem_points_vote_form.errors['note'] }}</span>
-            {% endif %}
-            <input type="submit" value="Vote"/>
-            <input type="hidden" name="vote_confirmation"/>
-        </form>
-
-        {% if has_voted %}
-            <hr style="padding-top: 0.1em">
-            <form method="post"> {% csrf_token %}
-                <input type="submit" value="Delete Vote"/>
-                <input type="hidden" name="delete_confirmation"/>
-            </form>
-        {% endif %}
-        <hr style="padding-top: 0.1em">
-    {% endif %}
-
     {% if request.user.is_authenticated and not request.profile.mute %}
         <a href="{{ url('new_problem_ticket', problem.code) }}" class="button clarify">
             {%- if contest_problem and contest_problem.contest.use_clarifications and request.profile.current_contest.live -%}

@@ -279,7 +279,9 @@ class ProblemDetail(ProblemMixin, SolvedProblemMixin, CommentedDetailView):
                     return self.render_to_response(context)
 
         elif 'delete_confirmation' in request.POST:
-            #delete anything that matches
+            if not request.user.is_authenticated: #un authed person tries to find a way to delete
+                return HttpResponseForbidden()
+            #delete anything that matches (if nothing matches it doesn't matter)
             ProblemPointsVote.objects.filter(voter=request.user.profile, problem=self.object).delete()
             context = self.get_context_data(
                 object=self.object,
