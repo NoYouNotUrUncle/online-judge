@@ -297,24 +297,23 @@
 
 {% block post_description_end %}
     {% if can_vote %}
-        <hr style="padding-top: 0.3em">
         {% if has_voted %}
-            <span class="pi-name">Current Vote: </span>
+            <span class="pi-name">Current Vote:   </span>
             <span class="pi-value">{{ voted_points|floatformat }}</span>
-            <br>
             <span class="pi-name">Change your vote below!</span>
         {% else %}
             <span class="pi-name">Cast your vote on this problem's weightage below!</span>
         {% endif %}
 
         <form method="post"> {% csrf_token %}
-            <span>Points:</span>
+            <span>Points: </span>
             <input type="number" name="points" step="any" id="id_points"/>
             {% if has_errors and 'points' in problem_points_vote_form.errors %}
                 <span class="voting-form-error">{{ problem_points_vote_form.errors['points'] }}</span>
             {% endif %}
+            <br/>
             <span>Note:</span>
-            <textarea name="note" id="id_note" rows="10" cols="20"></textarea>
+            <textarea name="note" id="id_note" rows="3" cols="80"></textarea>
             {% if has_errors and 'note' in problem_points_vote_form.errors %}
                 <span class="voting-form-error">{{ problem_points_vote_form.errors['note'] }}</span>
             {% endif %}
@@ -323,7 +322,6 @@
         </form>
 
         {% if has_voted %}
-            <hr style="padding-top: 0.1em">
             <form method="post"> {% csrf_token %}
                 <input type="submit" value="Delete Vote"/>
                 <input type="hidden" name="delete_confirmation"/>
