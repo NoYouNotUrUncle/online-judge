@@ -272,7 +272,7 @@ class ProblemDetail(ProblemMixin, SolvedProblemMixin, CommentedDetailView):
                         comment_request=request, #comment needs this to initialize
                         problem_points_vote_form=form, #extra context for the form re-rendering
                         has_errors=True,
-                        points_placeholder=float(request.POST['points']),
+                        points_placeholder=request.POST['points'],
                         note_placeholder=request.POST['note'],
                     )
                     return self.render_to_response(context)
