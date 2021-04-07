@@ -318,8 +318,8 @@
             {% if has_errors and 'note' in problem_points_vote_form.errors %}
                 <span class="voting-form-error">{{ problem_points_vote_form.errors['note'] }}</span>
             {% endif %}
-            <input type="submit" name="vote_confirmation" value="Vote"/>
-            <!--<input type="hidden" name="vote_confirmation"/>-->
+            <input type="submit" value="Vote"/>
+            <input type="hidden" name="vote_confirmation"/>
         </form>
 
         {% if has_voted %}
