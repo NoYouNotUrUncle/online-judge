@@ -295,12 +295,12 @@
         <form method="post"> {% csrf_token %}
             <span>Points:</span>
             <input type="number" name="points" step="any" id="id_points"/>
-            {% has_errors %}
+            {% if has_errors %}
                 <span>yolo</span>
             {% endif %}
             <span>Note:</span>
             <textarea name="note" id="id_note" rows="10" cols="20"></textarea>
-            {% has_errors %}
+            {% if has_errors %}
                 <span>yolo</span>
             {% endif %}
             <input type="submit" value="VOTE!"/>
