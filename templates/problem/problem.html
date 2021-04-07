@@ -46,6 +46,11 @@
             color: red;
         }
 
+        .vote-button{
+            background:none;
+            border:none;
+        }
+
         #voting_lightbox {
             position: fixed;
             z-index: 1000;
@@ -149,7 +154,7 @@
 
     {% if can_vote %}
         <hr style="padding-top: 0.1em">
-        <span id="id_vote_button" onclick="on_vote_button_clicked()">Vote problem points value</span>
+        <button class ="vote-button" id="id_vote_button" onclick="on_vote_button_clicked()">Vote problem points value</button>
         <script defer>
             const voting_lightbox = document.createElement("div")
             voting_lightbox.id = "lightbox"
