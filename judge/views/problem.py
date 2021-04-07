@@ -240,7 +240,7 @@ class ProblemDetail(ProblemMixin, SolvedProblemMixin, CommentedDetailView):
             context['has_errors'] = False
 
         if 'points_placeholder' not in context:
-            context['points_placeholder'] = 'How many points you think this this problem is worth.'
+            context['points_placeholder'] = 69.42069
 
         if 'note_placeholder' not in context:
             context['note_placeholder'] = 'A short justification for this problem\'s points value.'
@@ -272,7 +272,7 @@ class ProblemDetail(ProblemMixin, SolvedProblemMixin, CommentedDetailView):
                         comment_request=request, #comment needs this to initialize
                         problem_points_vote_form=form, #extra context for the form re-rendering
                         has_errors=True,
-                        points_placeholder=request.POST['points'],
+                        points_placeholder=float(request.POST['points']),
                         note_placeholder=request.POST['note'],
                     )
                     return self.render_to_response(context)
