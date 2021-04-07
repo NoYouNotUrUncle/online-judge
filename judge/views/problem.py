@@ -225,7 +225,8 @@ class ProblemDetail(ProblemMixin, SolvedProblemMixin, CommentedDetailView):
 
         context['can_vote'] = self.can_vote(user, self.object) #if this problem is votable by this user
         #the vote this user has already cast on this problem
-        vote = ProblemPointsVote.objects.filter(voter=user.profile, problem=self.object)
+        if context['can_vote']:
+            vote = ProblemPointsVote.objects.filter(voter=user.profile, problem=self.object)
         #whether or not they've already voted
         context['has_voted'] = context['can_vote'] and vote.exists()
         if context['has_voted']:
