@@ -291,14 +291,14 @@
         {% else %}
             <span class="pi-name">Cast your vote on this problem's weightage below!</span>
         {% endif %}
-        <p>
+
             <form method="post"> {% csrf_token %}
                 <input type="number" name="points" step="any" id="id_points"/>
                 <textarea name="note" id="id_note" rows="10" cols="20"></textarea>
                 <input type="submit" value="VOTE!"/>
                 <input type="hidden" name="vote_confirmation"/>
             </form>
-        </p>
+
     {% endif %}
 {% endblock %}
 
