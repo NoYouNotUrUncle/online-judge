@@ -295,19 +295,20 @@
         <form method="post"> {% csrf_token %}
             <span>Points:</span>
             <input type="number" name="points" step="any" id="id_points"/>
-            {% if has_errors %}
-                <span>yolo</span>
+            {% if has_errors and 'points' in problem_points_vote_form.errors %}
+                <span class="voting-form-error">error with the points field</span>
             {% endif %}
             <span>Note:</span>
             <textarea name="note" id="id_note" rows="10" cols="20"></textarea>
-            {% if has_errors %}
-                <span>yolo</span>
+            {% if has_errors and 'note' in problem_points_vote_form.errors %}
+                <span class="voting-form-error">error with the note field</span>
             {% endif %}
             <input type="submit" value="VOTE"/>
             <input type="hidden" name="vote_confirmation"/>
         </form>
 
         {% if has_voted %}
+            <hr style="padding-top: 0.3em">
             <form method="post"> {% csrf_token %}
                 <input type="submit" value="Delete Vote"/>
                 <input type="hidden" name="delete_confirmation"/>
