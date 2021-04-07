@@ -239,6 +239,12 @@ class ProblemDetail(ProblemMixin, SolvedProblemMixin, CommentedDetailView):
         if 'has_errors' not in context:
             context['has_errors'] = False
 
+        if 'points_placeholder' not in context:
+            context['points_placeholder'] = 'How many points you think this this problem is worth.'
+
+        if 'note_placeholder' not in context:
+            context['note_placeholder'] = 'A short justification for this problem\'s points value.'
+
         return context
 
     def post(self, request, *args, **kwargs):
@@ -257,20 +263,17 @@ class ProblemDetail(ProblemMixin, SolvedProblemMixin, CommentedDetailView):
                         vote.voter = request.user.profile
                         vote.problem = self.object
                         vote.save()
-                        context = self.get_context_data(
-                            object=self.object,
-                            comment_request=request, #comment needs this to initialize
-                        )
-                        return self.render_to_response(context)
+                        return self.get(request, *args, **kwargs)
                     else:
                         raise ValidationError #go to invalid case
                 except:
-                    print(form.errors or None)
                     context = self.get_context_data(
                         object=self.object,
                         comment_request=request, #comment needs this to initialize
-                        problem_points_vote_form=form, #extra context
+                        problem_points_vote_form=form, #extra context for the form re-rendering
                         has_errors=True,
+                        points_placeholder=form.points,
+                        note_placeholder=form.note,
                     )
                     return self.render_to_response(context)
 
