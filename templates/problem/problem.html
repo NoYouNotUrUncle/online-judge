@@ -323,13 +323,13 @@
         </form>
 
         {% if has_voted %}
-            <hr style="padding-top: 0.3em">
+            <hr style="padding-top: 0.1em">
             <form method="post"> {% csrf_token %}
                 <input type="submit" value="Delete Vote"/>
                 <input type="hidden" name="delete_confirmation"/>
             </form>
         {% endif %}
-        <hr style="padding-top: 0.3em">
+        <hr style="padding-top: 0.1em">
     {% endif %}
 
     {% if request.user.is_authenticated and not request.profile.mute %}
