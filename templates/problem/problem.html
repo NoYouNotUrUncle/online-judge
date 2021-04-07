@@ -307,7 +307,7 @@
 
         <form method="post"> {% csrf_token %}
             <span>Points: </span>
-            <input type="number" name="points" step="any" id="id_points" placeholder={{ points_placeholder }}/>
+            <input type="number" name="points" step="any" id="id_points" placeholder={{ points_placeholder }}>
             {% if has_errors and 'points' in problem_points_vote_form.errors %}
                 <span class="voting-form-error">{{ problem_points_vote_form.errors['points'] }}</span>
             {% endif %}
