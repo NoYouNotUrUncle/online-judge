@@ -231,8 +231,7 @@ class ProblemDetail(ProblemMixin, SolvedProblemMixin, CommentedDetailView):
         context['has_voted'] = context['can_vote'] and vote.exists()
         if context['has_voted']:
             context['voted_points'] = vote.first().points #the previous vote's points
-        else:
-            context['voted_points'] = 4.2069 #default
+            context['voted_note'] = vote.first().note
 
         if 'problem_points_vote_form' not in context:
             context['problem_points_vote_form'] = ProblemPointsVoteForm({})
@@ -240,11 +239,17 @@ class ProblemDetail(ProblemMixin, SolvedProblemMixin, CommentedDetailView):
         if 'has_errors' not in context:
             context['has_errors'] = False
 
-        if 'points_placeholder' not in context:
-            context['points_placeholder'] = 69.42069
+        if 'points_placeholder' not in context:#placeholder for the points
+            if context['has_voted']:# if voted, the vote
+                context['points_placeholder'] = context['voted_points']
+            else:# otherwise a *nice* default
+                context['points_placeholder'] = 69.42069
 
         if 'note_placeholder' not in context:
-            context['note_placeholder'] = 'A short justification for this problem\'s points value.'
+            if context['has_voted']:
+                context['note_placeholder'] = context['voted_note']
+            else:
+                context['note_placeholder'] = 'A short justification for this problem\'s points value.'
 
         return context
 

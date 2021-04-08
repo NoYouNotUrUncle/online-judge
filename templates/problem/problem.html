@@ -42,12 +42,34 @@
             padding-top: 0.5em;
         }
 
-        .voting-form-error {
-            color: red;
+        .vote-form{
+            background-color: rgb(255,255,255);
+            padding: 40px;
+            border-radius: 25px;
+            justify-content: center;
+            align-items: center;
         }
 
-        .vote-form-background{
-            background-color: rgb(255,255,255)
+        .vote-form-info{
+            font-size: 24px;
+            font-weight: bold;
+            padding: 10px;
+        }
+
+        .vote-form-value{
+            font-size: 24px;
+            padding: 10px;
+        }
+
+        .vote-form-text{
+            font-size: 18px;
+            padding: 10px;
+        }
+
+        .voting-form-error {
+            font-size: 18px;
+            padding: 10px;
+            color: red;
         }
 
         .voting-lightbox {
@@ -158,25 +180,26 @@
     {% if can_vote %}
         <!-- javascript will steal this div's content and put it in the lightbox -->
         <div id="id_vote_form" hidden>
-            <div class="vote-form-background">
+            <div class="vote-form">
                 {% if has_voted %}
-                    <span class="pi-name">Current Vote:   </span>
-                    <span class="pi-value">{{ voted_points|floatformat }}</span>
-                    <span class="pi-name">Change your vote below!</span>
+                    <span class="vote-form-info">Current Vote:</span>
+                    <span class="vote-form-value">{{ voted_points|floatformat }}</span>
+                    <br/>
+                    <span class="vote-form-text">Change your vote below!</span>
                 {% else %}
-                    <span class="pi-name">Cast your vote on this problem's weightage below!</span>
+                    <span class="vote-form-text">Cast your vote on this problem's weightage below!</span>
                 {% endif %}
 
                 <form method="post"> {% csrf_token %}
-                    <span>Points: </span>
-                    <input type="number" name="points" step="any" id="id_points" value={{ points_placeholder }}>
+                    <span class="vote-form-info">Points</span>
+                    <input class="vote-form-text" type="number" name="points" id="id_points" value={{ points_placeholder }}>
                     {% if has_errors and 'points' in problem_points_vote_form.errors %}
                         <span class="voting-form-error">{{ problem_points_vote_form.errors['points'] }}</span>
                     {% endif %}
                     <br/>
-                    <span>Note:</span>
+                    <span class="vote-form-info">Note</span>
                     <br/>
-                    <textarea name="note" id="id_note" rows="2" cols="80">{{ note_placeholder }}</textarea>
+                    <textarea class="vote-form-text" name="note" id="id_note" rows="2" cols="80">{{ note_placeholder }}</textarea>
                     {% if has_errors and 'note' in problem_points_vote_form.errors %}
                         <span class="voting-form-error">{{ problem_points_vote_form.errors['note'] }}</span>
                     {% endif %}
