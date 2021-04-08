@@ -55,26 +55,18 @@
         .vote-form-info{
             font-size: 24px;
             font-weight: bold;
-            padding-top: 10px;
-            padding-bottom: 10px;
         }
 
         .vote-form-value{
             font-size: 24px;
-            padding-top: 10px;
-            padding-bottom: 10px;
         }
 
         .vote-form-text{
             font-size: 18px;
-            padding-top: 10px;
-            padding-bottom: 10px;
         }
 
         .voting-form-error {
             font-size: 18px;
-            padding-top: 10px;
-            padding-bottom: 10px;
             color: red;
         }
 
@@ -190,16 +182,16 @@
                 {% if has_voted %}
                     <span class="vote-form-info">Current Vote:</span>
                     <span class="vote-form-value">{{ voted_points|floatformat }}</span>
-                    <br/>
+                    <br/> <br/>
                     <span class="vote-form-text">Change your vote below!</span>
+                    <br/> <br/>
                 {% else %}
                     <span class="vote-form-text">Cast your vote on this problem's weightage below!</span>
                 {% endif %}
 
                 <form method="post"> {% csrf_token %}
                     <span class="vote-form-info">Points</span>
-                    <br/>
-                    <input class="vote-form-text" type="number" name="points" id="id_points" value={{ points_placeholder }}>
+                    <input class="vote-form-text" type="number" step="any" name="points" id="id_points" value={{ points_placeholder }}>
                     {% if has_errors and 'points' in problem_points_vote_form.errors %}
                         <span class="voting-form-error">{{ problem_points_vote_form.errors['points'] }}</span>
                     {% endif %}
