@@ -46,6 +46,12 @@
             color: red;
         }
 
+        .vote-form-background{
+            width: 50%;
+            height: 50%;
+            background-color: rgb(255,255,255)
+        }
+
         .voting-lightbox {
             position: fixed;
             z-index: 1000;
@@ -152,40 +158,42 @@
     <div><a href="{{ url('ranked_submissions', problem.code) }}">{{ _('Best submissions') }}</a></div>
 
     {% if can_vote %}
+        <!-- javascript will steal this div's content and put it in the lightbox -->
         <div id="id_vote_form" hidden>
-            {% if has_voted %}
-                <span class="pi-name">Current Vote:   </span>
-                <span class="pi-value">{{ voted_points|floatformat }}</span>
-                <span class="pi-name">Change your vote below!</span>
-            {% else %}
-                <span class="pi-name">Cast your vote on this problem's weightage below!</span>
-            {% endif %}
-
-            <form method="post"> {% csrf_token %}
-                <span>Points: </span>
-                <input type="number" name="points" step="any" id="id_points" placeholder={{ points_placeholder }}>
-                {% if has_errors and 'points' in problem_points_vote_form.errors %}
-                    <span class="voting-form-error">{{ problem_points_vote_form.errors['points'] }}</span>
+            <div class="vote-form-background">
+                {% if has_voted %}
+                    <span class="pi-name">Current Vote:   </span>
+                    <span class="pi-value">{{ voted_points|floatformat }}</span>
+                    <span class="pi-name">Change your vote below!</span>
+                {% else %}
+                    <span class="pi-name">Cast your vote on this problem's weightage below!</span>
                 {% endif %}
-                <br/>
-                <span>Note:</span>
-                <br/>
-                <textarea name="note" id="id_note" rows="2" cols="80">{{ note_placeholder }}</textarea>
-                {% if has_errors and 'note' in problem_points_vote_form.errors %}
-                    <span class="voting-form-error">{{ problem_points_vote_form.errors['note'] }}</span>
-                {% endif %}
-                <input type="submit" value="Vote"/>
-                <input type="hidden" name="vote_confirmation"/>
-            </form>
 
-            {% if has_voted %}
-                <hr style="padding-top: 0.1em">
                 <form method="post"> {% csrf_token %}
-                    <input type="submit" value="Delete Vote"/>
-                    <input type="hidden" name="delete_confirmation"/>
+                    <span>Points: </span>
+                    <input type="number" name="points" step="any" id="id_points" value={{ points_placeholder }}>
+                    {% if has_errors and 'points' in problem_points_vote_form.errors %}
+                        <span class="voting-form-error">{{ problem_points_vote_form.errors['points'] }}</span>
+                    {% endif %}
+                    <br/>
+                    <span>Note:</span>
+                    <br/>
+                    <textarea name="note" id="id_note" rows="2" cols="80">{{ note_placeholder }}</textarea>
+                    {% if has_errors and 'note' in problem_points_vote_form.errors %}
+                        <span class="voting-form-error">{{ problem_points_vote_form.errors['note'] }}</span>
+                    {% endif %}
+                    <input type="submit" value="Vote"/>
+                    <input type="hidden" name="vote_confirmation"/>
                 </form>
-            {% endif %}
-            <hr style="padding-top: 0.1em">
+
+                {% if has_voted %}
+                    <hr style="padding-top: 0.1em">
+                    <form method="post"> {% csrf_token %}
+                        <input type="submit" value="Delete Vote"/>
+                        <input type="hidden" name="delete_confirmation"/>
+                    </form>
+                {% endif %}
+            </div>
         </div>
 
         <hr style="padding-top: 0.1em">
