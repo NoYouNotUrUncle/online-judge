@@ -191,25 +191,25 @@
         <hr style="padding-top: 0.1em">
         <a class="vote-button" id="id_vote_button">Vote problem points value</a>
         <script defer>
-            let voting_lightbox = document.createElement('div')
+            const voting_lightbox = document.createElement('div')
             voting_lightbox.id = 'lightbox'
             document.body.appendChild(voting_lightbox)
             voting_lightbox.classList.add('voting-lightbox')
-            if({{ has_errors }}) voting_lightbox.classList.add('voting-lightbox-active')
+            //if({{ has_errors }}) voting_lightbox.classList.add('voting-lightbox-active')
 
             //let vote_form_clone = document.getElementById('id_vote_form').cloneNode(true)
             //vote_form_clone.setAttribute('id', 'id_vote_form_clone')
             //voting_lightbox.appendChild(vote_form_clone)
 
-            let vote_button = document.getElementById('id_vote_button')
+            const vote_button = document.getElementById('id_vote_button')
             vote_button.onclick = function() {
                 voting_lightbox.classList.add('voting-lightbox-active')
             }
 
-            voting_lightbox.addEventListener('click', e => {
-                if(e.target !== e.currentTarget) return
-                voting_lightbox.classList.remove('voting-lightbox-active')
-            })
+            //voting_lightbox.addEventListener('click', e => {
+            //    if(e.target !== e.currentTarget) return
+            //    voting_lightbox.classList.remove('voting-lightbox-active')
+            //})
         </script>
     {% endif %}
 
