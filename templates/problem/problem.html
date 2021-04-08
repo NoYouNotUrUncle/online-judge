@@ -187,7 +187,7 @@
 
     {% if can_vote %}
         <!-- javascript will steal this div's content and put it in the lightbox -->
-        <div id="id_vote_form" hidden>
+        <div id="id_voting_lightbox" class="voting-lightbox">
             <div class="vote-form">
                 {% if has_voted %}
                     <span class="vote-form-info">Current Vote:</span>
@@ -230,18 +230,12 @@
         {% endif %}
 
         <script defer>
-            const voting_lightbox = document.createElement('div')
-            voting_lightbox.id = 'lightbox'
+            const voting_lightbox = document.getElementById('id_voting_lightbox')
             document.body.appendChild(voting_lightbox)
-            voting_lightbox.classList.add('voting-lightbox')
 
             {% if has_errors %}
                 voting_lightbox.classList.add('voting-lightbox-active')
             {% endif %}
-
-            const vote_form = document.createElement('div')
-            vote_form.innerHTML = document.getElementById('id_vote_form').innerHTML
-            voting_lightbox.appendChild(vote_form)
 
             const vote_button = document.getElementById('id_vote_button')
             vote_button.onclick = function() {
