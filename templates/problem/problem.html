@@ -71,6 +71,10 @@
             color: red;
         }
 
+        .vote-button{
+            float:right;
+        }
+
         .voting-lightbox {
             position: fixed;
             z-index: 1000;
@@ -89,6 +93,10 @@
 
         .form-button {
             cursor: pointer;
+        }
+
+        .errorlist {
+            list-style: none;
         }
     </style>
 {% endblock %}
@@ -199,13 +207,13 @@
                     {% endif %}
                     <span class="vote-form-info">Note</span>
                     <br/>
-                    <textarea class="vote-form-text" name="note" id="id_note" rows="2" cols="80">{{ note_placeholder }}</textarea>
+                    <textarea class="vote-form-text" name="note" id="id_note" rows="6" cols="80">{{ note_placeholder }}</textarea>
                     {% if has_errors and 'note' in problem_points_vote_form.errors %}
                         <span class="voting-form-error">{{ problem_points_vote_form.errors['note'] }}</span>
                     {% else %}
                         <br/> <br/>
                     {% endif %}
-                    <input type="submit" value="Vote"/>
+                    <input type="submit" value="Vote" class="vote-button"/>
                     <input type="hidden" name="vote_confirmation"/>
                 </form>
             </div>
