@@ -61,6 +61,10 @@
             justify-content: center;
             align-items: center;
         }
+
+        .vote-button {
+            cursor: pointer;
+        }
     </style>
 {% endblock %}
 
@@ -114,6 +118,42 @@
     </div>
 {% endblock %}
 
+<div id="id_vote_form">
+    {% if has_voted %}
+            <span class="pi-name">Current Vote:   </span>
+            <span class="pi-value">{{ voted_points|floatformat }}</span>
+            <span class="pi-name">Change your vote below!</span>
+        {% else %}
+            <span class="pi-name">Cast your vote on this problem's weightage below!</span>
+        {% endif %}
+
+        <form method="post"> {% csrf_token %}
+            <span>Points: </span>
+            <input type="number" name="points" step="any" id="id_points" placeholder={{ points_placeholder }}>
+            {% if has_errors and 'points' in problem_points_vote_form.errors %}
+                <span class="voting-form-error">{{ problem_points_vote_form.errors['points'] }}</span>
+            {% endif %}
+            <br/>
+            <span>Note:</span>
+            <br/>
+            <textarea name="note" id="id_note" rows="2" cols="80">{{ note_placeholder }}</textarea>
+            {% if has_errors and 'note' in problem_points_vote_form.errors %}
+                <span class="voting-form-error">{{ problem_points_vote_form.errors['note'] }}</span>
+            {% endif %}
+            <input type="submit" value="Vote"/>
+            <input type="hidden" name="vote_confirmation"/>
+        </form>
+
+        {% if has_voted %}
+            <hr style="padding-top: 0.1em">
+            <form method="post"> {% csrf_token %}
+                <input type="submit" value="Delete Vote"/>
+                <input type="hidden" name="delete_confirmation"/>
+            </form>
+        {% endif %}
+        <hr style="padding-top: 0.1em">
+</div>
+
 {% block info_float %}
     {% if request.user.is_authenticated and request.in_contest and submission_limit %}
         {% if submissions_left > 0 %}
@@ -149,53 +189,26 @@
 
     {% if can_vote %}
         <hr style="padding-top: 0.1em">
-        <a id="id_vote_button">Vote problem points value</a>
+        <a class="vote-button" id="id_vote_button">Vote problem points value</a>
         <script defer>
-            const voting_lightbox = document.createElement("div")
-            voting_lightbox.id = "lightbox"
-            voting_lightbox.classList.add("voting-lightbox")
+            const voting_lightbox = document.createElement('div')
+            voting_lightbox.id = 'lightbox'
+            voting_lightbox.classList.add('voting-lightbox')
+            if({{ has_errors }}) voting_lightbox.classList.add('voting-lightbox-active')
+            const vote_form = document.getElementById('id_vote_form')
+            voting_lightbox.appendChild(vote_form)
             document.body.appendChild(voting_lightbox)
 
-            const vote_button = document.getElementById("id_vote_button")
+            const vote_button = document.getElementById('id_vote_button')
             vote_button.onclick = function() {
-                voting_lightbox.classList.add("voting-lightbox-active")
+                voting_lightbox.classList.add('voting-lightbox-active')
             }
+
+            voting_lightbox.addEventListener('click', e => {
+                if(e.target !== e.currentTarget) return
+                voting_lightbox.classList.remove('active')
+            })
         </script>
-        <!--
-        {% if has_voted %}
-            <span class="pi-name">Current Vote:   </span>
-            <span class="pi-value">{{ voted_points|floatformat }}</span>
-            <span class="pi-name">Change your vote below!</span>
-        {% else %}
-            <span class="pi-name">Cast your vote on this problem's weightage below!</span>
-        {% endif %}
-
-        <form method="post"> {% csrf_token %}
-            <span>Points: </span>
-            <input type="number" name="points" step="any" id="id_points" placeholder={{ points_placeholder }}>
-            {% if has_errors and 'points' in problem_points_vote_form.errors %}
-                <span class="voting-form-error">{{ problem_points_vote_form.errors['points'] }}</span>
-            {% endif %}
-            <br/>
-            <span>Note:</span>
-            <br/>
-            <textarea name="note" id="id_note" rows="2" cols="80">{{ note_placeholder }}</textarea>
-            {% if has_errors and 'note' in problem_points_vote_form.errors %}
-                <span class="voting-form-error">{{ problem_points_vote_form.errors['note'] }}</span>
-            {% endif %}
-            <input type="submit" value="Vote"/>
-            <input type="hidden" name="vote_confirmation"/>
-        </form>
-
-        {% if has_voted %}
-            <hr style="padding-top: 0.1em">
-            <form method="post"> {% csrf_token %}
-                <input type="submit" value="Delete Vote"/>
-                <input type="hidden" name="delete_confirmation"/>
-            </form>
-        {% endif %}
-        <hr style="padding-top: 0.1em">
-        -->
     {% endif %}
 
     {% if (editorial and editorial.is_accessible_by(request.user)) and not request.in_contest %}

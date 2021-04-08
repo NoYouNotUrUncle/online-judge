@@ -283,11 +283,7 @@ class ProblemDetail(ProblemMixin, SolvedProblemMixin, CommentedDetailView):
                 return HttpResponseForbidden()
             #delete anything that matches (if nothing matches it doesn't matter)
             ProblemPointsVote.objects.filter(voter=request.user.profile, problem=self.object).delete()
-            context = self.get_context_data(
-                object=self.object,
-                comment_request=request,  # comment needs this to initialize
-            )
-            return self.render_to_response(context)
+            return self.get(request, *args, **kwargs)
         else: #forward to next level of post request (comment post request as of writing)
             return super(ProblemDetail, self).post(request, *args, **kwargs)
 
