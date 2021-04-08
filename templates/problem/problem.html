@@ -197,9 +197,8 @@
             voting_lightbox.classList.add('voting-lightbox')
             if('{{ has_errors }}' == 'True') voting_lightbox.classList.add('voting-lightbox-active')
 
-            const vote_form_clone = document.getElementById('id_vote_form').cloneNode(true)
-            vote_form_clone.setAttribute('id', 'id_vote_form_clone')
-            voting_lightbox.appendChild(vote_form_clone)
+            const vote_form = document.getElementById('id_vote_form')
+            voting_lightbox.appendChild(vote_form)
 
             const vote_button = document.getElementById('id_vote_button')
             vote_button.onclick = function() {
