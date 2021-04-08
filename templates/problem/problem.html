@@ -48,27 +48,33 @@
             border-radius: 25px;
             justify-content: center;
             align-items: center;
+            margin: auto;
+            text-align: center;
         }
 
         .vote-form-info{
             font-size: 24px;
             font-weight: bold;
-            padding: 10px;
+            padding-top: 10px;
+            padding-bottom: 10px;
         }
 
         .vote-form-value{
             font-size: 24px;
-            padding: 10px;
+            padding-top: 10px;
+            padding-bottom: 10px;
         }
 
         .vote-form-text{
             font-size: 18px;
-            padding: 10px;
+            padding-top: 10px;
+            padding-bottom: 10px;
         }
 
         .voting-form-error {
             font-size: 18px;
-            padding: 10px;
+            padding-top: 10px;
+            padding-bottom: 10px;
             color: red;
         }
 
@@ -192,6 +198,7 @@
 
                 <form method="post"> {% csrf_token %}
                     <span class="vote-form-info">Points</span>
+                    <br/>
                     <input class="vote-form-text" type="number" name="points" id="id_points" value={{ points_placeholder }}>
                     {% if has_errors and 'points' in problem_points_vote_form.errors %}
                         <span class="voting-form-error">{{ problem_points_vote_form.errors['points'] }}</span>
