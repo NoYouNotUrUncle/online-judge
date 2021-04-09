@@ -17,7 +17,7 @@ class ProblemPointsVote(models.Model):
     #who voted
     voter = models.ForeignKey(Profile, related_name='problem_points_votes', on_delete=CASCADE, db_index=True)
     #what problem is this vote for
-    problem = models.ForeignKey(Problem, related_name='problem_points_votes', on_delete=CASCADE)
+    problem = models.ForeignKey(Problem, related_name='problem_points_votes', on_delete=CASCADE, db_index=True)
     note = models.TextField( #note to go along with vote
         verbose_name='note',
         help_text='Justification for problem points value.',
