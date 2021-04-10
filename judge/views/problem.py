@@ -1,6 +1,7 @@
 import logging
 import os
 import shutil
+import math
 from datetime import timedelta
 from operator import itemgetter
 from random import randrange
@@ -250,6 +251,31 @@ class ProblemDetail(ProblemMixin, SolvedProblemMixin, CommentedDetailView):
                 context['note_placeholder'] = context['voted_note']
             else:
                 context['note_placeholder'] = 'A short justification for this problem\'s points value.'
+
+        all_votes = sorted([v.points for v in ProblemPointsVote.objects.filter(problem=self.object)])
+        context['mean_vote'] = sum(all_votes) / len(all_votes)
+        context['num_votes'] = len(all_votes)
+        context['min_vote'] = all_votes[0]
+        context['max_vote'] = all_votes[-1]
+
+        def median(l,r,data): #provides index and value of the median of some range of the data
+            size = r-l+1
+            if size % 2 == 1:
+                return l+size/2,data[l+size/2]
+            else:
+                return l+size/2+0.5,(data[l+size/2]+data[l+size/2+1])/2
+
+        #box and whisker plot data
+        q2 = median(0,len(all_votes)-1,all_votes) #median
+        median_index = q2[0]
+        q1 = median(0,math.ceil(median_index-1),all_votes) #first quartile
+        q3 = median(math.floor(median_index+1),len(all_votes)-1,all_votes) #second quartile
+
+        context['median'] = q2[1]
+        context['first_quartile'] = q1[1]
+        context['third_quartile'] = q3[1]
+
+        context['all_votes'] = all_votes
 
         return context
 
