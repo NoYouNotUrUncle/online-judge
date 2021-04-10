@@ -260,7 +260,9 @@ class ProblemDetail(ProblemMixin, SolvedProblemMixin, CommentedDetailView):
 
         def median(l,r,data): #provides index and value of the median of some range of the data
             size = r-l+1
-            if size % 2 == 1:
+            if size == 1:
+                return 0,data[0]
+            elif size % 2 == 1:
                 return l+size/2,data[l+int(size/2)]
             else:
                 return l+size/2+0.5,(data[l+int(size/2)]+data[l+int(size/2)+1])/2
