@@ -253,6 +253,7 @@ class ProblemDetail(ProblemMixin, SolvedProblemMixin, CommentedDetailView):
                 context['note_placeholder'] = 'A short justification for this problem\'s points value.'
 
         all_votes = sorted([v.points for v in ProblemPointsVote.objects.filter(problem=self.object)])
+        context['all_votes'] = all_votes
         context['mean_vote'] = sum(all_votes) / len(all_votes)
         context['num_votes'] = len(all_votes)
         context['min_vote'] = all_votes[0]
@@ -267,17 +268,16 @@ class ProblemDetail(ProblemMixin, SolvedProblemMixin, CommentedDetailView):
             else:
                 return l+size/2+0.5,(data[l+int(size/2)]+data[l+int(size/2)+1])/2
 
-        #box and whisker plot data
-        q2 = median(0,len(all_votes)-1,all_votes) #median
-        median_index = q2[0]
-        q1 = median(0,math.ceil(median_index-1),all_votes) #first quartile
-        q3 = median(math.floor(median_index+1),len(all_votes)-1,all_votes) #second quartile
+        median = median(0,len(all_votes),all_votes)
+        context['median_vote'] = median[1]
+        median_index = median[0]
 
-        context['median'] = q2[1]
-        context['first_quartile'] = q1[1]
-        context['third_quartile'] = q3[1]
-
-        context['all_votes'] = all_votes
+        if len(all_votes) > 2:
+            #box and whisker plot data
+            q1 = median(0,math.ceil(median_index-1),all_votes) #first quartile
+            q3 = median(math.floor(median_index+1),len(all_votes)-1,all_votes) #second quartile
+            context['first_quartile'] = q1[1]
+            context['third_quartile'] = q3[1]
 
         return context
 
