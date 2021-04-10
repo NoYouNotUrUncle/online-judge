@@ -186,7 +186,7 @@
     <div><a href="{{ url('ranked_submissions', problem.code) }}">{{ _('Best submissions') }}</a></div>
 
     {% if can_vote %}
-        {% include lightbox.html %}
+        {% include 'lightbox.html' %}
 
         <div class="vote-form" id="id_vote_form">
             {% if has_voted %}
