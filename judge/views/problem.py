@@ -268,7 +268,7 @@ class ProblemDetail(ProblemMixin, SolvedProblemMixin, CommentedDetailView):
             else:
                 return l+size/2+0.5,(data[l+int(size/2)]+data[l+int(size/2)+1])/2
 
-        median = median(0,len(all_votes),all_votes)
+        median = median(0,len(all_votes)-1,all_votes)
         context['median_vote'] = median[1]
         median_index = median[0]
 
