@@ -44,5 +44,9 @@
     const tempSpan = document.createElement('span')
     tempSpan.classList.add('vote-stats-text')
     tempDiv.appendChild(tempSpan)
-    tempSpan.innerHTML = canvas.width+' '+canvas.height
+    let cnt = 0
+    setInterval(function(){
+        cnt++
+        tempSpan.innerHTML = canvas.width+' '+canvas.height+' '+cnt
+    },1000)
 </script>
