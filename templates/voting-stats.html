@@ -45,7 +45,7 @@
 
     const ms_per_frame = 50
     const plot_padding = 20
-    const font_size = 18
+    const font_size = 12
 
     let display_votes = false
     {% if can_vote %}
@@ -62,15 +62,27 @@
         ctx.fillStyle = 'rgb(255,255,255)'
         ctx.fillRect(0,0,width,height)
 
-        const range = {{ max_vote }}-{{ min_vote }}
-        const min_graph_render = Math.max(range-range/4.0,{{ min_possible_vote }})
-        const max_graph_render = Math.min(range+range/4.0,{{ max_possible_vote }})
+        const points_range = {{ max_vote }}-{{ min_vote }}
+        const min_graph_points = Math.max(points_range-points_range/4.0,{{ min_possible_vote }})
+        const max_graph_points = Math.min(points_range+points_range/4.0,{{ max_possible_vote }})
+
+        ctx.fillStyle = 'rgb(37,37,37)'
+        const plot_width = width-2*plot_padding
+        const plot_height = height-2*plot_padding
+        ctx.fillRect(plot_padding,plot_padding,plot_width,plot_height)
 
         ctx.fillStyle = 'rgb(125,125,125)'
-        ctx.fillRect(plot_padding,plot_padding,width-2*plot_padding,height-2*plot_padding)
         ctx.textAlign = 'center'
         ctx.textBaseline = 'middle'
         ctx.font = font_size+'px Arial'
-        ctx.fillText(min_graph_render+'p', plot_padding, height-plot_padding/2)
+        let points = min_graph_points
+        let points_text_x = plot_padding
+        let points_text_y = height-plot_padding/2
+        for(let i=0;i<=10;i++){
+            ctx.fillText(points+'p', points_text_x, points_text_y)
+            points += points_range/10.0
+            points_text_x += plot_width/10.0
+        }
+        ctx.fillText(points+'p', plot_padding, height-plot_padding/2)
     },ms_per_frame)
 </script>
