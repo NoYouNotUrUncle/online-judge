@@ -1,3 +1,34 @@
-<div>
-    <p>Hello, World!</p>
+<style>
+    .vote-stats-background{
+        background-color: rgb(255,255,255);
+        padding: 40px;
+        border-radius: 25px;
+        justify-content: center;
+        align-items: center;
+        margin: auto;
+        text-align: center;
+        width: 70%;
+        height: 50%;
+    }
+
+    .canvas{
+        border: 1px;
+        border: solid;
+        border: #000000;
+        width: 100%;
+        height: 80%;
+    }
+
+    .vote-stats-value{
+        font-size: 24px;
+    }
+
+    .vote-stats-text{
+        font-size: 18px;
+    }
+</style>
+<div class="vote-stats-background">
+    <span class="vote-stats-text">Voting Statistics</span>
+    <canvas class="canvas" id="id_canvas"></canvas>
+    <span class="vote-stats-text">footer</span>
 </div>

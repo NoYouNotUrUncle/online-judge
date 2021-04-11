@@ -45,7 +45,6 @@
         .vote-form{
             background-color: rgb(255,255,255);
             padding: 40px;
-            padding-bottom: 80px;
             border-radius: 25px;
             justify-content: center;
             align-items: center;
@@ -74,22 +73,6 @@
 
         .vote-button{
             float:right;
-        }
-
-        .voting-lightbox {
-            position: fixed;
-            z-index: 1000;
-            top: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(22,27,34,0.8);
-            display: none;
-        }
-
-        .voting-lightbox-active {
-            display: flex;
-            justify-content: center;
-            align-items: center;
         }
 
         .form-button {
@@ -185,9 +168,10 @@
     <div><a href="{{ url('chronological_submissions', problem.code) }}">{{ _('All submissions') }}</a></div>
     <div><a href="{{ url('ranked_submissions', problem.code) }}">{{ _('Best submissions') }}</a></div>
 
-    {% if can_vote %}
-        {% include 'lightbox.html' %}
+    <hr style="padding-top: 0.1em">
+    {% include 'lightbox.html' %}
 
+    {% if can_vote %}
         <div class="vote-form" id="id_vote_form">
             {% if has_voted %}
                 <span class="vote-form-info">Current Vote:</span>
@@ -219,7 +203,6 @@
             </form>
         </div>
 
-        <hr style="padding-top: 0.1em">
         <a class="form-button" id="id_vote_button">{% if has_voted %}Change vote{% else %}Vote on problem points{% endif %}</a>
         {% if has_voted %}
             <form method="post" id="id_delete_vote_form"> {% csrf_token %}
@@ -249,6 +232,21 @@
             {% endif %}
         </script>
     {% endif %}
+
+    <div id="id_vote_stats">
+        {% include 'voting-stats.html' %}
+    </div>
+
+    <a class="form-button" id="id_vote_stats_button">Voting statistics</a>
+
+    <script defer>
+        const vote_stats_lightbox = createLightbox('id_vote_stats_lightbox', 'id_vote_stats')
+
+        const vote_stats_button = document.getElementById('id_vote_stats_button')
+        vote_stats_button.onclick = function() {
+            activateLightbox(vote_stats_lightbox)
+        }
+    </script>
 
     {% if (editorial and editorial.is_accessible_by(request.user)) and not request.in_contest %}
         <hr>

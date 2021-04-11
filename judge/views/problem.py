@@ -279,6 +279,8 @@ class ProblemDetail(ProblemMixin, SolvedProblemMixin, CommentedDetailView):
             context['first_quartile'] = q1[1]
             context['third_quartile'] = q3[1]
 
+        context['authed'] = authed
+
         return context
 
     def post(self, request, *args, **kwargs):
