@@ -45,7 +45,7 @@
 
     const ms_per_frame = 50
     const plot_padding = 20
-    const font_size = 12
+    const font_size = 8
 
     let display_votes = false
     {% if can_vote %}
@@ -66,12 +66,12 @@
         const min_graph_points = Math.max(points_range-points_range/4.0,{{ min_possible_vote }})
         const max_graph_points = Math.min(points_range+points_range/4.0,{{ max_possible_vote }})
 
-        ctx.fillStyle = 'rgb(37,37,37)'
+        ctx.fillStyle = 'rgb(134,146,153)'
         const plot_width = width-2*plot_padding
         const plot_height = height-2*plot_padding
         ctx.fillRect(plot_padding,plot_padding,plot_width,plot_height)
 
-        ctx.fillStyle = 'rgb(125,125,125)'
+        ctx.fillStyle = 'rgb(94,101,105)'
         ctx.textAlign = 'center'
         ctx.textBaseline = 'middle'
         ctx.font = font_size+'px Arial'
