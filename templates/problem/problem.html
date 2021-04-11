@@ -168,8 +168,10 @@
     <div><a href="{{ url('chronological_submissions', problem.code) }}">{{ _('All submissions') }}</a></div>
     <div><a href="{{ url('ranked_submissions', problem.code) }}">{{ _('Best submissions') }}</a></div>
 
-    <hr style="padding-top: 0.1em">
-    {% include 'lightbox.html' %}
+    {% if not in_contest %}
+        <hr style="padding-top: 0.1em">
+        {% include 'lightbox.html' %}
+    {% endif %}
 
     {% if can_vote %}
         <div class="vote-form" id="id_vote_form">
@@ -233,18 +235,19 @@
         </script>
     {% endif %}
 
-    {% include 'voting-stats.html' %}
+    {% if not in_contest %}
+        {% include 'voting-stats.html' %}
+        <a class="form-button" id="id_vote_stats_button">Voting statistics</a>
 
-    <a class="form-button" id="id_vote_stats_button">Voting statistics</a>
+        <script defer>
+            const vote_stats_lightbox = createLightbox('id_vote_stats_lightbox', 'id_vote_stats')
 
-    <script defer>
-        const vote_stats_lightbox = createLightbox('id_vote_stats_lightbox', 'id_vote_stats')
-
-        const vote_stats_button = document.getElementById('id_vote_stats_button')
-        vote_stats_button.onclick = function() {
-            activateLightbox(vote_stats_lightbox)
-        }
-    </script>
+            const vote_stats_button = document.getElementById('id_vote_stats_button')
+            vote_stats_button.onclick = function() {
+                activateLightbox(vote_stats_lightbox)
+            }
+        </script>
+    {% endif %}
 
     {% if (editorial and editorial.is_accessible_by(request.user)) and not request.in_contest %}
         <hr>

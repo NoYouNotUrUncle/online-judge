@@ -158,7 +158,8 @@ class ProblemDetail(ProblemMixin, SolvedProblemMixin, CommentedDetailView):
     def get_comment_page(self):
         return 'p:%s' % self.object.code
 
-    def can_vote(self, user, problem):
+    @staticmethod
+    def can_vote(user, problem):
         if not user.is_authenticated: #reject anons
             return False
         banned = user.profile.is_banned_from_voting_problem_points  # banned from voting site wide
@@ -253,7 +254,6 @@ class ProblemDetail(ProblemMixin, SolvedProblemMixin, CommentedDetailView):
                 context['note_placeholder'] = 'A short justification for this problem\'s points value.'
 
         all_votes = sorted([v.points for v in ProblemPointsVote.objects.filter(problem=self.object)])
-        context['all_votes'] = all_votes
         context['mean_vote'] = sum(all_votes) / len(all_votes)
         context['num_votes'] = len(all_votes)
         context['min_vote'] = all_votes[0]
@@ -279,7 +279,13 @@ class ProblemDetail(ProblemMixin, SolvedProblemMixin, CommentedDetailView):
             context['first_quartile'] = q1[1]
             context['third_quartile'] = q3[1]
 
-        context['authed'] = authed
+        context['in_contest'] = contest_problem is not None
+
+        if context['can_vote']:
+            context['all_votes'] = all_votes
+
+        context['max_possible_vote'] = settings.DMOJ_PROBLEM_MAX_USER_POINTS_VOTE
+        context['min_possible_vote'] = settings.DMOJ_PROBLEM_MIN_USER_POINTS_VOTE
 
         return context
 

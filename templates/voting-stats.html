@@ -39,16 +39,27 @@
     <span class="vote-stats-info">footer</span>
 </div>
 <script defer>
-    const canvas = document.getElementById('id_canvas')
-    const tempDiv = document.getElementById('id_vote_stats')
-    const tempSpan = document.createElement('span')
-    tempSpan.classList.add('vote-stats-text')
-    tempDiv.appendChild(tempSpan)
-    let cnt = 0
+    const ms_per_frame = 50
+
+    let display_votes = false
+    {% if can_vote %}
+        display_votes = true
+        const votes = []
+        {% for vote in all_votes %}
+            votes.push({{ vote }})
+        {% endfor %}
+    {% endif %}
+
     setInterval(function(){
-        //canvas.width = tempDiv.offsetWidth
-        //canvas.height = tempDiv.offsetHeight
-        cnt++
-        tempSpan.innerHTML = canvas.getBoundingClientRect().width+' '+canvas.getBoundingClientRect().height+' '+cnt
-    },1000)
+        const canvas = document.getElementById('id_canvas')
+        const ctx = canvas.getContext('2d')
+        const width = canvas.getBoundingClientRect().width
+        const height = canvas.getBoundingClientRect().height
+        const range = {{ max_vote }}-{{ min_vote }}
+        const min_graph_render = Math.max(range-range/4.0,{{ min_possible_vote }})
+        const max_graph_render = Math.min(range+range/4.0,{{ max_possible_vote }})
+
+        ctx.fillStyle = 'rgb(125,125,125)'
+        ctx.fillRect(40,40,width-80,height-80)
+    },ms_per_frame)
 </script>
