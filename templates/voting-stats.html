@@ -1,7 +1,7 @@
 <style>
     .vote-stats-background{
         background-color: rgb(255,255,255);
-        padding: 40px;
+        padding: 20px;
         border-radius: 25px;
         justify-content: center;
         align-items: center;
@@ -31,11 +31,24 @@
 </style>
 <div class="vote-stats-background" id="id_vote_stats">
     <span class="vote-stats-info">Voting Statistics</span>
-    <canvas class="canvas" id="id_canvas" width="800" height="300"></canvas>
+    <br/>
+    <canvas class="canvas" id="id_canvas"></canvas>
+    <br/>
     <span class="vote-stats-info">footer</span>
 </div>
 <script defer>
+    const canvas = document.getElementById('id_canvas')
+    if(window.innerWidth > 800){ //desktop
+        canvas.width = 800
+        canvas.height = 300
+    } else { //mobile (4x smaller)
+        canvas.width = 200
+        canvas.height = 75
+    }
+
     const ms_per_frame = 50
+    const plot_padding = 20
+    const font_size = 18
 
     let display_votes = false
     {% if can_vote %}
@@ -47,7 +60,6 @@
     {% endif %}
 
     setInterval(function(){
-        const canvas = document.getElementById('id_canvas')
         const ctx = canvas.getContext('2d')
 
         const width = canvas.width//canvas.getBoundingClientRect().width
@@ -60,12 +72,9 @@
         const max_graph_render = Math.min(range+range/4.0,{{ max_possible_vote }})
 
         ctx.fillStyle = 'rgb(125,125,125)'
-        console.log('width: ')
-        console.log(width)
-        console.log('height: ')
-        console.log(height)
         ctx.fillRect(10,10,width-20,height-20)
         ctx.textAlign = 'center'
-        ctx.fillText('9999', 10, height-5)
+        ctx.font = font_size+'px Arial'
+        ctx.fillText(min_graph_render+'p', plot_padding, height-plot_padding/2)
     },ms_per_frame)
 </script>
