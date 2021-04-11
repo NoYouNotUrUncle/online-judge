@@ -72,7 +72,7 @@
         const max_graph_render = Math.min(range+range/4.0,{{ max_possible_vote }})
 
         ctx.fillStyle = 'rgb(125,125,125)'
-        ctx.fillRect(10,10,width-20,height-20)
+        ctx.fillRect(plot_padding,plot_padding,width-2*plot_padding,height-2*plot_padding)
         ctx.textAlign = 'center'
         ctx.font = font_size+'px Arial'
         ctx.fillText(min_graph_render+'p', plot_padding, height-plot_padding/2)
