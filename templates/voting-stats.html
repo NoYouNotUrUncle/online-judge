@@ -15,8 +15,6 @@
         border: 1px;
         border: solid;
         border: #000000;
-        width: 100%;
-        height: 80%;
     }
 
     .vote-stats-value{
@@ -35,7 +33,7 @@
 </style>
 <div class="vote-stats-background" id="id_vote_stats">
     <span class="vote-stats-info">Voting Statistics</span>
-    <canvas class="canvas" id="id_canvas"></canvas>
+    <canvas class="canvas" id="id_canvas" width="800" height="300"></canvas>
     <span class="vote-stats-info">footer</span>
 </div>
 <script defer>
@@ -54,8 +52,8 @@
         const canvas = document.getElementById('id_canvas')
         const ctx = canvas.getContext('2d')
 
-        const width = 300//canvas.getBoundingClientRect().width
-        const height = 150//canvas.getBoundingClientRect().height
+        const width = canvas.width//canvas.getBoundingClientRect().width
+        const height = canvas.height//canvas.getBoundingClientRect().height
         ctx.fillStyle = 'rgb(255,255,255)'
         ctx.fillRect(0,0,width,height)
 
