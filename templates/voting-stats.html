@@ -97,7 +97,7 @@
         let horizontal_line_y = plot_padding
         for(let i=0;i<=4;i++){
             ctx.moveTo(horizontal_line_start_x, horizontal_line_y)
-            ctx.moveTo(horizontal_line_end_x, horizontal_line_y)
+            ctx.lineTo(horizontal_line_end_x, horizontal_line_y)
             ctx.stroke()
             horizontal_line_y += plot_height/4.0
         }
