@@ -38,13 +38,10 @@
 </div>
 <script defer>
     const canvas = document.getElementById('id_canvas')
-    if(window.innerWidth > 800){ //desktop
-        canvas.width = 800
-        canvas.height = 300
-    } else { //mobile (4x smaller)
-        canvas.width = 200
-        canvas.height = 75
-    }
+    const width = 800
+    const height = 300
+    canvas.width = width
+    canvas.height = height
 
     const ms_per_frame = 50
     const plot_padding = 20
@@ -62,8 +59,6 @@
     setInterval(function(){
         const ctx = canvas.getContext('2d')
 
-        const width = canvas.width//canvas.getBoundingClientRect().width
-        const height = canvas.height//canvas.getBoundingClientRect().height
         ctx.fillStyle = 'rgb(255,255,255)'
         ctx.fillRect(0,0,width,height)
 
@@ -74,6 +69,7 @@
         ctx.fillStyle = 'rgb(125,125,125)'
         ctx.fillRect(plot_padding,plot_padding,width-2*plot_padding,height-2*plot_padding)
         ctx.textAlign = 'center'
+        ctx.textBaseline = 'middle'
         ctx.font = font_size+'px Arial'
         ctx.fillText(min_graph_render+'p', plot_padding, height-plot_padding/2)
     },ms_per_frame)
