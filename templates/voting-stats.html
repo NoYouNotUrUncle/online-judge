@@ -71,14 +71,14 @@
         const plot_height = height-2*plot_padding
         ctx.fillRect(plot_padding,plot_padding,plot_width,plot_height)
 
-        ctx.fillStyle = 'rgb(125,125,125)'
+        ctx.fillStyle = 'rgb(94,101,105)'
         ctx.textAlign = 'center'
         ctx.textBaseline = 'middle'
         ctx.font = font_size+'px Arial'
         let points = min_graph_points
         let points_text_x = plot_padding
         let points_text_y = height-plot_padding/2
-
+        ctx.strokeStyle = 'rgb(94,101,105)'
         let line_start_y = plot_padding
         let line_end_y = plot_padding+plot_height
         for(let i=0;i<=10;i++){
