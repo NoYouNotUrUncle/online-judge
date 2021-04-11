@@ -78,12 +78,12 @@
         let points = min_graph_points
         let points_text_x = plot_padding
         let points_text_y = height-plot_padding/2
-        ctx.strokeStyle = 'rgb(94,101,105)'
         let line_start_y = plot_padding
         let line_end_y = plot_padding+plot_height
         for(let i=0;i<=10;i++){
             ctx.moveTo(points_text_x, line_start_y)
             ctx.lineTo(points_text_x, line_end_y)
+            ctx.strokeStyle = 'rgb(94,101,105)'
             ctx.stroke()
             ctx.fillText(points+'p', points_text_x, points_text_y)
 
