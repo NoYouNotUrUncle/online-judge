@@ -43,146 +43,151 @@
 </div>
 <script>
     const canvas = document.getElementById('id_canvas')
-    const width = 800
-    const height = 300
-    canvas.width = width
-    canvas.height = height
+    {% if has_votes %}
+        const width = 800
+        const height = 300
+        canvas.width = width
+        canvas.height = height
 
-    const ms_per_frame = 25
-    const plot_padding = 20
-    const font_size = 14
+        const ms_per_frame = 25
+        const plot_padding = 20
+        const font_size = 14
 
-    const total_frames = 20
-    let frames = 0
-    let animation_started = false
-    function startVotingStatsAnimation(){
-        animation_started = true
-    }
-
-    let mouse_x = 0
-    let mouse_y = 0
-    document.onmousemove = function(e){
-        const canvas_rect = canvas.getBoundingClientRect()
-        const canvas_x = canvas_rect.left
-        const canvas_y = canvas_rect.top
-        mouse_x = e.clientX-canvas_x
-        mouse_y = e.clientY-canvas_y
-    }
-
-    setInterval(function(){
-        if(!isOpen(vote_stats_lightbox)) return 0
-
-        const ctx = canvas.getContext('2d')
-
-        ctx.fillStyle = 'rgb(255,255,255)'
-        ctx.fillRect(0,0,width,height)
-
-        let points_range = {{ max_vote }}-{{ min_vote }}
-        const min_plot_points = Math.max({{ min_vote }}-Math.max(points_range/4.0,2),{{ min_possible_vote }})
-        const max_plot_points = Math.min({{ max_vote }}+Math.max(points_range/4.0,2),{{ max_possible_vote }})
-        points_range = max_plot_points-min_plot_points
-
-        ctx.fillStyle = 'rgb(255,255,255)'
-        const plot_width = width-2*plot_padding
-        const plot_height = height-2*plot_padding
-        ctx.fillRect(plot_padding,plot_padding,plot_width,plot_height)
-
-        function points_to_x(points){
-            return plot_padding+plot_width*((points-min_plot_points)/points_range)
+        const total_frames = 20
+        let frames = 0
+        let animation_started = false
+        function startVotingStatsAnimation(){
+            animation_started = true
         }
 
-        ctx.fillStyle = 'rgb(94,101,105)'
-        ctx.textAlign = 'center'
-        ctx.textBaseline = 'middle'
-        ctx.font = font_size+'px Arial'
-        let points = min_plot_points
-        let points_text_y = height-plot_padding/2
-        ctx.strokeStyle = 'rgb(170,170,170)'
-        let vertical_line_start_y = plot_padding
-        let vertical_line_end_y = plot_padding+plot_height
-        for(let i=0;i<=10;i++){
-            ctx.moveTo(points_to_x(points), vertical_line_start_y)
-            ctx.lineTo(points_to_x(points), vertical_line_end_y)
-            ctx.stroke()
-            ctx.fillText(points.toFixed(2)+'p', points_to_x(points), points_text_y)
-
-            points += points_range/10.0
+        let mouse_x = 0
+        let mouse_y = 0
+        document.onmousemove = function(e){
+            const canvas_rect = canvas.getBoundingClientRect()
+            const canvas_x = canvas_rect.left
+            const canvas_y = canvas_rect.top
+            mouse_x = e.clientX-canvas_x
+            mouse_y = e.clientY-canvas_y
         }
 
-        ctx.strokeStyle = 'rgb(170,170,170)'
-        let horizontal_line_start_x = plot_padding
-        let horizontal_line_end_x = plot_padding+plot_width
-        let horizontal_line_y = plot_padding
-        for(let i=0;i<=4;i++){
-            ctx.moveTo(horizontal_line_start_x, horizontal_line_y)
-            ctx.lineTo(horizontal_line_end_x, horizontal_line_y)
-            ctx.stroke()
-            horizontal_line_y += plot_height/4.0
-        }
+        setInterval(function(){
+            if(!isOpen(vote_stats_lightbox)) return 0
 
-        function get_animated_x(final_x){
-            let initial_x = plot_padding + plot_width/2.0
-            return initial_x+frames*((final_x-initial_x)/total_frames)
-        }
+            const ctx = canvas.getContext('2d')
 
-        function points_to_animated_x(points){
-            return get_animated_x(points_to_x(points))
-        }
+            ctx.fillStyle = 'rgb(255,255,255)'
+            ctx.fillRect(0, 0, width, height)
 
-        //box and whisker plot
-        const box_plot_height = plot_height*(2/3)
+            let points_range = {{ max_vote }}-
+            {{ min_vote }}
+            const min_plot_points = Math.max({{ min_vote }}-Math.max(points_range / 4.0, 2), {{ min_possible_vote }})
+            const max_plot_points = Math.min({{ max_vote }}+Math.max(points_range / 4.0, 2), {{ max_possible_vote }})
+            points_range = max_plot_points - min_plot_points
 
-        {% if can_vote %}
-            const show_votes_box = document.getElementById('id_show_vote_box')
-            if(show_votes_box.checked) {
-                const vote_height = plot_height*(2/3)
-                const vote_width = 5
-                const vote_y = plot_padding+plot_height/2-vote_height/2
+            ctx.fillStyle = 'rgb(255,255,255)'
+            const plot_width = width - 2 * plot_padding
+            const plot_height = height - 2 * plot_padding
+            ctx.fillRect(plot_padding, plot_padding, plot_width, plot_height)
 
-                let votes = []
-                {% for vote in all_votes %}
-                    votes.push({{ vote }})
-                {% endfor %}
-
-                let max_overlap = 0
-                //use 2 pointers approach to get the maximum number of votes that would overlap on top of each other
-                //assuming the aforementioned vote width
-                for(let l=0,r=0;l<votes.length;l++){
-                    if(r < l) r = l;
-
-                    function next_r_overlaps(){
-                        if(r+1 >= votes.length) return false
-                        const left_vote_x = points_to_animated_x(votes[l])-vote_width/2
-                        const right_vote_x = points_to_animated_x(votes[r])-vote_width/2
-                        return left_vote_x+vote_width >= right_vote_x
-                    }
-
-                    while(next_r_overlaps()) r++;
-                    max_overlap = Math.max(max_overlap, r-l+1)
-                }
-
-                let hovered_element = null
-                for(let i=0;i<votes.length;i++){
-                    const vote_x = points_to_animated_x(votes[i])-vote_width/2
-                    if(mouse_x >= vote_x && mouse_x <= vote_x+vote_width && mouse_y >= vote_y && mouse_y <= vote_y+vote_height){
-                        hovered_element = i;
-                    }
-                }
-
-                for(let i=0;i<votes.length;i++){
-                    if(i === hovered_element) ctx.fillStyle = 'rgb(0,0,255,1)'
-                    else {
-                        const transparency = 1/max_overlap;
-                        console.log(transparency)
-                        console.log(max_overlap)
-                        ctx.fillStyle = 'rgb(81,160,213,'+transparency+')'
-                    }
-                    const vote_x = points_to_animated_x(votes[i])-vote_width/2
-                    ctx.fillRect(vote_x, vote_y, vote_width, vote_height)
-                }
+            function points_to_x(points) {
+                return plot_padding + plot_width * ((points - min_plot_points) / points_range)
             }
-        {% endif %}
 
-        if(frames < total_frames && animation_started) frames++
-    },ms_per_frame)
+            ctx.fillStyle = 'rgb(94,101,105)'
+            ctx.textAlign = 'center'
+            ctx.textBaseline = 'middle'
+            ctx.font = font_size + 'px Arial'
+            let points = min_plot_points
+            let points_text_y = height - plot_padding / 2
+            ctx.strokeStyle = 'rgb(170,170,170)'
+            let vertical_line_start_y = plot_padding
+            let vertical_line_end_y = plot_padding + plot_height
+            for (let i = 0; i <= 10; i++) {
+                ctx.moveTo(points_to_x(points), vertical_line_start_y)
+                ctx.lineTo(points_to_x(points), vertical_line_end_y)
+                ctx.stroke()
+                ctx.fillText(points.toFixed(2) + 'p', points_to_x(points), points_text_y)
+
+                points += points_range / 10.0
+            }
+
+            ctx.strokeStyle = 'rgb(170,170,170)'
+            let horizontal_line_start_x = plot_padding
+            let horizontal_line_end_x = plot_padding + plot_width
+            let horizontal_line_y = plot_padding
+            for (let i = 0; i <= 4; i++) {
+                ctx.moveTo(horizontal_line_start_x, horizontal_line_y)
+                ctx.lineTo(horizontal_line_end_x, horizontal_line_y)
+                ctx.stroke()
+                horizontal_line_y += plot_height / 4.0
+            }
+
+            function get_animated_x(final_x) {
+                let initial_x = plot_padding + plot_width / 2.0
+                return initial_x + frames * ((final_x - initial_x) / total_frames)
+            }
+
+            function points_to_animated_x(points) {
+                return get_animated_x(points_to_x(points))
+            }
+
+            //box and whisker plot
+            const box_plot_height = plot_height * (2 / 3)
+
+            {% if can_vote %}
+                const show_votes_box = document.getElementById('id_show_vote_box')
+                if (show_votes_box.checked) {
+                    const vote_height = plot_height * (2 / 3)
+                    const vote_width = 5
+                    const vote_y = plot_padding + plot_height / 2 - vote_height / 2
+
+                    let votes = []
+                    {% for vote in all_votes %}
+                        votes.push({{ vote }})
+                    {% endfor %}
+
+                    let max_overlap = 0
+                    //use 2 pointers approach to get the maximum number of votes that would overlap on top of each other
+                    //assuming the aforementioned vote width
+                    for (let l = 0, r = 0; l < votes.length; l++) {
+                        if (r < l) r = l;
+
+                        function next_r_overlaps() {
+                            if (r + 1 >= votes.length) return false
+                            const left_vote_x = points_to_animated_x(votes[l]) - vote_width / 2
+                            const right_vote_x = points_to_animated_x(votes[r]) - vote_width / 2
+                            return left_vote_x + vote_width >= right_vote_x
+                        }
+
+                        while (next_r_overlaps()) r++;
+                        max_overlap = Math.max(max_overlap, r - l + 1)
+                    }
+
+                    let hovered_element = null
+                    for (let i = 0; i < votes.length; i++) {
+                        const vote_x = points_to_animated_x(votes[i]) - vote_width / 2
+                        if (mouse_x >= vote_x && mouse_x <= vote_x + vote_width && mouse_y >= vote_y && mouse_y <= vote_y + vote_height) {
+                            hovered_element = i;
+                        }
+                    }
+
+                    for (let i = 0; i < votes.length; i++) {
+                        if (i === hovered_element) ctx.fillStyle = 'rgb(0,0,255,1)'
+                        else {
+                            const transparency = 1 / max_overlap;
+                            console.log(transparency)
+                            console.log(max_overlap)
+                            ctx.fillStyle = 'rgb(81,160,213,' + transparency + ')'
+                        }
+                        const vote_x = points_to_animated_x(votes[i]) - vote_width / 2
+                        ctx.fillRect(vote_x, vote_y, vote_width, vote_height)
+                    }
+                }
+            {% endif %}
+
+            if (frames < total_frames && animation_started) frames++
+        },ms_per_frame)
+    {% else %}
+        canvas.hidden = true
+    {% endif %}
 </script>

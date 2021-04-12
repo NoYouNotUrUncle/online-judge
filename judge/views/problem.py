@@ -254,38 +254,40 @@ class ProblemDetail(ProblemMixin, SolvedProblemMixin, CommentedDetailView):
                 context['note_placeholder'] = 'A short justification for this problem\'s points value.'
 
         all_votes = sorted([v.points for v in ProblemPointsVote.objects.filter(problem=self.object)])
-        context['mean_vote'] = sum(all_votes) / len(all_votes)
-        context['num_votes'] = len(all_votes)
-        context['min_vote'] = all_votes[0]
-        context['max_vote'] = all_votes[-1]
+        context['has_votes'] = len(all_votes) > 0
+        if context['has_votes']:
+            context['mean_vote'] = sum(all_votes) / len(all_votes)
+            context['num_votes'] = len(all_votes)
+            context['min_vote'] = all_votes[0]
+            context['max_vote'] = all_votes[-1]
 
-        def median(l,r,data): #provides index and value of the median of some range of the data
-            size = r-l+1
-            if size == 1:
-                return 0,data[0]
-            elif size % 2 == 1:
-                return l+size/2,data[l+int(size/2)]
-            else:
-                return l+size/2+0.5,(data[l+int(size/2)-1]+data[l+int(size/2)])/2
+            def median(l,r,data): #provides index and value of the median of some range of the data
+                size = r-l+1
+                if size == 1:
+                    return 0,data[0]
+                elif size % 2 == 1:
+                    return l+size/2,data[l+int(size/2)]
+                else:
+                    return l+size/2+0.5,(data[l+int(size/2)-1]+data[l+int(size/2)])/2
 
-        median_data = median(0,len(all_votes)-1,all_votes)
-        context['median_vote'] = median_data[1]
-        median_index = median_data[0]
+            median_data = median(0,len(all_votes)-1,all_votes)
+            context['median_vote'] = median_data[1]
+            median_index = median_data[0]
 
-        if len(all_votes) > 2:
-            #box and whisker plot data
-            q1 = median(0,math.ceil(median_index-1),all_votes) #first quartile
-            q3 = median(math.floor(median_index+1),len(all_votes)-1,all_votes) #second quartile
-            context['first_quartile'] = q1[1]
-            context['third_quartile'] = q3[1]
+            if len(all_votes) > 2:
+                #box and whisker plot data
+                q1 = median(0,math.ceil(median_index-1),all_votes) #first quartile
+                q3 = median(math.floor(median_index+1),len(all_votes)-1,all_votes) #second quartile
+                context['first_quartile'] = q1[1]
+                context['third_quartile'] = q3[1]
 
-        context['in_contest'] = contest_problem is not None
+            context['in_contest'] = contest_problem is not None
 
-        if context['can_vote']:
-            context['all_votes'] = all_votes
+            if context['can_vote']:
+                context['all_votes'] = all_votes
 
-        context['max_possible_vote'] = settings.DMOJ_PROBLEM_MAX_USER_POINTS_VOTE
-        context['min_possible_vote'] = settings.DMOJ_PROBLEM_MIN_USER_POINTS_VOTE
+            context['max_possible_vote'] = settings.DMOJ_PROBLEM_MAX_USER_POINTS_VOTE
+            context['min_possible_vote'] = settings.DMOJ_PROBLEM_MIN_USER_POINTS_VOTE
 
         return context
 
