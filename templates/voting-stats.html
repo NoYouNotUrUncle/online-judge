@@ -70,6 +70,8 @@
     }
 
     setInterval(function(){
+        if(!isOpen(vote_stats_lightbox)) return 0
+
         const ctx = canvas.getContext('2d')
 
         ctx.fillStyle = 'rgb(255,255,255)'

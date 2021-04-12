@@ -236,11 +236,15 @@
     {% endif %}
 
     {% if not in_contest %}
+        <script>
+            let vote_stats_lightbox = null
+        </script>
+
         {% include 'voting-stats.html' %}
         <a class="form-button" id="id_vote_stats_button">Voting statistics</a>
 
         <script defer>
-            const vote_stats_lightbox = createLightbox('id_vote_stats_lightbox', 'id_vote_stats')
+            vote_stats_lightbox = createLightbox('id_vote_stats_lightbox', 'id_vote_stats')
 
             const vote_stats_button = document.getElementById('id_vote_stats_button')
             vote_stats_button.onclick = function() {
