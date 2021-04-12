@@ -170,10 +170,13 @@
                     }
 
                     for (let i = 0; i < votes.length; i++) {
-                        if (i === hovered_element) ctx.fillStyle = 'rgb(0,0,255,1)'
+                        if (i === hovered_element) {
+                            ctx.fillStyle = 'rgb(0,0,255,1)'
+                            ctx.globalAlpha = 1
+                        }
                         else {
-                            const transparency = 1 / max_overlap;
-                            ctx.fillStyle = 'rgb(81,160,213,' + transparency + ')'
+                            ctx.fillStyle = 'rgb(81,160,213)'
+                            ctx.globalAlpha = 1 / max_overlap
                         }
                         const vote_x = points_to_animated_x(votes[i]) - vote_width / 2
                         ctx.fillRect(vote_x, vote_y, vote_width, vote_height)
