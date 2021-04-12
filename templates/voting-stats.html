@@ -176,8 +176,7 @@
                         }
                         else {
                             ctx.fillStyle = 'rgb(123,202,255)'
-                            ctx.globalAlpha = 1/max_overlap + 0.1
-                            console.log(ctx.globalAlpha)
+                            ctx.globalAlpha = 1/max_overlap
                         }
                         const vote_x = points_to_animated_x(votes[i]) - vote_width / 2
                         ctx.fillRect(vote_x, vote_y, vote_width, vote_height)
