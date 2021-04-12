@@ -170,9 +170,9 @@
                 }
 
                 for(let i=0;i<votes.length;i++){
-                    if(i === hovered_element) ctx.fillStyle = 'rgb(0,0,255)'
+                    if(i === hovered_element) ctx.fillStyle = 'rgb(0,0,255,1)'
                     else {
-                        const transparency = 255/max_overlap;
+                        const transparency = 1/max_overlap;
                         console.log(transparency)
                         console.log(max_overlap)
                         ctx.fillStyle = 'rgb(81,160,213,'+transparency+')'
