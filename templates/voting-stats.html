@@ -175,8 +175,6 @@
                     }
                     const vote_x = points_to_animated_x(votes[i])-vote_width/2
                     ctx.fillRect(vote_x, vote_y, vote_width, vote_height)
-                    ctx.arc(vote_x+vote_width/2, vote_y, vote_width/2, Math.PI, 0)
-                    ctx.arc(vote_x+vote_width/2, vote_y+vote_height, vote_width/2, 0, Math.PI)
                 }
             }
         {% endif %}
