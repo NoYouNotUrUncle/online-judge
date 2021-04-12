@@ -149,22 +149,15 @@
                     let max_overlap = 0
                     //use 2 pointers approach to get the maximum number of votes that would overlap on top of each other
                     //assuming the aforementioned vote width
-                    let vote_locations = []
-                    for(let i=0;i<votes.length;i++) vote_locations.push(points_to_x(votes[i]))
-                    console.log(vote_locations)
                     for (let l = 0, r = 0; l < votes.length; l++) {
-                        if (r < l) r = l;
-
                         function next_r_overlaps() {
                             if (r + 1 >= votes.length) return false
-                            const left_vote_x = vote_locations[l] - vote_width / 2
-                            const right_vote_x = vote_locations[r] - vote_width / 2
-                            console.log(l+' '+r+': '+(left_vote_x + vote_width >= right_vote_x))
+                            const left_vote_x = points_to_animated_x(votes[l]) - vote_width / 2
+                            const right_vote_x = points_to_animated_x(votes[r+1]) - vote_width / 2
                             return left_vote_x + vote_width >= right_vote_x
                         }
-
+                        if(r < l) r = l
                         while (next_r_overlaps()) r++;
-                        console.log('final: '+l+' '+r)
                         max_overlap = Math.max(max_overlap, r - l + 1)
                     }
 
@@ -180,9 +173,6 @@
                         if (i === hovered_element) ctx.fillStyle = 'rgb(0,0,255,1)'
                         else {
                             const transparency = 1 / max_overlap;
-                            console.log(transparency)
-                            console.log(max_overlap)
-                            console.log(votes)
                             ctx.fillStyle = 'rgb(81,160,213,' + transparency + ')'
                         }
                         const vote_x = points_to_animated_x(votes[i]) - vote_width / 2
