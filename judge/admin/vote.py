@@ -53,7 +53,7 @@ class VoteAdmin(admin.ModelAdmin):
         ] + super(VoteAdmin, self).get_urls()
 
     def judge_view(self, request, id):
-        if not request.user.has_perm('judge.edit_own_problem') and not request.user.has_perm('judge.edit.all_problem'):
+        if not request.user.has_perm('judge.edit_own_problem') and not request.user.has_perm('judge.edit_all_problem'):
             raise PermissionDenied()
 
         # Not sure if I actually need to call this
