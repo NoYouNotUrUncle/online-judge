@@ -28,6 +28,12 @@ class VoteAdmin(admin.ModelAdmin):
             queryset = queryset.filter(Q(problem__authors__id=id) | Q(problem__curators__id=id)).distinct()
         return queryset
 
+    def has_change_permission(self, request, obj=None):
+        if not request.user.has_perm('judge.edit_own_problem'):
+            return False
+        if request.user.has_perm('judge.edit_all_problem') or obj is None:
+            return True
+        return obj.problem.is_editor(request.profile)
 
 
     def problem_code(self, obj):
@@ -49,13 +55,11 @@ class VoteAdmin(admin.ModelAdmin):
     def get_urls(self):
         return [
             url('r^(\d+)/judge/$', self.judge_view, name='judge_vote'),
+            url('r^(\d+)/judge/$', self.judge_view, name='judge_ProblemPointsVote'),
         ] + super(VoteAdmin, self).get_urls()
 
     def judge_view(self, request, id):
-        if not request.user.has_perm('judge.edit_own_problem') and not request.user.has_perm('judge.edit.all_problem'):
+        if not request.user.has_perm('judge.edit_own_problem') and not request.user.has_perm('judge.edit_all_problem'):
             raise PermissionDenied()
 
-        # Not sure if I actually need to call this
-        vote = get_object_or_404(ProblemPointsVote, id=id)
         return HttpResponseRedirect(request.META.get('HTTP_REFERER', '/'))
-
