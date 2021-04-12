@@ -149,13 +149,16 @@
                     let max_overlap = 0
                     //use 2 pointers approach to get the maximum number of votes that would overlap on top of each other
                     //assuming the aforementioned vote width
+                    let vote_locations = []
+                    for(let i=0;i<votes.length;i++) vote_locations.push(points_to_x(votes[i]))
+                    console.log(vote_locations)
                     for (let l = 0, r = 0; l < votes.length; l++) {
                         if (r < l) r = l;
 
                         function next_r_overlaps() {
                             if (r + 1 >= votes.length) return false
-                            const left_vote_x = points_to_x(votes[l]) - vote_width / 2
-                            const right_vote_x = points_to_x(votes[r]) - vote_width / 2
+                            const left_vote_x = vote_locations[l] - vote_width / 2
+                            const right_vote_x = vote_locations[r] - vote_width / 2
                             return left_vote_x + vote_width >= right_vote_x
                         }
 
