@@ -80,7 +80,7 @@
         const max_plot_points = Math.min({{ max_vote }}+Math.max(points_range/4.0,2),{{ max_possible_vote }})
         points_range = max_plot_points-min_plot_points
 
-        ctx.fillStyle = 'rgb(217,240,236)'
+        ctx.fillStyle = 'rgb(255,255,255)'
         const plot_width = width-2*plot_padding
         const plot_height = height-2*plot_padding
         ctx.fillRect(plot_padding,plot_padding,plot_width,plot_height)
