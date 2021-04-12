@@ -173,8 +173,7 @@
                         const base_transparency = 100
                         const transparency = base_transparency+(255-base_transparency)*(1-1/max_overlap);
                         console.log(transparency)
-                        //81, 160, 213
-                        ctx.fillStyle = 'rgb(0,0,255,'+transparency+')'
+                        ctx.fillStyle = 'rgb(81,160,213,'+transparency+')'
                     }
                     const vote_x = points_to_animated_x(votes[i])-vote_width/2
                     ctx.fillRect(vote_x, vote_y, vote_width, vote_height)
