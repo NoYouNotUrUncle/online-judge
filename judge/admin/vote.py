@@ -28,6 +28,12 @@ class VoteAdmin(admin.ModelAdmin):
             queryset = queryset.filter(Q(problem__authors__id=id) | Q(problem__curators__id=id)).distinct()
         return queryset
 
+    def has_change_permission(self, request, obj=None):
+        if not request.user.has_perm('judge.edit_own_problem'):
+            return False
+        if request.user.has_perm('judge.edit_all_problem') or obj is None:
+            return True
+        return obj.problem.is_editor(request.profile)
 
 
     def problem_code(self, obj):
