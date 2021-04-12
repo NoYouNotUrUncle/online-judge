@@ -77,10 +77,15 @@
         console.log('min vote: '+{{ min_vote }})
         console.log('max vote: '+{{ max_vote }})
         console.log('votes: {{ all_votes }}')
+        console.log('min possible vote: '+{{ min_possible_vote }})
+        console.log('max possible vote: '+{{ max_possible_vote }})
         let points_range = {{ max_vote }}-{{ min_vote }}
         const min_plot_points = Math.max({{ min_vote }}-Math.max(points_range/4.0,2),{{ min_possible_vote }})
         const max_plot_points = Math.min({{ max_vote }}+Math.max(points_range/4.0,2),{{ max_possible_vote }})
         points_range = max_plot_points-min_plot_points
+        console.log(min_plot_points)
+        console.log(max_plot_points)
+        console.log(points_range)
 
         ctx.fillStyle = 'rgb(211,211,211)'
         const plot_width = width-2*plot_padding
