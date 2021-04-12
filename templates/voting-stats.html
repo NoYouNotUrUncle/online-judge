@@ -38,7 +38,7 @@
     <br/>
     {% if can_vote %}
         <span class="vote-stats-info">Show Votes</span>
-        <input type="checkbox" id="id_show_vote_box">
+        <input type="checkbox" id="id_show_vote_box" checked="true">
     {% endif %}
 </div>
 <script>
@@ -74,6 +74,8 @@
         ctx.fillStyle = 'rgb(255,255,255)'
         ctx.fillRect(0,0,width,height)
 
+        console.log('min vote: '+{{ min_vote }})
+        console.log('max vote: '+{{ min_vote }})
         const points_range = {{ max_vote }}-{{ min_vote }}
         const min_plot_points = Math.max({{ min_vote }}-Math.max(points_range/4.0,2),{{ min_possible_vote }})
         const max_plot_points = Math.min({{ max_vote }}+Math.max(points_range/4.0,2),{{ max_possible_vote }})
