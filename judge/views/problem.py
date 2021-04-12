@@ -257,7 +257,7 @@ class ProblemDetail(ProblemMixin, SolvedProblemMixin, CommentedDetailView):
         context['mean_vote'] = sum(all_votes) / len(all_votes)
         context['num_votes'] = len(all_votes)
         context['min_vote'] = all_votes[0]
-        context['max_vote'] = all_votes[-1]
+        context['max_vote'] = all_votes[len(all_votes)-1]
 
         def median(l,r,data): #provides index and value of the median of some range of the data
             size = r-l+1
