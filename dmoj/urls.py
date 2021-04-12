@@ -153,7 +153,6 @@ urlpatterns = [
 
     url(r'^src/(?P<submission>\d+)$', submission.SubmissionSource.as_view(), name='submission_source'),
 
-    ## add votes
 
 
     url(r'^src/(?P<submission>\d+)/raw$', submission.SubmissionSourceRaw.as_view(), name='submission_source_raw'),
