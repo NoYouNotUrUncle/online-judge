@@ -48,7 +48,7 @@
     canvas.width = width
     canvas.height = height
 
-    const ms_per_frame = 16
+    const ms_per_frame = 30
     const plot_padding = 20
     const font_size = 14
 
@@ -172,6 +172,7 @@
                     else {
                         const base_transparency = 100
                         const transparency = base_transparency+(255-base_transparency)*(1-1/max_overlap);
+                        console.log(transparency)
                         ctx.fillStyle = 'rgb(0,0,255,'+transparency+')'
                     }
                     const vote_x = points_to_animated_x(votes[i])-vote_width/2
