@@ -35,8 +35,13 @@
     <canvas class="canvas" id="id_canvas"></canvas>
     <br/>
     <span class="vote-stats-info">footer</span>
+    <br/>
+    {% if can_vote %}
+        <span class="vote-stats-info">Show Votes</span>
+        <input type="checkbox" id="id_show_vote_box">
+    {% endif %}
 </div>
-<script defer>
+<script>
     const canvas = document.getElementById('id_canvas')
     const width = 800
     const height = 300
@@ -45,7 +50,7 @@
 
     const ms_per_frame = 50
     const plot_padding = 20
-    const font_size = 16
+    const font_size = 14
 
     let display_votes = false
     {% if can_vote %}
@@ -55,6 +60,13 @@
             votes.push({{ vote }})
         {% endfor %}
     {% endif %}
+
+    const total_frames = 40
+    let frames = 0
+    let animation_started = false
+    function startAnimation(){
+        animation_started = true
+    }
 
     setInterval(function(){
         const ctx = canvas.getContext('2d')
@@ -71,24 +83,26 @@
         const plot_height = height-2*plot_padding
         ctx.fillRect(plot_padding,plot_padding,plot_width,plot_height)
 
+        function points_to_x(points){
+            return plot_padding+plot_width*((points-min_graph_points)/points_range)
+        }
+
         ctx.fillStyle = 'rgb(94,101,105)'
         ctx.textAlign = 'center'
         ctx.textBaseline = 'middle'
         ctx.font = font_size+'px Arial'
         let points = min_graph_points
-        let points_text_x = plot_padding
         let points_text_y = height-plot_padding/2
         ctx.strokeStyle = 'rgb(170,170,170)'
         let vertical_line_start_y = plot_padding
         let vertical_line_end_y = plot_padding+plot_height
         for(let i=0;i<=10;i++){
-            ctx.moveTo(points_text_x, vertical_line_start_y)
-            ctx.lineTo(points_text_x, vertical_line_end_y)
+            ctx.moveTo(points_to_x(points), vertical_line_start_y)
+            ctx.lineTo(points_to_x(points), vertical_line_end_y)
             ctx.stroke()
-            ctx.fillText(points+'p', points_text_x, points_text_y)
+            ctx.fillText(points.toFixed(2)+'p', points_to_x(points), points_text_y)
 
             points += points_range/10.0
-            points_text_x += plot_width/10.0
         }
 
         ctx.strokeStyle = 'rgb(170,170,170)'
@@ -101,5 +115,17 @@
             ctx.stroke()
             horizontal_line_y += plot_height/4.0
         }
+
+        function get_animated_x(final_x){
+            let initial_x = plot_padding + plot_width/2.0
+            return initial_x+frames*((final_x-initial_x)/total_frames)
+        }
+
+        //box and whisker plot
+        const box_plot_height = plot_height*(2/3)
+
+        //votes
+
+        if(frames < total_frames && animation_started) frames++;
     },ms_per_frame)
 </script>
