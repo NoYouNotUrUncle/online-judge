@@ -125,7 +125,17 @@
         //box and whisker plot
         const box_plot_height = plot_height*(2/3)
 
-        //votes
+        {% if can_vote %}
+            const show_votes_box = document.getElementById('id_show_vote_box')
+            if(show_votes_box.checked) {
+                //show votes
+                const vote_height = plot_height * (2 / 3)
+                const vote_width = 5
+                let overlaps = 0
+                let curOverlaps = 0
+
+            }
+        {% endif %}
 
         if(frames < total_frames && animation_started) frames++;
     },ms_per_frame)

@@ -268,9 +268,9 @@ class ProblemDetail(ProblemMixin, SolvedProblemMixin, CommentedDetailView):
             else:
                 return l+size/2+0.5,(data[l+int(size/2)-1]+data[l+int(size/2)])/2
 
-        median = median(0,len(all_votes)-1,all_votes)
-        context['median_vote'] = median[1]
-        median_index = median[0]
+        median_data = median(0,len(all_votes)-1,all_votes)
+        context['median_vote'] = median_data[1]
+        median_index = median_data[0]
 
         if len(all_votes) > 2:
             #box and whisker plot data
