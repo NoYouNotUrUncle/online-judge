@@ -170,7 +170,7 @@
                 for(let i=0;i<votes.length;i++){
                     if(i === hovered_element) ctx.fillStyle = 'rgb(0,0,125)'
                     else {
-                        const transparency = max_overlap/{{ num_votes }};
+                        const transparency = 255/max_overlap;
                         ctx.fillStyle = 'rgb(0,0,255,'+transparency+')'
                     }
                     const vote_x = points_to_animated_x(votes[i])-vote_width/2
