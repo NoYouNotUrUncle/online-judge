@@ -51,3 +51,11 @@ class VotesAdmin(admin.ModelAdmin):
             url('r^(\d+)/judge/$', self.judge_view, name='judge_vote'),
         ] + super(VotesAdmin, self).get_urls()
 
+    def judge_view(self, request, id):
+        if not request.user.has_perm('judge.edit_own_problem') and not request.user.has_perm('judge.edit.all_problem'):
+            raise PermissionDenied()
+
+        # Not sure if I actually need to call this
+        vote = get_object_or_404(ProblemPointsVote, id=id)
+        return HttpResponseRedirect(request.META.get('HTTP_REFERER', '/'))
+
