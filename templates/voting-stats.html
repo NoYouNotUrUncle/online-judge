@@ -75,7 +75,7 @@
         ctx.fillRect(0,0,width,height)
 
         console.log('min vote: '+{{ min_vote }})
-        console.log('max vote: '+{{ min_vote }})
+        console.log('max vote: '+{{ max_vote }})
         console.log('votes: {{ all_votes }}')
         const points_range = {{ max_vote }}-{{ min_vote }}
         const min_plot_points = Math.max({{ min_vote }}-Math.max(points_range/4.0,2),{{ min_possible_vote }})
