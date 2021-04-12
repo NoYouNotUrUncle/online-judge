@@ -13,7 +13,7 @@ from judge.models import ProblemPointsVote
 
 from judge.utils.raw_sql import use_straight_join
 
-class VotesAdmin(admin.ModelAdmin):
+class VoteAdmin(admin.ModelAdmin):
     list_display = ('id', 'problem_code', 'problem_name', 'user_column')
     search_fields = ('problem__code', 'problem__name', 'user__user__username')
 
@@ -49,7 +49,7 @@ class VotesAdmin(admin.ModelAdmin):
     def get_urls(self):
         return [
             url('r^(\d+)/judge/$', self.judge_view, name='judge_vote'),
-        ] + super(VotesAdmin, self).get_urls()
+        ] + super(VoteAdmin, self).get_urls()
 
     def judge_view(self, request, id):
         if not request.user.has_perm('judge.edit_own_problem') and not request.user.has_perm('judge.edit.all_problem'):
