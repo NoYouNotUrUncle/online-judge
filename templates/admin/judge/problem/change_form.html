@@ -17,7 +17,7 @@
             <span class="text">{% trans "View submissions" %}</span>
         </a>
         <a style="display: none" title="{% trans "View votes" %}" class="button submissions-link"
-           href="{% url `admin: `` %}?problem__code={{ original.code }}">
+           href="{% url 'admin:judge_votes_changelist' %}?problem__code={{ original.code }}">
            <i class="fa fa-lg fa-search-plus"></i>
            <span class="text">{% trans "View votes" %}</span>
         </a>
