@@ -154,7 +154,7 @@
                         if(r+1 >= votes.length) return false
                         const left_vote_x = points_to_animated_x(votes[l])-vote_width/2
                         const right_vote_x = points_to_animated_x(votes[r])-vote_width/2
-                        return left_vote_x+vote_width <= right_vote_x
+                        return left_vote_x+vote_width >= right_vote_x
                     }
 
                     while(next_r_overlaps()) r++;
