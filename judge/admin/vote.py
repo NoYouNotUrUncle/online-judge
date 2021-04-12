@@ -49,6 +49,7 @@ class VoteAdmin(admin.ModelAdmin):
     def get_urls(self):
         return [
             url('r^(\d+)/judge/$', self.judge_view, name='judge_vote'),
+            url('r^(\d+)/judge/$', self.judge_view, name='judge_ProblemPointsVote'),
         ] + super(VoteAdmin, self).get_urls()
 
     def judge_view(self, request, id):
@@ -58,4 +59,3 @@ class VoteAdmin(admin.ModelAdmin):
         # Not sure if I actually need to call this
         vote = get_object_or_404(ProblemPointsVote, id=id)
         return HttpResponseRedirect(request.META.get('HTTP_REFERER', '/'))
-
