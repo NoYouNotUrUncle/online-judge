@@ -48,11 +48,11 @@
     canvas.width = width
     canvas.height = height
 
-    const ms_per_frame = 30
+    const ms_per_frame = 50
     const plot_padding = 20
     const font_size = 14
 
-    const total_frames = 10
+    const total_frames = 20
     let frames = 0
     let animation_started = false
     function startVotingStatsAnimation(){
@@ -168,11 +168,12 @@
                 }
 
                 for(let i=0;i<votes.length;i++){
-                    if(i === hovered_element) ctx.fillStyle = 'rgb(0,0,125)'
+                    if(i === hovered_element) ctx.fillStyle = 'rgb(0,0,255)'
                     else {
                         const base_transparency = 100
                         const transparency = base_transparency+(255-base_transparency)*(1-1/max_overlap);
                         console.log(transparency)
+                        //81, 160, 213
                         ctx.fillStyle = 'rgb(0,0,255,'+transparency+')'
                     }
                     const vote_x = points_to_animated_x(votes[i])-vote_width/2
