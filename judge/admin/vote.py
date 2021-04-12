@@ -56,6 +56,4 @@ class VoteAdmin(admin.ModelAdmin):
         if not request.user.has_perm('judge.edit_own_problem') and not request.user.has_perm('judge.edit_all_problem'):
             raise PermissionDenied()
 
-        # Not sure if I actually need to call this
-        vote = get_object_or_404(ProblemPointsVote, id=id)
         return HttpResponseRedirect(request.META.get('HTTP_REFERER', '/'))
