@@ -52,8 +52,9 @@
         const plot_padding = 20
         const font_size = 14
 
-        const ms_per_frame = 10
-        const total_frames = 60
+        const animation_duration = 1000
+        const ms_per_frame = 50
+        const total_frames = animation_duration/ms_per_frame
         let frames = 0
         let animation_started = false
         function startVotingStatsAnimation(){
@@ -75,11 +76,6 @@
 
         setInterval(function(){
             if(!isOpen(vote_stats_lightbox)) return 0
-
-            console.log('{{ all_votes }}')
-
-            //ctx.restore()
-            //ctx.save()
 
             ctx.fillStyle = 'rgb(255,255,255)'
             ctx.clearRect(0,0,width,height)
@@ -214,6 +210,15 @@
             ctx.beginPath()
             ctx.moveTo(box_plot_x[2],box_plot_median_y)
             ctx.lineTo(box_plot_x[2],box_plot_median_y+box_plot_median_height)
+            ctx.stroke()
+
+            const mean_y = box_plot_median_y
+            const mean_height = box_plot_median_height
+            const mean_x = points_to_animated_x({{ mean_vote }})
+            ctx.strokeStyle = '#00ff00'
+            ctx.beginPath()
+            ctx.moveTo(mean_x,mean_y)
+            ctx.lineTo(mean_x,mean_y+mean_height)
             ctx.stroke()
 
             {% if can_vote %}
