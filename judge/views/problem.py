@@ -168,6 +168,10 @@ class ProblemDetail(ProblemMixin, SolvedProblemMixin, CommentedDetailView):
         ac = Submission.objects.filter(user=user.profile,problem=problem,result='AC').exists()
         return ac and not in_contest and not banned
 
+    @staticmethod
+    def default_note():
+        return 'A short justification for this problem\'s points value.'
+
     def get_context_data(self, **kwargs):
         context = super(ProblemDetail, self).get_context_data(**kwargs)
         user = self.request.user
@@ -251,7 +255,7 @@ class ProblemDetail(ProblemMixin, SolvedProblemMixin, CommentedDetailView):
             if context['has_voted']:
                 context['note_placeholder'] = context['voted_note']
             else:
-                context['note_placeholder'] = 'A short justification for this problem\'s points value.'
+                context['note_placeholder'] = self.default_note()
 
         all_votes = sorted([v.points for v in ProblemPointsVote.objects.filter(problem=self.object)])
         context['has_votes'] = len(all_votes) > 0
@@ -308,6 +312,8 @@ class ProblemDetail(ProblemMixin, SolvedProblemMixin, CommentedDetailView):
                         vote = form.save(commit=False)
                         vote.voter = request.user.profile
                         vote.problem = self.object
+                        if vote.note == self.default_note() or vote.note.strip() == '':
+                            vote.note = ' ' #correct to blank
                         vote.save()
                         return self.get(request, *args, **kwargs)
                     else:

@@ -21,7 +21,8 @@ class ProblemPointsVote(models.Model):
     note = models.TextField( #note to go along with vote
         verbose_name='note',
         help_text='Justification for problem points value.',
-        max_length=2048
+        max_length=2048,
+        required=False,
     )
 
     def __str__(self):

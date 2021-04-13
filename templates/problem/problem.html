@@ -214,6 +214,16 @@
         {% endif %}
 
         <script defer>
+            //clear upon the first click of the note box
+            let cleared_default = false
+            const note_field = document.getElementById('id_note')
+            note_field.onclick = function(){
+                if(!cleared_default){
+                    cleared_default = true
+                    note_field.innerHTML = ''
+                }
+            }
+
             const voting_lightbox = createLightbox('id_voting_lightbox', 'id_vote_form')
 
             {% if has_errors %}
