@@ -98,7 +98,7 @@
             ctx.font = font_size + 'px Arial'
             let points = min_plot_points
             let points_text_y = height - plot_padding / 2
-            ctx.strokeStyle = '#aaaaaa'
+            ctx.strokeStyle = 'rgb(94,101,105)'
             let vertical_line_start_y = plot_padding
             let vertical_line_end_y = plot_padding + plot_height
             for (let i = 0; i <= 10; i++) {
@@ -110,7 +110,7 @@
                 points += points_range / 10.0
             }
 
-            ctx.strokeStyle = '#aaaaaa'
+            ctx.strokeStyle = 'rgb(94,101,105)'
             let horizontal_line_start_x = plot_padding
             let horizontal_line_end_x = plot_padding + plot_width
             let horizontal_line_y = plot_padding
@@ -240,8 +240,6 @@
                     }
                 }
             {% endif %}
-
-            ctx.globalAlpha = 1
 
             if (frames < total_frames && animation_started) frames++
         },ms_per_frame)
