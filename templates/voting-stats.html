@@ -76,6 +76,8 @@
         setInterval(function(){
             if(!isOpen(vote_stats_lightbox)) return 0
 
+            console.log('{{ all_votes }}')
+
             //ctx.restore()
             //ctx.save()
 
@@ -123,7 +125,6 @@
                 ctx.beginPath()
                 ctx.moveTo(horizontal_line_start_x, horizontal_line_y)
                 ctx.lineTo(horizontal_line_end_x, horizontal_line_y)
-                console.log(ctx.strokeStyle)
                 ctx.stroke()
                 horizontal_line_y += plot_height / 4.0
             }
@@ -147,6 +148,7 @@
             const box_plot_median_y = plot_padding+plot_height/2-box_plot_middle_y/2
 
             const box_plot_data = [{{ min_vote,first_quartile,median_vote,third_quartile,max_vote }}]
+            console.log(box_plot_data)
             const render_box_plot = [true,true,true,true,true]
             if(box_plot_data[3] === box_plot_data[2]) render_box_plot[3] = false
             if(box_plot_data[4] === box_plot_data[2] || box_plot_data[4] == box_plot_data[3]) render_box_plot[4] = false
