@@ -54,7 +54,7 @@ class VoteAdmin(admin.ModelAdmin):
     # need to look into to see if works
     def get_urls(self):
         return [
-            url('r^(\d+)/judge/vote/$', self.judge_view, name='judge_vote'),
+            url(r'^(\d+)/judge/vote/$', self.judge_view, name='judge_vote'),
         ] + super(VoteAdmin, self).get_urls()
 
     def judge_view(self, request, id):
