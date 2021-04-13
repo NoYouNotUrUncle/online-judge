@@ -154,6 +154,7 @@
             const box_plot_x = []
             for(let i=0;i<5;i++) box_plot_x.push(points_to_animated_x(box_plot_data[i]))
 
+            ctx.beginPath()
             ctx.strokeStyle = '#000000'
             if(render_box_plot[0]){
                 ctx.moveTo(box_plot_x[0],box_plot_edges_y)
