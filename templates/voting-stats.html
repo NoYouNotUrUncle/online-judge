@@ -33,6 +33,11 @@
         width: 20px;
         height: 20px;
     }
+
+    .vertical-line{
+        border-left: 1px black;
+        height:30px;
+    }
 </style>
 <div class="vote-stats-background" id="id_vote_stats">
     <span class="vote-stats-info">Voting Statistics</span>
@@ -44,12 +49,15 @@
     {% if can_vote %}
         <span class="vote-stats-info">Show Votes</span>
         <input class="checkbox" type="checkbox" id="id_show_vote_box" checked="true">
+        <div class="vertical-line"></div>
     {% endif %}
     <span class="vote-stats-info">Show Median</span>
     <input class="checkbox" type="checkbox" id="id_show_median_box" checked="true">
+    <div class="vertical-line"></div>
     <span class="vote-stats-info">Show Mean</span>
     <input class="checkbox" type="checkbox" id="id_show_mean_box" checked="true">
     {% if enough_data_for_plot %}
+        <div class="vertical-line"></div>
         <span class="vote-stats-info">Show Box and Whisker Plot</span>
         <input class="checkbox" type="checkbox" id="id_show_box_plot_box" checked="true">
     {% endif %}
