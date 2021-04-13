@@ -76,10 +76,9 @@
             const ctx = canvas.getContext('2d')
 
             ctx.fillStyle = 'rgb(255,255,255)'
-            ctx.fillRect(0, 0, 99999, 99999)
+            ctx.clearRect(0,0,width,height)
 
-            let points_range = {{ max_vote }}-
-            {{ min_vote }}
+            let points_range = {{ max_vote }}-{{ min_vote }}
             const min_plot_points = Math.max({{ min_vote }}-Math.max(points_range / 4.0, 2), {{ min_possible_vote }})
             const max_plot_points = Math.min({{ max_vote }}+Math.max(points_range / 4.0, 2), {{ max_possible_vote }})
             points_range = max_plot_points - min_plot_points
