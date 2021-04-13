@@ -98,7 +98,7 @@
             ctx.font = font_size + 'px Arial'
             let points = min_plot_points
             let points_text_y = height - plot_padding / 2
-            ctx.strokeStyle = 'rgb(170,170,170)'
+            ctx.strokeStyle = '#aaaaaa'
             let vertical_line_start_y = plot_padding
             let vertical_line_end_y = plot_padding + plot_height
             for (let i = 0; i <= 10; i++) {
@@ -110,7 +110,7 @@
                 points += points_range / 10.0
             }
 
-            ctx.strokeStyle = 'rgb(170,170,170)'
+            ctx.strokeStyle = '#aaaaaa'
             let horizontal_line_start_x = plot_padding
             let horizontal_line_end_x = plot_padding + plot_width
             let horizontal_line_y = plot_padding
@@ -149,7 +149,7 @@
             const box_plot_x = []
             for(let i=0;i<5;i++) box_plot_x.push(points_to_animated_x(box_plot_data[i]))
 
-            ctx.strokeStyle = 'rgb(0,0,0)'
+            ctx.strokeStyle = '#000000'
             if(render_box_plot[0]){
                 ctx.moveTo(box_plot_x[0],box_plot_edges_y)
                 ctx.lineTo(box_plot_x[0],box_plot_edges_y+box_plot_edges_height)
@@ -189,7 +189,7 @@
                 ctx.stroke()
             }
 
-            ctx.strokeStyle = 'rgb(255,0,0)'
+            ctx.strokeStyle = '#ff0000'
             ctx.moveTo(box_plot_x[2],box_plot_median_y)
             ctx.lineTo(box_plot_x[2],box_plot_median_y+box_plot_median_height)
             ctx.stroke()
