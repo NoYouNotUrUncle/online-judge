@@ -263,12 +263,13 @@ class ProblemDetail(ProblemMixin, SolvedProblemMixin, CommentedDetailView):
 
             def median(l,r,data): #provides index and value of the median of some range of the data
                 size = r-l+1
-                if size == 1:
-                    return 0,data[0]
-                elif size % 2 == 1:
-                    return l+size/2,data[l+int(size/2)]
+                index = l+(size-1)/2
+                value = None
+                if size % 2 == 1:
+                    value = data[int(index)]
                 else:
-                    return l+size/2+0.5,(data[l+int(size/2)-1]+data[l+int(size/2)])/2
+                    value = (data[math.floor(index)]+data[math.ceil(index)])/2
+                return index,value
 
             median_data = median(0,len(all_votes)-1,all_votes)
             context['median_vote'] = median_data[1]
