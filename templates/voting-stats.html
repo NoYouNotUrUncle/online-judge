@@ -240,20 +240,20 @@
                 }
             {% endif %}
             //draw median line
-            const box_plot_median_height = plot_height * (5 / 6)
-            const box_plot_median_y = plot_padding + plot_height / 2 - box_plot_median_height / 2
+            const median_height = plot_height * (5 / 6)
+            const median_y = plot_padding + plot_height / 2 - median_height / 2
             const median_x = points_to_animated_x({{ median_vote }})
             if(document.getElementById('id_show_median_box').checked) {
                 ctx.strokeStyle = '#ff0000'
                 ctx.lineWidth = 5
                 ctx.beginPath()
-                ctx.moveTo(median_x, box_plot_median_y)
-                ctx.lineTo(median_x, box_plot_median_y + box_plot_median_height)
+                ctx.moveTo(median_x, median_y)
+                ctx.lineTo(median_x, median_y + median_height)
                 ctx.stroke()
             }
             //draw mean line
-            const mean_y = box_plot_median_y
-            const mean_height = box_plot_median_height
+            const mean_y = median_y
+            const mean_height = median_height
             const mean_x = points_to_animated_x({{ mean_vote }})
             if(document.getElementById('id_show_mean_box').checked) {
                 ctx.strokeStyle = '#00cc00'
