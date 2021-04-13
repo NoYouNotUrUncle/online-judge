@@ -71,9 +71,13 @@
         }
 
         const ctx = canvas.getContext('2d')
+        ctx.save()
 
         setInterval(function(){
             if(!isOpen(vote_stats_lightbox)) return 0
+
+            //ctx.restore()
+            //ctx.save()
 
             ctx.fillStyle = 'rgb(255,255,255)'
             ctx.clearRect(0,0,width,height)
@@ -130,7 +134,7 @@
             function points_to_animated_x(points) {
                 return get_animated_x(points_to_x(points))
             }
-
+            /*
             //box and whisker plot
             const box_plot_height = plot_height * (3 / 4)
             const box_plot_y = plot_padding+plot_height/2-box_plot_height/2
@@ -194,7 +198,7 @@
             ctx.moveTo(box_plot_x[2],box_plot_median_y)
             ctx.lineTo(box_plot_x[2],box_plot_median_y+box_plot_median_height)
             ctx.stroke()
-
+            */
             {% if can_vote %}
                 const show_votes_box = document.getElementById('id_show_vote_box')
                 if (show_votes_box.checked) {
