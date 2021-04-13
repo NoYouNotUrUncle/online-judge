@@ -44,7 +44,7 @@
     <br/>
     <canvas class="canvas" id="id_canvas"></canvas>
     <br/>
-    {% has_votes %}
+    {% if has_votes %}
         {% if can_vote %}
             <span class="vote-stats-info">Show Votes</span>
             <input class="checkbox" type="checkbox" id="id_show_vote_box" checked="true">
