@@ -32,7 +32,6 @@
     .checkbox{
         width: 20px;
         height: 20px;
-        padding-bottom: 10px;
     }
 </style>
 <div class="vote-stats-background" id="id_vote_stats">
@@ -230,6 +229,7 @@
             const median_x = points_to_animated_x({{ median_vote }})
             if(document.getElementById('id_show_median_box').checked) {
                 ctx.strokeStyle = '#ff0000'
+                ctx.lineWidth = 5
                 ctx.beginPath()
                 ctx.moveTo(median_x, box_plot_median_y)
                 ctx.lineTo(median_x, box_plot_median_y + box_plot_median_height)
@@ -241,6 +241,7 @@
             const mean_x = points_to_animated_x({{ mean_vote }})
             if(document.getElementById('id_show_mean_box').checked) {
                 ctx.strokeStyle = '#00cc00'
+                ctx.lineWidth = 5
                 ctx.beginPath()
                 ctx.moveTo(mean_x, mean_y)
                 ctx.lineTo(mean_x, mean_y + mean_height)
@@ -248,19 +249,28 @@
             }
 
             {% if can_vote %}
+                //draw the individual votes
                 if (document.getElementById('id_show_vote_box').checked) {
+                    //vote size settings
                     const vote_height = plot_height * (2 / 3)
                     const vote_width = 10
                     const vote_y = plot_padding + plot_height / 2 - vote_height / 2
-
+                    //get the votes from context
                     let votes = []
                     {% for vote in all_votes %}
                         votes.push({{ vote }})
                     {% endfor %}
 
+                    /*
+                    votes will have their transparency adjusted based on the maximum amount of
+                    overlap with other votes at any given point in the plot
+                    e.g. if there is a max overlap of 2, all votes are 50% opaque
+                    if there is a max overlap of 4, all votes are 25% opaque
+                    doesn't work perfectly in practice because 50% opacity + 50% opacity != 100% opacity,
+                    but it provides a nice affect that still makes overlapping votes seem heavier than others
+                     */
                     let max_overlap = 0
                     //use 2 pointers approach to get the maximum number of votes that would overlap on top of each other
-                    //assuming the aforementioned vote width
                     for (let l = 0, r = 0; l < votes.length; l++) {
                         function next_r_overlaps() {
                             if (r + 1 >= votes.length) return false
@@ -272,7 +282,7 @@
                         while (next_r_overlaps()) r++;
                         max_overlap = Math.max(max_overlap, r - l + 1)
                     }
-
+                    //check which element user is moving their mouse over
                     let hovered_element = null
                     for (let i = 0; i < votes.length; i++) {
                         const vote_x = points_to_animated_x(votes[i]) - vote_width / 2
@@ -280,7 +290,7 @@
                             hovered_element = i;
                         }
                     }
-
+                    //draw the votes
                     for (let i = 0; i < votes.length; i++) {
                         if (i === hovered_element) ctx.fillStyle = 'rgb(0,0,255)'
                         else {
@@ -292,7 +302,7 @@
                     }
                 }
             {% endif %}
-
+            //forward animation if incomplete
             if (frames < total_frames && animation_started) frames++
         },ms_per_frame)
     {% else %}
