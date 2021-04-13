@@ -61,6 +61,12 @@
         <span class="vote-stats-info">Show Box and Whisker Plot</span>
         <input class="checkbox" type="checkbox" id="id_show_box_plot_box" checked="true">
     {% endif %}
+    <br/>
+    <span class="vote-stats-info">Median Vote:</span>
+    <span class="vote-stats-value">{{ median_vote }}</span>
+    <br/>
+    <span class="vote-stats-info">Mean Vote:</span>
+    <span class="vote-stats-value">{{ mean_vote }}</span>
 </div>
 <script>
     const canvas = document.getElementById('id_canvas')
@@ -291,16 +297,19 @@
                         max_overlap = Math.max(max_overlap, r - l + 1)
                     }
                     //check which element user is moving their mouse over
+                    //uncomment and use later once who voted is public
                     let hovered_element = null
+                    /*
                     for (let i = 0; i < votes.length; i++) {
                         const vote_x = points_to_animated_x(votes[i]) - vote_width / 2
                         if (mouse_x >= vote_x && mouse_x <= vote_x + vote_width && mouse_y >= vote_y && mouse_y <= vote_y + vote_height) {
                             hovered_element = i;
                         }
                     }
+                     */
                     //draw the votes
                     for (let i = 0; i < votes.length; i++) {
-                        if (i === hovered_element) ctx.fillStyle = 'rgb(0,0,255)'
+                        if (i === hovered_element) ctx.fillStyle = 'rgb(0,0,255)' //different color if mouse is on top
                         else {
                             const transparency = 1/max_overlap
                             ctx.fillStyle = 'rgb(123,202,255,'+transparency+')'
