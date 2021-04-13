@@ -22,7 +22,8 @@ class ProblemPointsVote(models.Model):
         verbose_name='note',
         help_text='Justification for problem points value.',
         max_length=2048,
-        required=False,
+        blank=True,
+        default=' ',
     )
 
     def __str__(self):
