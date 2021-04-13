@@ -20,13 +20,10 @@ class VoteAdmin(admin.ModelAdmin):
 
     def get_queryset(self, request):
         queryset = ProblemPointsVote.objects.select_related('problem', 'user__user').only(
-            'problem', 'voter', 'points', 'note'
+            'problem', 'voter', 'points', 'note',
         )
         use_straight_join(request)
-        # subject to change, currently assume to give the queryset to people that has perms to edit the problems
-        if not request.user.has_perm('judge.edit_all_problem'):
-            id = request.profile.id
-            queryset = queryset.filter(Q(problem__authors__id=id) | Q(problem__curators__id=id)).distinct()
+    
         return queryset
 
     def has_change_permission(self, request, obj=None):
