@@ -275,7 +275,8 @@ class ProblemDetail(ProblemMixin, SolvedProblemMixin, CommentedDetailView):
             context['median_vote'] = median_data[1]
             median_index = median_data[0]
 
-            if len(all_votes) > 2:
+            context['enough_data_for_plot'] = len(all_votes) > 2
+            if context['enough_data_for_plot']:
                 #box and whisker plot data
                 q1 = median(0,math.ceil(median_index-1),all_votes) #first quartile
                 q3 = median(math.floor(median_index+1),len(all_votes)-1,all_votes) #second quartile
