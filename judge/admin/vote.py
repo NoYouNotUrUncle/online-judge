@@ -17,8 +17,9 @@ class VoteAdmin(admin.ModelAdmin):
     list_display = ('id', 'problem_code', 'problem_name', 'user_column')
     search_fields = ('problem__code', 'problem__name', 'user__user__username')
 
+
     def get_queryset(self, request):
-        queryset = ProblemPointsVote.object.select_related('problem', 'user__user').only(
+        queryset = ProblemPointsVote.objects.select_related('problem', 'user__user').only(
             'problem', 'voter', 'points', 'note'
         )
         use_straight_join(request)
@@ -35,7 +36,6 @@ class VoteAdmin(admin.ModelAdmin):
             return True
         return obj.problem.is_editor(request.profile)
 
-
     def problem_code(self, obj):
         return obj.problem.code
     problem_code.short_description = _('Problem code')
@@ -51,7 +51,9 @@ class VoteAdmin(admin.ModelAdmin):
     user_column.admin_order_field = 'user__user__username'
     user_column.short_description = _('User')
 
-    # need to look into to see if works
+
+
+    # finally works but doesnt load page
     def get_urls(self):
         return [
             url(r'^(\d+)/judge/vote/$', self.judge_view, name='judge_vote'),
