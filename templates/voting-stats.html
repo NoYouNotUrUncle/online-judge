@@ -73,6 +73,9 @@
 <script>
     const canvas = document.getElementById('id_canvas')
     {% if has_votes %}
+        {% if can_vote and all_votes|length > 50 %} //do not render large amounts of votes by default
+            document.getElementById('id_show_vote_box').checked = false
+        {% endif %}
         //set canvas size
         const width = 800
         const height = 300
