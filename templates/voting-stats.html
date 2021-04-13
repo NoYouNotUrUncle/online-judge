@@ -44,29 +44,31 @@
     <br/>
     <canvas class="canvas" id="id_canvas"></canvas>
     <br/>
-    <span class="vote-stats-info">footer</span>
-    <br/>
-    {% if can_vote %}
-        <span class="vote-stats-info">Show Votes</span>
-        <input class="checkbox" type="checkbox" id="id_show_vote_box" checked="true">
+    {% has_votes %}
+        {% if can_vote %}
+            <span class="vote-stats-info">Show Votes</span>
+            <input class="checkbox" type="checkbox" id="id_show_vote_box" checked="true">
+            <span class="vertical-line"></span>
+        {% endif %}
+        <span class="vote-stats-info">Show Median</span>
+        <input class="checkbox" type="checkbox" id="id_show_median_box" checked="true">
         <span class="vertical-line"></span>
+        <span class="vote-stats-info">Show Mean</span>
+        <input class="checkbox" type="checkbox" id="id_show_mean_box" checked="true">
+        {% if enough_data_for_plot %}
+            <span class="vertical-line"></span>
+            <span class="vote-stats-info">Show Box and Whisker Plot</span>
+            <input class="checkbox" type="checkbox" id="id_show_box_plot_box" checked="true">
+        {% endif %}
+        <br/>
+        <span class="vote-stats-info">Median Vote:</span>
+        <span class="vote-stats-value">{{ median_vote|floatformat }}</span>
+        <br/>
+        <span class="vote-stats-info">Mean Vote:</span>
+        <span class="vote-stats-value">{{ mean_vote|floatformat }}</span>
+    {% else %}
+        <span class="vote-stats-info">No Votes Available!</span>
     {% endif %}
-    <span class="vote-stats-info">Show Median</span>
-    <input class="checkbox" type="checkbox" id="id_show_median_box" checked="true">
-    <span class="vertical-line"></span>
-    <span class="vote-stats-info">Show Mean</span>
-    <input class="checkbox" type="checkbox" id="id_show_mean_box" checked="true">
-    {% if enough_data_for_plot %}
-        <span class="vertical-line"></span>
-        <span class="vote-stats-info">Show Box and Whisker Plot</span>
-        <input class="checkbox" type="checkbox" id="id_show_box_plot_box" checked="true">
-    {% endif %}
-    <br/>
-    <span class="vote-stats-info">Median Vote:</span>
-    <span class="vote-stats-value">{{ median_vote|floatformat }}</span>
-    <br/>
-    <span class="vote-stats-info">Mean Vote:</span>
-    <span class="vote-stats-value">{{ mean_vote|floatformat }}</span>
 </div>
 <script>
     const canvas = document.getElementById('id_canvas')
