@@ -106,6 +106,7 @@
             let vertical_line_start_y = plot_padding
             let vertical_line_end_y = plot_padding + plot_height
             for (let i = 0; i <= 10; i++) {
+                ctx.beginPath()
                 ctx.moveTo(points_to_x(points), vertical_line_start_y)
                 ctx.lineTo(points_to_x(points), vertical_line_end_y)
                 ctx.stroke()
@@ -119,6 +120,7 @@
             let horizontal_line_end_x = plot_padding + plot_width
             let horizontal_line_y = plot_padding
             for (let i = 0; i <= 4; i++) {
+                ctx.beginPath()
                 ctx.moveTo(horizontal_line_start_x, horizontal_line_y)
                 ctx.lineTo(horizontal_line_end_x, horizontal_line_y)
                 console.log(ctx.strokeStyle)
@@ -154,52 +156,62 @@
             const box_plot_x = []
             for(let i=0;i<5;i++) box_plot_x.push(points_to_animated_x(box_plot_data[i]))
 
-            ctx.beginPath()
             ctx.strokeStyle = '#000000'
             if(render_box_plot[0]){
+                ctx.beginPath()
                 ctx.moveTo(box_plot_x[0],box_plot_edges_y)
                 ctx.lineTo(box_plot_x[0],box_plot_edges_y+box_plot_edges_height)
                 ctx.stroke()
+                ctx.beginPath()
                 ctx.moveTo(box_plot_x[0],box_plot_middle_y)
                 ctx.lineTo(box_plot_x[1],box_plot_middle_y)
                 ctx.stroke()
-            }/*
+            }
             if(render_box_plot[4]){
+                ctx.beginPath()
                 ctx.moveTo(box_plot_x[4],box_plot_edges_y)
                 ctx.lineTo(box_plot_x[4],box_plot_edges_y+box_plot_edges_height)
                 ctx.stroke()
+                ctx.beginPath()
                 ctx.moveTo(box_plot_x[4],box_plot_middle_y)
                 ctx.lineTo(box_plot_x[3],box_plot_middle_y)
                 ctx.stroke()
             }
             if(render_box_plot[1]){
+                ctx.beginPath()
                 ctx.moveTo(box_plot_x[1],box_plot_y)
                 ctx.lineTo(box_plot_x[2],box_plot_y)
                 ctx.stroke()
+                ctx.beginPath()
                 ctx.moveTo(box_plot_x[1],box_plot_y+box_plot_height)
                 ctx.lineTo(box_plot_x[2],box_plot_y+box_plot_height)
                 ctx.stroke()
+                ctx.beginPath()
                 ctx.moveTo(box_plot_x[1],box_plot_y)
                 ctx.lineTo(box_plot_x[1],box_plot_y+box_plot_height)
                 ctx.stroke()
             }
             if(render_box_plot[3]){
+                ctx.beginPath()
                 ctx.moveTo(box_plot_x[3],box_plot_y)
                 ctx.lineTo(box_plot_x[2],box_plot_y)
                 ctx.stroke()
+                ctx.beginPath()
                 ctx.moveTo(box_plot_x[3],box_plot_y+box_plot_height)
                 ctx.lineTo(box_plot_x[2],box_plot_y+box_plot_height)
                 ctx.stroke()
+                ctx.beginPath()
                 ctx.moveTo(box_plot_x[3],box_plot_y)
                 ctx.lineTo(box_plot_x[1],box_plot_y+box_plot_height)
                 ctx.stroke()
             }
 
             ctx.strokeStyle = '#ff0000'
+            ctx.beginPath()
             ctx.moveTo(box_plot_x[2],box_plot_median_y)
             ctx.lineTo(box_plot_x[2],box_plot_median_y+box_plot_median_height)
             ctx.stroke()
-            */
+
             {% if can_vote %}
                 const show_votes_box = document.getElementById('id_show_vote_box')
                 if (show_votes_box.checked) {
