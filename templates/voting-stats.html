@@ -230,7 +230,7 @@
                     }
 
                     for (let i = 0; i < votes.length; i++) {
-                        if (i === hovered_element) ctx.fillStyle = 'rgb(0,0,255,1)'
+                        if (i === hovered_element) ctx.fillStyle = 'rgb(0,0,255)'
                         else {
                             const transparency = 1/max_overlap
                             ctx.fillStyle = 'rgb(123,202,255,'+transparency+')'
@@ -240,6 +240,8 @@
                     }
                 }
             {% endif %}
+
+            ctx.globalAlpha = 1
 
             if (frames < total_frames && animation_started) frames++
         },ms_per_frame)
