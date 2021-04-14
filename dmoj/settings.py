@@ -177,7 +177,7 @@ else:
                 },
                 {
                     'model': 'judge.Submission',
-                    'icon': 'fa-check-square-o',
+                    'icon': 'fa-vote-yea',
                     'children': [
                         'judge.Language',
                         'judge.Judge',
