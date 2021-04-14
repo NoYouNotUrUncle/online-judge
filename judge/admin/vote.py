@@ -28,7 +28,7 @@ class VoteAdmin(admin.ModelAdmin):
     # finally works but doesnt load page
     def get_urls(self):
         return [
-            url(r'^(\d+)/$', self.judge_view, name='judge_vote'),
+            url(r'^(\d+)/judge/vote/$', self.judge_view, name='judge_vote'),
         ] + super(VoteAdmin, self).get_urls()
 
     def judge_view(self, request, id):
