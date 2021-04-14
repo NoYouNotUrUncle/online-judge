@@ -184,6 +184,10 @@ else:
                     ],
                 },
                 {
+                    'model': 'judge.Vote',
+                    'icon': 'fa-check-square-o',
+                },
+                {
                     'model': 'judge.Contest',
                     'icon': 'fa-bar-chart',
                     'children': [
