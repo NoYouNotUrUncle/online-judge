@@ -43,7 +43,7 @@
     .switch{
         position: relative;
         display: inline-block;
-        background-color: orange;
+        background-color: #ccc;
         width: 60px;
         height: 20px;
     }
@@ -59,17 +59,17 @@
         left: 0;
         right: 0;
         bottom: 0;
-        background-color: red;
+        background-color: white;
         -webkit-transition: .4s;
         transition: .4s;
     }
     .slider:before {
-        position: relative;
+        position: absolute;
         content: "";
-        height: 0;
-        width: 0;
-        left: 0;
-        bottom: 0;
+        height: 26px;
+        width: 26px;
+        left: 4px;
+        bottom: 4px;
         background: #3b3b3b;
         -webkit-transition: .4s;
         transition: .4s;
