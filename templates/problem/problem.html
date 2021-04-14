@@ -222,10 +222,12 @@
             let cleared_default = false
             const note_field = document.getElementById('id_note')
             note_field.onclick = function(){
-                if(!cleared_default){
-                    cleared_default = true
-                    note_field.innerHTML = ''
-                }
+                {% if not has_voted %}
+                    if(!cleared_default){
+                        cleared_default = true
+                        note_field.innerHTML = ''
+                    }
+                {% endif %}
             }
 
             const voting_lightbox = createLightbox('id_voting_lightbox', 'id_vote_form')
@@ -237,7 +239,7 @@
             const vote_button = document.getElementById('id_vote_button')
             vote_button.onclick = function() {
                 activateLightbox(voting_lightbox)
-                cleared_default = true
+                cleared_default = false
             }
 
             {% if has_voted %}
