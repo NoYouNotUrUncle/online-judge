@@ -27,8 +27,10 @@ class ProblemPointsVote(models.Model):
         default=' ',
     )
 
+    # The name that shows up on the sidebar instead of the model class name
     class Meta:
         verbose_name = _('Vote')
         verbose_name_plural = _('Votes')
+
     def __str__(self):
         return f'{self.voter}: {self.points} for {self.problem.code} - "{self.note}"'

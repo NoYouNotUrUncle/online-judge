@@ -185,7 +185,7 @@ else:
                 },
                 {
                     'model': 'judge.ProblemPointsVote',
-                    'icon': 'fa-check-square-o',
+                    'icon': 'fa-envelope',
                 },
                 {
                     'model': 'judge.Contest',
