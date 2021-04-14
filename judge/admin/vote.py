@@ -35,4 +35,4 @@ class VoteAdmin(admin.ModelAdmin):
         if not request.user.has_perm('judge.edit_own_problem') and not request.user.has_perm('judge.edit_all_problem'):
             raise PermissionDenied()
 
-        return HttpResponseRedirect(request.META.get('HTTP_REFERER', '/'))
+        return HttpResponseRedirect('admin/judge/problempointsvote/' + id + '/change')
