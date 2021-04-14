@@ -176,7 +176,7 @@ else:
                     ],
                 },
                 {
-                    'model': 'judge.submission',
+                    'model': 'judge.Submission',
                     'icon': 'fa-check-square-o',
                     'children': [
                         'judge.Language',
@@ -184,7 +184,7 @@ else:
                     ],
                 },
                 {
-                    'model': 'judge.Vote',
+                    'model': 'judge.ProblemPointsVote',
                     'icon': 'fa-check-square-o',
                 },
                 {
