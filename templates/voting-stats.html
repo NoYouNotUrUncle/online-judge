@@ -52,18 +52,18 @@
         height: 0;
     }
     .slider {
-        position: absolute;
+        position: relative;
         cursor: pointer;
-        top: 200px;
-        left: 200px;
-        right: 200px;
-        bottom: 200px;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
         background-color: #ccc;
         -webkit-transition: .4s;
         transition: .4s;
     }
     .slider:before {
-        position: absolute;
+        position: relative;
         content: "";
         height: 26px;
         width: 26px;
@@ -92,14 +92,12 @@
     <br/>
     {% if has_votes %}
         {% if can_vote %}
-            <div>
-                <span class="vote-stats-info">{{ _('Show Votes') }}</span>
-                <label class="switch">
-                    <input class="checkbox" type="checkbox" id="id_show_vote_box" checked="true">
-                    <span class="slider"></span>
-                    <span class="vertical-line"></span>
-                </label>
-            </div>
+            <span class="vote-stats-info">{{ _('Show Votes') }}</span>
+            <label class="switch">
+                <input class="checkbox" type="checkbox" id="id_show_vote_box" checked="true">
+                <span class="slider"></span>
+                <span class="vertical-line"></span>
+            </label>
         {% endif %}
         <span class="vote-stats-info">{{ _('Show Median') }}</span>
         <input class="checkbox" type="checkbox" id="id_show_median_box" checked="true">
