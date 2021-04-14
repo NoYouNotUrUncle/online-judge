@@ -106,14 +106,23 @@
             <span class="vertical-line"></span>
         {% endif %}
         <span class="vote-stats-info">{{ _('Show Median') }}</span>
-        <input class="checkbox" type="checkbox" id="id_show_median_box" checked="true">
+        <label class="switch">
+            <input class="checkbox" type="checkbox" id="id_show_median_box" checked="true">
+            <span class="slider"></span>
+        </label>
         <span class="vertical-line"></span>
         <span class="vote-stats-info">{{ _('Show Mean') }}</span>
-        <input class="checkbox" type="checkbox" id="id_show_mean_box" checked="true">
+        <label class="switch">
+            <input class="checkbox" type="checkbox" id="id_show_mean_box" checked="true">
+            <span class="slider"></span>
+        </label>
         {% if enough_data_for_plot %}
             <span class="vertical-line"></span>
             <span class="vote-stats-info">{{ _('Show Box and Whisker Plot') }}</span>
-            <input class="checkbox" type="checkbox" id="id_show_box_plot_box" checked="true">
+            <label class="switch">
+                <input class="checkbox" type="checkbox" id="id_show_box_plot_box" checked="true">
+                <span class="slider"></span>
+            </label>
         {% endif %}
         <br/>
         <span class="vote-stats-info">{{ _('Median Vote:') }}</span>
