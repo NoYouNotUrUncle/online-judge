@@ -17,7 +17,7 @@
 
     .vote-stats-value{
         font-size: 24px;
-        font-family: 'Times New Roman';
+        font-family: 'Times New Roman', serif;
     }
 
     .vote-stats-text{
@@ -26,7 +26,8 @@
 
     .vote-stats-info{
         font-size: 24px;
-        font-family: 'Times New Roman';
+        font-weight: bold;
+        font-family: 'Times New Roman', serif;
         padding:10px
     }
 
@@ -48,8 +49,11 @@
     {% if has_votes %}
         {% if can_vote %}
             <span class="vote-stats-info">{{ _('Show Votes') }}</span>
-            <input class="checkbox" type="checkbox" id="id_show_vote_box" checked="true">
-            <span class="vertical-line"></span>
+            <label class="switch">
+                <input class="checkbox" type="checkbox" id="id_show_vote_box" checked="true">
+                <span class="slider"></span>
+                <span class="vertical-line"></span>
+            </label>
         {% endif %}
         <span class="vote-stats-info">{{ _('Show Median') }}</span>
         <input class="checkbox" type="checkbox" id="id_show_median_box" checked="true">
