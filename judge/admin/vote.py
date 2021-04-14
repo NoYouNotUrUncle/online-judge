@@ -28,11 +28,11 @@ class VoteAdmin(admin.ModelAdmin):
     # finally works but doesnt load page
     def get_urls(self):
         return [
-            url(r'^(\d+)/$', self.judge_view, name='judge_vote'),
+            url(r'^(\d+)/judge/vote/$', self.judge_view, name='judge_vote'),
         ] + super(VoteAdmin, self).get_urls()
 
     def judge_view(self, request, id):
         if not request.user.has_perm('judge.edit_own_problem') and not request.user.has_perm('judge.edit_all_problem'):
             raise PermissionDenied()
 
-        return HttpResponseRedirect('admin/judge/problempointsvote/' + id + '/change')
+        return HttpResponseRedirect('/admin/judge/problempointsvote/?problem__id=' + id)
