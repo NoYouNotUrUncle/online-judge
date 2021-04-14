@@ -46,7 +46,7 @@ class TimezoneFilter(admin.SimpleListFilter):
 
 class ProfileAdmin(NoBatchDeleteMixin, VersionAdmin):
     fields = ('user', 'display_rank', 'about', 'organizations', 'timezone', 'language', 'ace_theme',
-              'math_engine', 'last_access', 'ip', 'mute', 'is_unlisted', 'can_vote', 'notes', 'is_totp_enabled', 'user_script',
+              'math_engine', 'last_access', 'ip', 'mute', 'is_unlisted', 'is_banned_from_voting_problem_points', 'notes', 'is_totp_enabled', 'user_script',
               'current_contest')
     readonly_fields = ('user',)
     list_display = ('admin_user_admin', 'email', 'is_totp_enabled', 'timezone_full',
