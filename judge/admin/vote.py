@@ -19,4 +19,6 @@ class VoteAdmin(admin.ModelAdmin):
             return True
         return obj.problem.is_editor(request.profile)
 
+    def lookup_allowed(self, key, value):
+        return super(VoteAdmin, self).lookup_allowed(key, value) or key in ('problem code',)
 
