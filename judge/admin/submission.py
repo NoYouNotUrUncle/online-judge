@@ -256,6 +256,5 @@ class SubmissionAdmin(admin.ModelAdmin):
         if not request.user.has_perm('judge.edit_all_problem') and \
                 not submission.problem.is_editor(request.profile):
             raise PermissionDenied()
-
         submission.judge(rejudge=True)
         return HttpResponseRedirect(request.META.get('HTTP_REFERER', '/'))

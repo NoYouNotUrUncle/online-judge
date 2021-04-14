@@ -158,8 +158,7 @@ class ProblemDetail(ProblemMixin, SolvedProblemMixin, CommentedDetailView):
     def get_comment_page(self):
         return 'p:%s' % self.object.code
 
-    @staticmethod
-    def can_vote(user, problem):
+    def can_vote(self, user, problem):
         if not user.is_authenticated: #reject anons
             return False
         banned = user.profile.is_banned_from_voting_problem_points  # banned from voting site wide
@@ -168,9 +167,8 @@ class ProblemDetail(ProblemMixin, SolvedProblemMixin, CommentedDetailView):
         ac = Submission.objects.filter(user=user.profile,problem=problem,result='AC').exists()
         return ac and not in_contest and not banned
 
-    @staticmethod
-    def default_note():
-        return 'A short justification for this problem\'s points value.'
+    def default_note(self):
+        return _('A short justification for this problem\'s points value.')
 
     def get_context_data(self, **kwargs):
         context = super(ProblemDetail, self).get_context_data(**kwargs)
