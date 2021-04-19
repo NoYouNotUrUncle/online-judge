@@ -9,7 +9,7 @@ import judge.models.profile
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('judge', '0113_contest_decimal_points'),
+        ('judge', '0115_contest_scoreboard_visibility'),
     ]
 
     operations = [
