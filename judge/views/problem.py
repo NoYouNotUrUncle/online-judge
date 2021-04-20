@@ -246,8 +246,8 @@ class ProblemDetail(ProblemMixin, SolvedProblemMixin, CommentedDetailView):
         if 'points_placeholder' not in context:  # placeholder for the points
             if context['has_voted']:  # if voted, the vote
                 context['points_placeholder'] = context['voted_points']
-            else:  # otherwise a *nice* default
-                context['points_placeholder'] = 69.42069
+            else:
+                context['points_placeholder'] = 10
 
         if 'note_placeholder' not in context:
             if context['has_voted']:
@@ -267,22 +267,18 @@ class ProblemDetail(ProblemMixin, SolvedProblemMixin, CommentedDetailView):
             def median(left_index, right_index, data):
                 size = right_index - left_index + 1
                 index = left_index + (size - 1) / 2
-                value = None
-                if size % 2 == 1:
-                    value = data[int(index)]
-                else:
-                    value = (data[math.floor(index)] + data[math.ceil(index)]) / 2
+                value = (data[math.floor(index)] + data[math.ceil(index)]) / 2
                 return index, value
 
             median_data = median(0, len(all_votes) - 1, all_votes)
             context['median_vote'] = median_data[1]
             median_index = median_data[0]
 
-            context['enough_data_for_plot'] = len(all_votes) > 2
+            context['enough_data_for_plot'] = len(all_votes) > 1
             if context['enough_data_for_plot']:
                 # box and whisker plot data
                 q1 = median(0, math.ceil(median_index - 1), all_votes)  # first quartile
-                q3 = median(math.floor(median_index + 1), len(all_votes) - 1, all_votes)  # second quartile
+                q3 = median(math.floor(median_index + 1), len(all_votes) - 1, all_votes)  # third quartile
                 context['first_quartile'] = q1[1]
                 context['third_quartile'] = q3[1]
 
@@ -316,7 +312,7 @@ class ProblemDetail(ProblemMixin, SolvedProblemMixin, CommentedDetailView):
                         vote.save()
                         return self.get(request, *args, **kwargs)
                     else:
-                        raise ValidationError  # go to invalid case
+                        raise ValidationError(_('invalid arguments'))  # go to invalid case
                 except ValidationError:
                     context = self.get_context_data(
                         object=self.object,

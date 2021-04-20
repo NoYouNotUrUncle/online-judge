@@ -110,7 +110,7 @@ class Profile(models.Model):
     # field for whether or not users are able to vote on problems
     is_banned_from_voting_problem_points = models.BooleanField(
         verbose_name=_('banned from voting'),
-        help_text=_('User will not be able to vote on problems\' points values.'),
+        help_text=_("User will not be able to vote on problems' points values."),
         default=False,
     )
     rating = models.IntegerField(null=True, default=None)
