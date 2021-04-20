@@ -5,13 +5,11 @@ class VoteAdmin(admin.ModelAdmin):
     list_display = ('points', 'voter', 'problem', 'note')
     search_fields = ('voter', 'problem')
 
-    # if the user has edit all problem or edit own problem perms, so curators authors and superusers
+    # if the user has edit all problem or other editing permissions, so superusers
     def has_change_permission(self, request, obj=None):
-        if not request.user.has_perm('judge.edit_own_problem'):
-            return False
-        if request.user.has_perm('judge.edit_all_problem') or obj is None:
-            return True
-        return obj.problem.is_editor(request.profile)
+        if obj is None:
+            return request.user.has_perm('judge.edit_own_problem')
+        return obj.is_editable_by(request.user)
 
     def lookup_allowed(self, key, value):
         return super(VoteAdmin, self).lookup_allowed(key, value) or key in ('problem__code',)
