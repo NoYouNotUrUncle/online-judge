@@ -320,11 +320,14 @@ class ProblemDetail(ProblemMixin, SolvedProblemMixin, CommentedDetailView):
         elif 'delete_confirmation' in request.POST:
             if not request.user.is_authenticated:  # un authed person tries to find a way to delete
                 return HttpResponseForbidden()
+            if not request.user.can_vote:          # if the user is banned from voting, they can't delete their votes.
+                return HttpResponseForbidden()
+
             # delete anything that matches (if nothing matches it doesn't matter)
             ProblemPointsVote.objects.filter(voter=request.user.profile, problem=self.object).delete()
             return self.get(request, *args, **kwargs)
         else:  # forward to next level of post request (comment post request as of writing)
-            return super(ProblemDetail, self).post(request, *args, **kwargs)
+            return super().post(request, *args, **kwargs)
 
 
 class LatexError(Exception):
