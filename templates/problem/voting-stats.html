@@ -359,17 +359,9 @@
                         while (next_r_overlaps()) r++;
                         max_overlap = Math.max(max_overlap, r - l + 1);
                     }
-                    //check which element user is moving their mouse over
-                    //uncomment and use later once who voted is public
+
                     let hovered_element = null;
-                    /*
-                    for (let i = 0; i < votes.length; i++) {
-                        const vote_x = points_to_animated_x(votes[i]) - vote_width / 2
-                        if (mouse_x >= vote_x && mouse_x <= vote_x + vote_width && mouse_y >= vote_y && mouse_y <= vote_y + vote_height) {
-                            hovered_element = i;
-                        }
-                    }
-                     */
+                    
                     //draw the votes
                     for (let i = 0; i < votes.length; i++) {
                         if (i === hovered_element) ctx.fillStyle = 'rgb(0,0,255)'; //different color if mouse is on top
