@@ -218,7 +218,7 @@ class ProblemDetail(ProblemMixin, SolvedProblemMixin, CommentedDetailView):
         context['meta_description'] = self.object.summary or metadata[0]
         context['og_image'] = self.object.og_image or metadata[1]
 
-        context['can_vote'] = self.object.can_vote(user, self.object)  # if this problem is votable by this user
+        context['can_vote'] = self.object.can_vote(user)  # if this problem is votable by this user
         # the vote this user has already cast on this problem
         if context['can_vote']:
             vote = ProblemPointsVote.objects.filter(voter=user.profile, problem=self.object)
@@ -287,7 +287,7 @@ class ProblemDetail(ProblemMixin, SolvedProblemMixin, CommentedDetailView):
         self.object = self.get_object()
 
         if 'vote_confirmation' in request.POST:  # deal with request as problem points vote
-            if not self.object.can_vote(request.user, self.object):  # not allowed to vote for some reason
+            if not self.object.can_vote(request.user):  # not allowed to vote for some reason
                 return HttpResponseForbidden()
             else:
                 form = ProblemPointsVoteForm(request.POST)
