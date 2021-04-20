@@ -408,9 +408,6 @@ class Problem(models.Model):
     save.alters_data = True
 
     def can_vote(self, user):
-        # importing here to avoid circular dependency (Submission imports Problem as well)
-        from judge.models.submission import Submission
-
         if not user.is_authenticated:  # reject anons
             return False
 
@@ -422,7 +419,7 @@ class Problem(models.Model):
         in_contest = user.profile.current_contest is not None  # whether or not they're in contest
 
         # already ac'd this q, not in contest, and also not banned
-        ac = Submission.objects.filter(user=user.profile, problem=self, result='AC').exists()
+        ac = self.submission_set.filter(user=user.profile, problem=self, result='AC').exists()
         return ac and not in_contest and not banned
 
     class Meta:
