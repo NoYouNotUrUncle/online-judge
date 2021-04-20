@@ -16,6 +16,7 @@ from django.utils.translation import gettext_lazy as _
 from judge.fulltext import SearchQuerySet
 from judge.models.profile import Organization, Profile
 from judge.models.runtime import Language
+from judge.models.submission import Submission
 from judge.user_translations import gettext as user_gettext
 from judge.utils.raw_sql import RawSQLColumn, unique_together_left_join
 
@@ -483,6 +484,21 @@ class Solution(models.Model):
         if self.problem.is_editable_by(user):
             return True
         return False
+
+    def can_vote(self, user, problem):
+        if not user.is_authenticated:  # reject anons
+            return False
+
+        # if user is unlisted or is banned from submitting to the problem, then they cannot vote
+        if user.profile.is_unlisted or problem.banned_users.filter(pk=user.pk).exists():
+            return False
+
+        banned = user.profile.is_banned_from_voting_problem_points  # banned from voting site wide
+        in_contest = user.profile.current_contest is not None  # whether or not they're in contest
+
+        # already ac'd this q, not in contest, and also not banned
+        ac = Submission.objects.filter(user=user.profile, problem=problem, result='AC').exists()
+        return ac and not in_contest and not banned
 
     class Meta:
         permissions = (
