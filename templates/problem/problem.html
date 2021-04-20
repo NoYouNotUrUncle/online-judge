@@ -42,7 +42,7 @@
             padding-top: 0.5em;
         }
 
-        .vote-form{
+        .vote-form {
             background-color: rgb(255,255,255);
             padding: 40px;
             border-radius: 25px;
@@ -52,17 +52,17 @@
             text-align: center;
         }
 
-        .vote-form-info{
+        .vote-form-info {
             font-size: 24px;
             font-weight: bold;
             padding:10px
         }
 
-        .vote-form-value{
+        .vote-form-value {
             font-size: 24px;
         }
 
-        .vote-form-text{
+        .vote-form-text {
             font-size: 18px;
         }
 
@@ -71,7 +71,7 @@
             color: red;
         }
 
-        .vote-button{
+        .vote-button {
             float:right;
         }
 
@@ -209,10 +209,10 @@
             </form>
         </div>
 
-        <a class="form-button" id="id_vote_button">{% if has_voted %}Change vote{% else %}Vote on problem points{% endif %}</a>
+        <a class="form-button" id="id_vote_button">{% if has_voted %}{{ _('Change vote') }}{% else %}{{ _('Vote on problem points') }}{% endif %}</a>
         {% if has_voted %}
             <form method="post" id="id_delete_vote_form"> {% csrf_token %}
-                <a class="form-button" id="id_delete_vote_button">{{   _('Delete vote') }}</a>
+                <a class="form-button" id="id_delete_vote_button">{{ _('Delete vote') }}</a>
                 <input type="hidden" name="delete_confirmation"/>
             </form>
         {% endif %}
@@ -221,7 +221,7 @@
             //clear default upon the first click of the note box
             let cleared_default = false
             const note_field = document.getElementById('id_note')
-            note_field.onclick = function(){
+            note_field.onclick = function (){
                 {% if not has_voted %}
                     if(!cleared_default){
                         cleared_default = true
@@ -237,14 +237,14 @@
             {% endif %}
 
             const vote_button = document.getElementById('id_vote_button')
-            vote_button.onclick = function() {
+            vote_button.onclick = function () {
                 activateLightbox(voting_lightbox)
             }
 
             {% if has_voted %}
                 const delete_vote_form = document.getElementById('id_delete_vote_form')
                 const delete_vote_button = document.getElementById('id_delete_vote_button')
-                delete_vote_button.onclick = function(){
+                delete_vote_button.onclick = function (){
                     delete_vote_form.submit()
                 }
             {% endif %}
@@ -257,13 +257,13 @@
         </script>
 
         {% include 'voting-stats.html' %}
-        <a class="form-button" id="id_vote_stats_button">Voting statistics</a>
+        <a class="form-button" id="id_vote_stats_button">{{ _('Voting statistics') }}</a>
 
         <script defer>
             vote_stats_lightbox = createLightbox('id_vote_stats_lightbox', 'id_vote_stats')
 
             const vote_stats_button = document.getElementById('id_vote_stats_button')
-            vote_stats_button.onclick = function() {
+            vote_stats_button.onclick = function () {
                 activateLightbox(vote_stats_lightbox)
                 startVotingStatsAnimation()
             }
