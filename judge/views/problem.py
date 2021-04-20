@@ -168,6 +168,7 @@ class ProblemDetail(ProblemMixin, SolvedProblemMixin, CommentedDetailView):
 
         banned = user.profile.is_banned_from_voting_problem_points  # banned from voting site wide
         in_contest = user.profile.current_contest is not None  # whether or not they're in contest
+
         # already ac'd this q, not in contest, and also not banned
         ac = Submission.objects.filter(user=user.profile, problem=problem, result='AC').exists()
         return ac and not in_contest and not banned
