@@ -12,4 +12,4 @@ class VoteAdmin(admin.ModelAdmin):
         return obj.is_editable_by(request.user)
 
     def lookup_allowed(self, key, value):
-        return super(VoteAdmin, self).lookup_allowed(key, value) or key in ('problem__code',)
+        return super().lookup_allowed(key, value) or key in ('problem__code',)
