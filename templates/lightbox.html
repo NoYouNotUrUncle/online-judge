@@ -16,43 +16,43 @@
     }
 </style>
 <script>
-    let open_lightboxes = []
+    let open_lightboxes = [];
 
-    function createLightbox(id_lightbox, id_content){
-        const lightbox = document.createElement('div')
-        lightbox.id = id_lightbox
-        lightbox.classList.add('lightbox')
-        document.body.appendChild(lightbox)
+    function createLightbox(id_lightbox, id_content) {
+        const lightbox = document.createElement('div');
+        lightbox.id = id_lightbox;
+        lightbox.classList.add('lightbox');
+        document.body.appendChild(lightbox);
 
-        const content = document.getElementById(id_content)
-        lightbox.appendChild(content)
+        const content = document.getElementById(id_content);
+        lightbox.appendChild(content);
 
         lightbox.addEventListener('click', e => {
-            if(e.target !== e.currentTarget) return
-            lightbox.classList.remove('lightbox-active')
-            for(let i=0;i<open_lightboxes.length;i++){
-                if(open_lightboxes[i] === lightbox.id){
-                    open_lightboxes.splice(i,1)
-                    return 0
+            if(e.target !== e.currentTarget) return;
+            lightbox.classList.remove('lightbox-active');
+            for(let i=0;i<open_lightboxes.length;i++) {
+                if(open_lightboxes[i] === lightbox.id) {
+                    open_lightboxes.splice(i, 1);
+                    return 0;
                 }
             }
-        })
+        });
 
-        return lightbox
+        return lightbox;
     }
 
-    function activateLightbox(lightbox){
-        lightbox.classList.add('lightbox-active')
+    function activateLightbox(lightbox) {
+        lightbox.classList.add('lightbox-active');
         open_lightboxes.push(lightbox.id)
     }
 
-    function isOpen(lightbox){
-        if(lightbox === null) return false
-        for(let i=0;i<open_lightboxes.length;i++){
-            if(open_lightboxes[i] === lightbox.id){
-                return true
+    function isOpen(lightbox) {
+        if(lightbox === null) return false;
+        for(let i=0;i<open_lightboxes.length;i++) {
+            if(open_lightboxes[i] === lightbox.id) {
+                return true;
             }
         }
-        return false
+        return false;
     }
 </script>
