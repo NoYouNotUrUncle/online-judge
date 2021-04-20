@@ -246,9 +246,9 @@ class ProblemDetail(ProblemMixin, SolvedProblemMixin, CommentedDetailView):
             else:
                 context['note_placeholder'] = self.default_note()
 
-        # all_votes = sorted([v.points for v in ProblemPointsVote.objects.filter(problem=self.object)])
+        all_votes = sorted([v.points for v in ProblemPointsVote.objects.filter(problem=self.object)])
         # testing
-        all_votes = list(self.object.problem_points_votes.order_by('points').values_list('points', flat=True))
+        # all_votes = list(self.object.problem_points_votes.order_by('points').values_list('points', flat=True))
         context['has_votes'] = len(all_votes) > 0
         if context['has_votes']:
             context['mean_vote'] = sum(all_votes) / len(all_votes)
