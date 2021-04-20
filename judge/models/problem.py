@@ -419,7 +419,8 @@ class Problem(models.Model):
         in_contest = user.profile.current_contest is not None  # whether or not they're in contest
 
         # already ac'd this q, not in contest, and also not banned
-        ac = self.submission_set.filter(user=user.profile, problem=self, result='AC').exists()
+        ac_sub_points = list(self.submission_set.filter(user=user, result='AC').order_by('-points').values_list('points', flat=True))
+        ac = len(ac_sub_points) > 0 and abs(ac_sub_points[0] - self.points) < 0.1 # < 0.1 instead of == for precision
         return ac and not in_contest and not banned
 
     class Meta:
