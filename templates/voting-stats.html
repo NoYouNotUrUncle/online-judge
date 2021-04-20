@@ -252,36 +252,36 @@
                     ctx.lineWidth = 5;
                     if (render_box_plot[0]) {//left edge
                         ctx.beginPath();
-                        ctx.moveTo(box_plot_x[0],box_plot_edges_y);
-                        ctx.lineTo(box_plot_x[0],box_plot_edges_y+box_plot_edges_height);
+                        ctx.moveTo(box_plot_x[0], box_plot_edges_y);
+                        ctx.lineTo(box_plot_x[0], box_plot_edges_y+box_plot_edges_height);
                         ctx.stroke();
                         ctx.beginPath();
-                        ctx.moveTo(box_plot_x[0],box_plot_middle_y);
-                        ctx.lineTo(box_plot_x[1],box_plot_middle_y);
+                        ctx.moveTo(box_plot_x[0], box_plot_middle_y);
+                        ctx.lineTo(box_plot_x[1], box_plot_middle_y);
                         ctx.stroke()
                     }
                     if (render_box_plot[4]) {//right edge
                         ctx.beginPath();
-                        ctx.moveTo(box_plot_x[4],box_plot_edges_y);
-                        ctx.lineTo(box_plot_x[4],box_plot_edges_y+box_plot_edges_height);
+                        ctx.moveTo(box_plot_x[4], box_plot_edges_y);
+                        ctx.lineTo(box_plot_x[4], box_plot_edges_y+box_plot_edges_height);
                         ctx.stroke();
                         ctx.beginPath();
-                        ctx.moveTo(box_plot_x[4],box_plot_middle_y);
-                        ctx.lineTo(box_plot_x[3],box_plot_middle_y);
+                        ctx.moveTo(box_plot_x[4], box_plot_middle_y);
+                        ctx.lineTo(box_plot_x[3], box_plot_middle_y);
                         ctx.stroke();
                     }
                     if (render_box_plot[1]) {//left edge of box
                         ctx.beginPath();
-                        ctx.moveTo(box_plot_x[1],box_plot_y);
-                        ctx.lineTo(box_plot_x[2],box_plot_y);
+                        ctx.moveTo(box_plot_x[1], box_plot_y);
+                        ctx.lineTo(box_plot_x[2], box_plot_y);
                         ctx.stroke();
                         ctx.beginPath();
-                        ctx.moveTo(box_plot_x[1],box_plot_y+box_plot_height);
-                        ctx.lineTo(box_plot_x[2],box_plot_y+box_plot_height);
+                        ctx.moveTo(box_plot_x[1], box_plot_y+box_plot_height);
+                        ctx.lineTo(box_plot_x[2], box_plot_y+box_plot_height);
                         ctx.stroke();
                         ctx.beginPath();
-                        ctx.moveTo(box_plot_x[1],box_plot_y);
-                        ctx.lineTo(box_plot_x[1],box_plot_y+box_plot_height);
+                        ctx.moveTo(box_plot_x[1], box_plot_y);
+                        ctx.lineTo(box_plot_x[1], box_plot_y+box_plot_height);
                         ctx.stroke();
                     }
                     if (render_box_plot[3]) {//right edge of box
