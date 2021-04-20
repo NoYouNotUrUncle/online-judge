@@ -158,21 +158,6 @@ class ProblemDetail(ProblemMixin, SolvedProblemMixin, CommentedDetailView):
     def get_comment_page(self):
         return 'p:%s' % self.object.code
 
-    def can_vote(self, user, problem):
-        if not user.is_authenticated:  # reject anons
-            return False
-
-        # if user is unlisted or is banned from submitting to the problem, then they cannot vote
-        if user.profile.is_unlisted or problem.banned_users.filter(pk=user.pk).exists():
-            return False
-
-        banned = user.profile.is_banned_from_voting_problem_points  # banned from voting site wide
-        in_contest = user.profile.current_contest is not None  # whether or not they're in contest
-
-        # already ac'd this q, not in contest, and also not banned
-        ac = Submission.objects.filter(user=user.profile, problem=problem, result='AC').exists()
-        return ac and not in_contest and not banned
-
     def default_note(self):
         return _('A short justification for this problem\'s points value.')
 
@@ -233,7 +218,7 @@ class ProblemDetail(ProblemMixin, SolvedProblemMixin, CommentedDetailView):
         context['meta_description'] = self.object.summary or metadata[0]
         context['og_image'] = self.object.og_image or metadata[1]
 
-        context['can_vote'] = self.can_vote(user, self.object)  # if this problem is votable by this user
+        context['can_vote'] = self.object.can_vote(user, self.object)  # if this problem is votable by this user
         # the vote this user has already cast on this problem
         if context['can_vote']:
             vote = ProblemPointsVote.objects.filter(voter=user.profile, problem=self.object)
@@ -302,7 +287,7 @@ class ProblemDetail(ProblemMixin, SolvedProblemMixin, CommentedDetailView):
         self.object = self.get_object()
 
         if 'vote_confirmation' in request.POST:  # deal with request as problem points vote
-            if not self.can_vote(request.user, self.object):  # not allowed to vote for some reason
+            if not self.object.can_vote(request.user, self.object):  # not allowed to vote for some reason
                 return HttpResponseForbidden()
             else:
                 form = ProblemPointsVoteForm(request.POST)
