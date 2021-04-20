@@ -420,9 +420,7 @@ class Problem(models.Model):
 
         # already ac'd this q, not in contest, and also not banned
         ac_sub_points = list(self.submission_set.filter(user=user.profile, result='AC').order_by('-points').values_list('points', flat=True))
-        print("points of all ac subs", ac_sub_points)
-        print("problem is worth", self.points)
-        ac = len(ac_sub_points) > 0 and abs(ac_sub_points[0] - self.points) < 0.1 # < 0.1 instead of == for precision
+        ac = len(ac_sub_points) > 0 and ac_sub_points[0] > self.points - 0.1 # < 0.1 instead of == for precision
         return ac and not in_contest and not banned
 
     class Meta:
