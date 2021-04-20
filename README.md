@@ -5,7 +5,7 @@ A modern [open-source](https://github.com/DMOJ/online-judge/blob/master/LICENSE)
 
 See it live at [dmoj.ca](https://dmoj.ca/)!
 
-## Features
+## Features ; random change
 
 * [Support for over **60 language runtimes**](https://github.com/DMOJ/online-judge#supported-languages)
 * Highly robust judging system:
