@@ -163,7 +163,7 @@ class ProblemDetail(ProblemMixin, SolvedProblemMixin, CommentedDetailView):
             return False
 
         # if user is unlisted or is banned from submitting to the problem, then they cannot vote
-        if user.is_unlisted or user.banned_users:
+        if user.profile.is_unlisted or user in problem.banned_users:
             return False
 
         banned = user.profile.is_banned_from_voting_problem_points  # banned from voting site wide
