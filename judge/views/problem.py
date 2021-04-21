@@ -243,7 +243,7 @@ class ProblemDetail(ProblemMixin, SolvedProblemMixin, CommentedDetailView):
             else:
                 context['note_placeholder'] = _("A short justification for this problem's points value.")
 
-        all_votes = sorted([v.points for v in ProblemPointsVote.objects.filter(problem=self.object)])
+        all_votes = list(self.object.problem_points_votes.order_by('points').values_list('points', flat=True))
         # testing
         # all_votes = list(self.object.problem_points_votes.order_by('points').values_list('points', flat=True))
         context['has_votes'] = len(all_votes) > 0
