@@ -275,7 +275,7 @@ class ProblemDetail(ProblemMixin, SolvedProblemMixin, CommentedDetailView):
                 context['first_quartile'] = q1[1]
                 context['third_quartile'] = q3[1]
 
-            context['in_contest'] = contest_problem is not None
+            context['in_contest'] = user.profile.current_contest is not None
 
             if context['can_vote']:
                 context['all_votes'] = all_votes
