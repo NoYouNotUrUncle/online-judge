@@ -158,9 +158,6 @@ class ProblemDetail(ProblemMixin, SolvedProblemMixin, CommentedDetailView):
     def get_comment_page(self):
         return 'p:%s' % self.object.code
 
-    def default_note(self):
-        return _('A short justification for this problem\'s points value.')
-
     def get_context_data(self, **kwargs):
         context = super(ProblemDetail, self).get_context_data(**kwargs)
         user = self.request.user
@@ -244,7 +241,7 @@ class ProblemDetail(ProblemMixin, SolvedProblemMixin, CommentedDetailView):
             if context['has_voted']:
                 context['note_placeholder'] = context['voted_note']
             else:
-                context['note_placeholder'] = self.default_note()
+                context['note_placeholder'] = _("A short justification for this problem's points value.")
 
         all_votes = sorted([v.points for v in ProblemPointsVote.objects.filter(problem=self.object)])
         # testing
@@ -300,8 +297,7 @@ class ProblemDetail(ProblemMixin, SolvedProblemMixin, CommentedDetailView):
                         vote = form.save(commit=False)
                         vote.voter = request.profile
                         vote.problem = self.object
-                        if vote.note == self.default_note() or vote.note.strip() == '':
-                            vote.note = ' '  # correct to blank
+                        vote.note = vote.note.strip()
                         vote.save()
                         return self.get(request, *args, **kwargs)
                     else:
