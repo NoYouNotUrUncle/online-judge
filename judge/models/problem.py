@@ -415,13 +415,16 @@ class Problem(models.Model):
         if user.profile.is_unlisted or self.banned_users.filter(pk=user.pk).exists():
             return False
 
-        banned = user.profile.is_banned_from_voting_problem_points  # banned from voting site wide
-        in_contest = user.profile.current_contest is not None  # whether or not they're in contest
+        if user.profile.is_banned_from_voting_problem_points:
+            return False  # site wide voting ban
 
-        # already ac'd this q, not in contest, and also not banned
+        if user.profile.current_contest:
+            return False  # if the user is in contest, nothing should be shown
+
+        # the points of all ac submissions in decreasing order
         ac_sub_points = list(self.submission_set.filter(user=user.profile, result='AC').order_by('-points').values_list('points', flat=True))
-        ac = len(ac_sub_points) > 0 and ac_sub_points[0] > self.points - 0.1 # < 0.1 instead of == for precision
-        return ac and not in_contest and not banned
+        # if the first ac is a full ac
+        return len(ac_sub_points) > 0 and ac_sub_points[0] > self.points - 0.1  # < 0.1 instead of == for pointer precision
 
     class Meta:
         permissions = (
