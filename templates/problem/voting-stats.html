@@ -187,6 +187,14 @@
             function points_to_x(points) {
                 return plot_padding + plot_width * ((points - min_plot_points) / points_range);
             }
+
+            function line(x1, y1, x2, y2){
+                ctx.beginPath();
+                ctx.moveTo(x1,y1);
+                ctx.lineTo(x2,y2);
+                ctx.stroke();
+            }
+
             //draw the vertical lines
             ctx.fillStyle = 'rgb(94,101,105)';
             ctx.textAlign = 'center';
@@ -199,10 +207,7 @@
             let vertical_line_start_y = plot_padding;
             let vertical_line_end_y = plot_padding + plot_height;
             for (let i = 0; i <= 10; i++) {
-                ctx.beginPath();
-                ctx.moveTo(points_to_x(points), vertical_line_start_y);
-                ctx.lineTo(points_to_x(points), vertical_line_end_y);
-                ctx.stroke();
+                line(points_to_x(points), vertical_line_start_y, points_to_x(points), vertical_line_end_y);
                 ctx.fillText(points.toFixed(2) + 'p', points_to_x(points), points_text_y);
                 points += points_range / 10.0;
             }
@@ -212,10 +217,7 @@
             let horizontal_line_end_x = plot_padding + plot_width;
             let horizontal_line_y = plot_padding;
             for (let i = 0; i <= 4; i++) {
-                ctx.beginPath();
-                ctx.moveTo(horizontal_line_start_x, horizontal_line_y);
-                ctx.lineTo(horizontal_line_end_x, horizontal_line_y);
-                ctx.stroke();
+                line(horizontal_line_start_x, horizontal_line_y, horizontal_line_end_x, horizontal_line_y)
                 horizontal_line_y += plot_height / 4.0;
             }
             //get the animated x coordinates of a given x based on current frame
@@ -232,24 +234,28 @@
                 if (document.getElementById('id_show_box_plot_box').checked) {
                     //box and whisker plot settings
                     const box_plot_height = plot_height * (3 / 4);
-                    const box_plot_y = plot_padding+plot_height/2-box_plot_height/2;
+                    const box_plot_box_y = plot_padding+plot_height/2-box_plot_height/2;
                     const box_plot_edges_height = plot_height/2;
                     const box_plot_edges_y = plot_padding+plot_height/2-box_plot_edges_height/2;
                     const box_plot_middle_y = plot_padding+plot_height/2;
 
                     //box and whisker plot data
                     const box_plot_data = [{{min_vote}},{{first_quartile}},{{median_vote}},{{third_quartile}},{{max_vote}}];
-                    const render_box_plot = [true,true,true,true,true]; //whether or not to render each element
-                    if (box_plot_data[3] === box_plot_data[2]) render_box_plot[3] = false;
-                    if (box_plot_data[4] == box_plot_data[3]) render_box_plot[4] = false;
-                    if (box_plot_data[1] === box_plot_data[2]) render_box_plot[1] = false;
-                    if (box_plot_data[0] == box_plot_data[1]) render_box_plot[0] = false;
+                    const render_box_plot = [true,true,true,true,true];
+                    for(let i=0;i<2;i++) if(box_plot_data[i] === box_plot_data[i+1]) render_box_plot[i] = false;
+                    for(let i=3;i<5;i++) if(box_plot_data[i] === box_plot_data[i-1]) render_box_plot[i] = false;
 
+                    //turning this garbage into for loop, WIP
                     const box_plot_x = [];
                     for (let i = 0; i < 5; i++) box_plot_x.push(points_to_animated_x(box_plot_data[i]));
+                    const box_plot_y = [box_plot_edges_y, box_plot_box_y, -1, box_plot_box_y, box_plot_edges_y]
 
                     ctx.strokeStyle = '#000000';
                     ctx.lineWidth = 5;
+                    for (let i = 0; i < 5; i++){
+
+                    }
+
                     if (render_box_plot[0]) {//left edge
                         ctx.beginPath();
                         ctx.moveTo(box_plot_x[0], box_plot_edges_y);
@@ -272,30 +278,30 @@
                     }
                     if (render_box_plot[1]) {//left edge of box
                         ctx.beginPath();
-                        ctx.moveTo(box_plot_x[1], box_plot_y);
-                        ctx.lineTo(box_plot_x[2], box_plot_y);
+                        ctx.moveTo(box_plot_x[1], box_plot_box_y);
+                        ctx.lineTo(box_plot_x[2], box_plot_box_y);
                         ctx.stroke();
                         ctx.beginPath();
-                        ctx.moveTo(box_plot_x[1], box_plot_y+box_plot_height);
-                        ctx.lineTo(box_plot_x[2], box_plot_y+box_plot_height);
+                        ctx.moveTo(box_plot_x[1], box_plot_box_y+box_plot_height);
+                        ctx.lineTo(box_plot_x[2], box_plot_box_y+box_plot_height);
                         ctx.stroke();
                         ctx.beginPath();
-                        ctx.moveTo(box_plot_x[1], box_plot_y);
-                        ctx.lineTo(box_plot_x[1], box_plot_y+box_plot_height);
+                        ctx.moveTo(box_plot_x[1], box_plot_box_y);
+                        ctx.lineTo(box_plot_x[1], box_plot_box_y+box_plot_height);
                         ctx.stroke();
                     }
                     if (render_box_plot[3]) {//right edge of box
                         ctx.beginPath();
-                        ctx.moveTo(box_plot_x[3], box_plot_y);
-                        ctx.lineTo(box_plot_x[2], box_plot_y);
+                        ctx.moveTo(box_plot_x[3], box_plot_box_y);
+                        ctx.lineTo(box_plot_x[2], box_plot_box_y);
                         ctx.stroke();
                         ctx.beginPath();
-                        ctx.moveTo(box_plot_x[3], box_plot_y + box_plot_height);
-                        ctx.lineTo(box_plot_x[2], box_plot_y + box_plot_height);
+                        ctx.moveTo(box_plot_x[3], box_plot_box_y + box_plot_height);
+                        ctx.lineTo(box_plot_x[2], box_plot_box_y + box_plot_height);
                         ctx.stroke();
                         ctx.beginPath();
-                        ctx.moveTo(box_plot_x[3], box_plot_y);
-                        ctx.lineTo(box_plot_x[3], box_plot_y + box_plot_height);
+                        ctx.moveTo(box_plot_x[3], box_plot_box_y);
+                        ctx.lineTo(box_plot_x[3], box_plot_box_y + box_plot_height);
                         ctx.stroke();
                     }
                 }
@@ -307,10 +313,7 @@
             if (document.getElementById('id_show_median_box').checked) {
                 ctx.strokeStyle = '#ff0000';
                 ctx.lineWidth = 5;
-                ctx.beginPath();
-                ctx.moveTo(median_x, median_y);
-                ctx.lineTo(median_x, median_y + median_height);
-                ctx.stroke();
+                line(median_x, median_y, median_x, median_y + median_height);
             }
             //draw mean line
             const mean_y = median_y;
@@ -319,10 +322,7 @@
             if (document.getElementById('id_show_mean_box').checked) {
                 ctx.strokeStyle = '#00cc00';
                 ctx.lineWidth = 5;
-                ctx.beginPath();
-                ctx.moveTo(mean_x, mean_y);
-                ctx.lineTo(mean_x, mean_y + mean_height);
-                ctx.stroke();
+                line(mean_x, mean_y, mean_x, mean_y + mean_height);
             }
 
             {% if can_vote %}
