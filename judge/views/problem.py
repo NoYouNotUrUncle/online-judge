@@ -8,7 +8,7 @@ from random import randrange
 
 from django.conf import settings
 from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
-from django.core.exceptions import ObjectDoesNotExist, PermissionDenied, ValidationError
+from django.core.exceptions import ObjectDoesNotExist, PermissionDenied
 from django.db import transaction
 from django.db.models import Count, F, Prefetch, Q
 from django.db.utils import ProgrammingError
@@ -293,19 +293,16 @@ class ProblemDetail(ProblemMixin, SolvedProblemMixin, CommentedDetailView):
                 return HttpResponseForbidden()
             else:
                 form = ProblemPointsVoteForm(request.POST)
-                try:
-                    if form.is_valid():
-                        # delete any pre existing votes (will be replaced by new one)
-                        ProblemPointsVote.objects.filter(voter=request.user.profile, problem=self.object).delete()
-                        vote = form.save(commit=False)
-                        vote.voter = request.profile
-                        vote.problem = self.object
-                        vote.note = vote.note.strip()
-                        vote.save()
-                        return self.get(request, *args, **kwargs)
-                    else:
-                        raise ValidationError(_('invalid arguments'))  # go to invalid case
-                except ValidationError:
+                if form.is_valid():
+                    # delete any pre existing votes (will be replaced by new one)
+                    ProblemPointsVote.objects.filter(voter=request.user.profile, problem=self.object).delete()
+                    vote = form.save(commit=False)
+                    vote.voter = request.profile
+                    vote.problem = self.object
+                    vote.note = vote.note.strip()
+                    vote.save()
+                    return self.get(request, *args, **kwargs)
+                else:
                     context = self.get_context_data(
                         object=self.object,
                         comment_request=request,  # comment needs this to initialize
