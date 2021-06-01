@@ -281,8 +281,8 @@ class ProblemDetail(ProblemMixin, SolvedProblemMixin, CommentedDetailView):
                 context['all_votes'] = all_votes
 
             context['max_possible_vote'] = settings.DMOJ_PROBLEM_MAX_USER_POINTS_VOTE
-            context['min_possible_vote'] = settings.DMOJ_PROBLEM_MIN_USER_POINTS_VOTE
-
+            context['min_possible_vote'] = max(settings.DMOJ_PROBLEM_MIN_USER_POINTS_VOTE,
+                                               settings.DMOJ_PROBLEM_MIN_PROBLEM_POINTS)
         return context
 
     def post(self, request, *args, **kwargs):
