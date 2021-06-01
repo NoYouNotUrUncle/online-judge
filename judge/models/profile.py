@@ -107,7 +107,6 @@ class Profile(models.Model):
                                default=False)
     is_unlisted = models.BooleanField(verbose_name=_('unlisted user'), help_text=_('User will not be ranked.'),
                                       default=False)
-    # field for whether or not users are able to vote on problems
     is_banned_from_voting_problem_points = models.BooleanField(
         verbose_name=_('banned from voting'),
         help_text=_("User will not be able to vote on problems' point values."),

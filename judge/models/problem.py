@@ -408,20 +408,26 @@ class Problem(models.Model):
     save.alters_data = True
 
     def can_vote(self, user):
-        if not user.is_authenticated:  # reject anons
+        if not user.is_authenticated:
             return False
 
-        # if user is unlisted or is banned from submitting to the problem, then they cannot vote
-        if user.profile.is_unlisted or self.banned_users.filter(pk=user.pk).exists():
-            return False
-
-        if user.profile.is_banned_from_voting_problem_points:
-            return False  # site wide voting ban
-
+        # If the user is in contest, nothing should be shown.
         if user.profile.current_contest:
-            return False  # if the user is in contest, nothing should be shown
+            return False
 
-        # the points of all ac submissions in decreasing order
+        # If user is unlisted
+        if user.profile.is_unlisted:
+            return False
+
+        # Site wide voting ban.
+        if user.profile.is_banned_from_voting_problem_points:
+            return False
+        
+        # If the user is banned from submitting to the problem.
+        if self.banned_users.filter(pk=user.pk).exists():
+            return False
+
+        # The points of all ac submissions in decreasing order.
         ac_sub_points = list(self.submission_set.filter(user=user.profile, result='AC').order_by('-points').values_list('points', flat=True))
         # if the first ac is a full ac
         return len(ac_sub_points) > 0 and ac_sub_points[0] > self.points - 0.1  # < 0.1 instead of == for pointer precision
@@ -520,10 +526,10 @@ class ProblemPointsVote(models.Model):
             MaxValueValidator(settings.DMOJ_PROBLEM_MAX_USER_POINTS_VOTE),
         ],
     )
-    # who voted
+
     voter = models.ForeignKey(Profile, related_name='problem_points_votes', on_delete=CASCADE, db_index=True)
-    # what problem is this vote for
     problem = models.ForeignKey(Problem, related_name='problem_points_votes', on_delete=CASCADE, db_index=True)
+
     note = models.TextField(
         verbose_name=_('note to go along with vote'),
         help_text=_('Justification for problem points value.'),
@@ -532,7 +538,6 @@ class ProblemPointsVote(models.Model):
         default='',
     )
 
-    # The name that shows up on the sidebar instead of the model class name
     class Meta:
         verbose_name = _('Vote')
         verbose_name_plural = _('Votes')
