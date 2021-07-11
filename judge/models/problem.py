@@ -422,7 +422,7 @@ class Problem(models.Model):
         # Site wide voting ban.
         if user.profile.is_banned_from_voting_problem_points:
             return False
-        #change
+        
         # If the user is banned from submitting to the problem.
         if self.banned_users.filter(pk=user.pk).exists():
             return False
