@@ -87,6 +87,7 @@
       transform: translateX(20px);
     }
 </style>
+
 <div class="vote-stats-background" id="id_vote_stats">
     <span class="vote-stats-info">{{ _('Voting Statistics') }}</span>
     <br/>
@@ -100,9 +101,9 @@
                 <span class="slider"></span>
             </label>
         {% endif %}
-        <span class="vote-stats-info">{{ _('Show Median') }}</span>
+        <span class="vote-stats-info">{{ _('Show Quartiles') }}</span>
         <label class="switch">
-            <input class="checkbox" type="checkbox" id="id_show_median_box" checked="true">
+            <input class="checkbox" type="checkbox" id="id_show_quartiles_box" checked="true">
             <span class="slider"></span>
         </label>
         <span class="vote-stats-info">{{ _('Show Mean') }}</span>
@@ -110,13 +111,6 @@
             <input class="checkbox" type="checkbox" id="id_show_mean_box" checked="true">
             <span class="slider"></span>
         </label>
-        {% if enough_data_for_plot %}
-            <span class="vote-stats-info">{{ _('Show Box and Whisker Plot') }}</span>
-            <label class="switch">
-                <input class="checkbox" type="checkbox" id="id_show_box_plot_box" checked="true">
-                <span class="slider"></span>
-            </label>
-        {% endif %}
         <br/>
         <span class="vote-stats-info">{{ _('Median Vote:') }}</span>
         <span class="vote-stats-value">{{ median_vote|floatformat }}</span>
@@ -231,7 +225,7 @@
             }
 
             {% if enough_data_for_plot %} //render box plot
-                if (document.getElementById('id_show_box_plot_box').checked) {
+                if (document.getElementById('id_show_quartiles_box').checked) {
                     //box and whisker plot settings
                     const box_plot_height = plot_height * (3 / 4);
                     const box_plot_box_y = plot_padding+plot_height/2-box_plot_height/2;
@@ -310,7 +304,7 @@
             const median_height = plot_height * (5 / 6);
             const median_y = plot_padding + plot_height / 2 - median_height / 2;
             const median_x = points_to_animated_x({{ median_vote }});
-            if (document.getElementById('id_show_median_box').checked) {
+            if (document.getElementById('id_show_quartiles_box').checked) {
                 ctx.strokeStyle = '#ff0000';
                 ctx.lineWidth = 5;
                 line(median_x, median_y, median_x, median_y + median_height);
