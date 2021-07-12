@@ -92,13 +92,9 @@
     <script src={{ static('libs/chart.js/Chart.js') }}></script>
     <span class="vote-stats-info">{{ _('Voting Statistics') }}</span>
     <br/>
-    <div id="voteChart">
-        <canvas id="voteChart"></canvas>
-    </div>
+    <canvas class="canvas", id="voteChart"></canvas>
     <br/>
     <canvas class="canvas" id="id_canvas"></canvas>
-    <br/>
-    <canvas class="canvas" id="id_canvas2"></canvas>
     <br/>
     {% if has_votes %}
         {% if can_vote %}
