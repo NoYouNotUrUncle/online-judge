@@ -125,9 +125,13 @@
 </div>
 
 <script>
-
+    let xlabels = [];
+    let min_points = 0; // lakshy there should be a thing for both min and max, refer to views/problem.py and
+                        // search for: max(settings.DMOJ_PROBLEM_MIN_USER_POINTS_VOTE, settings.DMOJ_PROBLEM_MIN_PROBLEM_POINTS
+    let max_points = 50;
+    for(let i=min_points; i<=max_points; i++) xlabels[i] = i;
     const voteData = {
-        labels: [1, 2, 3, 4, 5],
+        labels: xlabels,
         datasets: [{
             label: 'Number of votes',
             data: [2, 13, 4, 9, 20],
