@@ -129,6 +129,7 @@
     const voteData = {
         labels: [1, 2, 3, 4, 5],
         datasets: [{
+            label: 'Number of votes',
             data: [2, 13, 4, 9, 20],
             borderColor: 'red',
         }]
@@ -139,10 +140,6 @@
         data: voteData,
         options: {
             responsive: true,
-            title: {
-                display: true,
-                text: 'Vote'
-            }
         }
     };
 
