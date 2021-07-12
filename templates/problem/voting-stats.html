@@ -89,6 +89,7 @@
 </style>
 
 <div class="vote-stats-background" id="id_vote_stats">
+    <script src={{ static('libs/chart.js/Chart.js') }}></script>
     <span class="vote-stats-info">{{ _('Voting Statistics') }}</span>
     <br/>
     <canvas class="canvas" id="id_canvas"></canvas>
@@ -124,7 +125,31 @@
         <span class="vote-stats-info">{{ _('No Votes Available!') }}</span>
     {% endif %}
 </div>
+
 <script>
+
+    const voteData = {
+        labels: [1, 2, 3, 4, 5],
+        datasets: [{
+            data: [2, 13, 4, 9, 20],
+            borderColor: 'red',
+        }]
+    };
+
+    const voteDataConfig = {
+        type: 'line',
+        data: voteData,
+        options: {
+            responsive: true,
+            title: {
+                display: true,
+                text: 'Vote'
+            }
+        }
+    };
+
+    let voteChart = new Chart(document.getElementById('id_canvas'), voteDataConfig);
+
     const canvas = document.getElementById('id_canvas');
     {% if has_votes %}
         {% if can_vote and all_votes|length > 50 %} //do not render large amounts of votes by default
