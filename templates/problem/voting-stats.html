@@ -135,7 +135,7 @@
         <span class="vote-stats-value">{{ mean_vote|floatformat }}</span>
         <span class="vote-stats-info">{{ _('Number of Votes:') }}</span>
         <span class="vote-stats-value">{{ num_votes }}</span>
-        <button class="chart-action-button">press me</button>
+        <a class="chart-action-button">press me</a>
     {% else %}
         <span class="vote-stats-info">{{ _('No Votes Available!') }}</span>
     {% endif %}
@@ -153,6 +153,7 @@
             label: 'Number of votes for this point value',
             data: [2, 13, 4, 9, 20],
             borderColor: 'red',
+            backgroundColor: Utils.transparentize(Utils.CHART_COLORS.red, 0.5),
         }]
     };
 
