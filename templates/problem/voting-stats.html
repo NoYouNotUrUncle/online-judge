@@ -128,6 +128,7 @@
             <input class="checkbox" type="checkbox" id="id_show_mean_box" checked="true">
             <span class="slider"></span>
         </label>
+        <a class="chart-action-button">press me</a>
         <br/>
         <span class="vote-stats-info">{{ _('Median Vote:') }}</span>
         <span class="vote-stats-value">{{ median_vote|floatformat }}</span>
@@ -135,7 +136,6 @@
         <span class="vote-stats-value">{{ mean_vote|floatformat }}</span>
         <span class="vote-stats-info">{{ _('Number of Votes:') }}</span>
         <span class="vote-stats-value">{{ num_votes }}</span>
-        <a class="chart-action-button">press me</a>
     {% else %}
         <span class="vote-stats-info">{{ _('No Votes Available!') }}</span>
     {% endif %}
@@ -147,13 +147,21 @@
                         // search for: max(settings.DMOJ_PROBLEM_MIN_USER_POINTS_VOTE, settings.DMOJ_PROBLEM_MIN_PROBLEM_POINTS
     let max_points = 50;
     for(let i=min_points; i<=max_points; i++) xlabels[i] = i;
+
+    let data = [2, 3, 5, 6, 0, 0, 0, 0, 2]; // TODO lakshy you need to give me real data
+    let voteFreq = [];
+    for(let i=0; i<data.length; i++) {
+        // assume data is valid
+        voteFreq[data[i]]++;
+    }
+
     const voteData = {
         labels: xlabels,
         datasets: [{
             label: 'Number of votes for this point value',
-            data: [2, 13, 4, 9, 20],
+            data: voteFreq,
             borderColor: 'red',
-            backgroundColor: Utils.transparentize(Utils.CHART_COLORS.red, 0.5),
+            backgroundColor: 'pink'
         }]
     };
 
