@@ -1,20 +1,4 @@
 <style>
-    .chart-action-button {
-        transition: background .25s,border-color .25s;
-        background: rgba(40,44,52,.05);
-        border: 1px solid transparent;
-        border-radius: 6px;
-        color: #3080d0;
-        text-decoration: none!important;
-        display: inline-block;
-        font-size: .8rem;
-        padding: 8px 16px;
-        margin: 0 8px 8px 0;
-        cursor: pointer;
-        -webkit-user-select: none;
-        -moz-user-select: none;
-        user-select: none;
-    }
     .vote-stats-background{
         background-color: rgb(255,255,255);
         padding: 20px;
@@ -128,7 +112,6 @@
             <input class="checkbox" type="checkbox" id="id_show_mean_box" checked="true">
             <span class="slider"></span>
         </label>
-        <a class="chart-action-button">press me</a>
         <br/>
         <span class="vote-stats-info">{{ _('Median Vote:') }}</span>
         <span class="vote-stats-value">{{ median_vote|floatformat }}</span>
@@ -146,10 +129,13 @@
     let min_points = 0; // lakshy there should be a thing for both min and max, refer to views/problem.py and
                         // search for: max(settings.DMOJ_PROBLEM_MIN_USER_POINTS_VOTE, settings.DMOJ_PROBLEM_MIN_PROBLEM_POINTS
     let max_points = 50;
-    for(let i=min_points; i<=max_points; i++) xlabels[i] = i;
+    let voteFreq = [];
+    for(let i=min_points; i<=max_points; i++) {
+        xlabels[i] = i;
+        voteFreq[i] = 0;
+    }
 
     let data = [2, 3, 5, 6, 0, 0, 0, 0, 2]; // TODO lakshy you need to give me real data
-    let voteFreq = [];
     for(let i=0; i<data.length; i++) {
         // assume data is valid
         voteFreq[data[i]]++;
