@@ -1,4 +1,20 @@
 <style>
+    .chart-action-button {
+        transition: background .25s,border-color .25s;
+        background: rgba(40,44,52,.05);
+        border: 1px solid transparent;
+        border-radius: 6px;
+        color: #3080d0;
+        text-decoration: none!important;
+        display: inline-block;
+        font-size: .8rem;
+        padding: 8px 16px;
+        margin: 0 8px 8px 0;
+        cursor: pointer;
+        -webkit-user-select: none;
+        -moz-user-select: none;
+        user-select: none;
+    }
     .vote-stats-background{
         background-color: rgb(255,255,255);
         padding: 20px;
@@ -119,6 +135,7 @@
         <span class="vote-stats-value">{{ mean_vote|floatformat }}</span>
         <span class="vote-stats-info">{{ _('Number of Votes:') }}</span>
         <span class="vote-stats-value">{{ num_votes }}</span>
+        <button class="chart-action-button">press me</button>
     {% else %}
         <span class="vote-stats-info">{{ _('No Votes Available!') }}</span>
     {% endif %}
@@ -133,14 +150,14 @@
     const voteData = {
         labels: xlabels,
         datasets: [{
-            label: 'Number of votes',
+            label: 'Number of votes for this point value',
             data: [2, 13, 4, 9, 20],
             borderColor: 'red',
         }]
     };
 
     const voteDataConfig = {
-        type: 'line',
+        type: 'bar',
         data: voteData,
         options: {
             responsive: true,
