@@ -80,7 +80,7 @@
             {% endif %}
             <span class="vote-form-info">{{ _('Note') }}</span>
             <br/>
-            <textarea class="vote-form-text" name="note" id="id_note" rows="6" cols="80" placeholder={{ note_placeholder }}/>
+            <textarea class="vote-form-text" name="note" id="id_note" rows="6" cols="80" placeholder={{ note_placeholder }}></textarea>
             {% if has_errors and 'note' in problem_points_vote_form.errors %}
                 <br/>
                 <span class="voting-form-error">{{  _(problem_points_vote_form.errors['note'][0]) }}</span>
