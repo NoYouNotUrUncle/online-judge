@@ -81,8 +81,13 @@
             <br/>
             <textarea class="vote-form-text" name="note" id="id_note" rows="6" cols="80"></textarea>
             <script>
-                let attribute = {% if has_errors %}'value'{% else %}'placeholder'{% endif %};
-                document.getElementById('id_note').setAttribute(attribute, `{{ note_placeholder }}`) //js raw string
+                //use JS to edit HTML for raw strings
+                const note_field = document.getElementById('id_note');
+                {% if has_errors %}
+                    note_field.innerHTML = `{{ note_placeholder }}`;
+                {% else %}
+                    note_field.setAttribute('placeholder', `{{ note_placeholder }}`);
+                {% endif %}
             </script>
             {% if has_errors and 'note' in problem_points_vote_form.errors %}
                 <br/>
