@@ -81,7 +81,7 @@
             <br/>
             <textarea class="vote-form-text" name="note" id="id_note" rows="6" cols="80"></textarea>
             <script>
-                //use JS to edit HTML for raw strings  // randomchange
+                //use JS to edit HTML for raw strings
                 const note_field = document.getElementById('id_note');
                 {% if has_errors or has_voted %}
                     note_field.innerHTML = `{{ note_placeholder }}`;
