@@ -39,7 +39,6 @@ from judge.utils.strings import safe_float_or_none, safe_int_or_none
 from judge.utils.tickets import own_ticket_filter
 from judge.utils.views import QueryStringSortMixin, SingleObjectFormView, TitleMixin, add_file_response, generic_message
 
-
 def get_contest_problem(problem, profile):
     try:
         return problem.contests.get(contest_id=profile.current_contest.contest_id)
@@ -149,7 +148,6 @@ class ProblemRaw(ProblemMixin, TitleMixin, TemplateResponseMixin, SingleObjectMi
             return self.render_to_response(self.get_context_data(
                 object=self.object,
             ))
-
 
 class ProblemDetail(ProblemMixin, SolvedProblemMixin, CommentedDetailView):
     context_object_name = 'problem'
@@ -330,6 +328,10 @@ class DeleteVote(ProblemMixin, View):
     context_object_name = 'problem'
 
     def post(self, request, *args, **kwargs):
+
+        print(ProblemDetail.__mro__)
+        print(DeleteVote.__mro__)
+
         self.object = self.get_object()
         if request.user.is_authenticated and self.object.can_vote(request.user):
             ProblemPointsVote.objects.filter(voter=request.user.profile, problem=self.object).delete()
