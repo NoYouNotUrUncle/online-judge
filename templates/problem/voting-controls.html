@@ -99,7 +99,7 @@
 
     <a class="form-button" id="id_vote_button">{% if has_voted %}{{ _('Change vote') }}{% else %}{{ _('Vote on problem points') }}{% endif %}</a>
     {% if has_voted %}
-        <form method="post" action="delete_vote" id="id_delete_vote_form"> {% csrf_token %}
+        <form method="post" action="{{ problem_code }}/delete_vote" id="id_delete_vote_form"> {% csrf_token %}
             <a class="form-button" id="id_delete_vote_button">{{ _('Delete vote') }}</a>
         </form>
         <script>

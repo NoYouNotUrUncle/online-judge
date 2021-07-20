@@ -215,6 +215,8 @@ class ProblemDetail(ProblemMixin, SolvedProblemMixin, CommentedDetailView):
         context['meta_description'] = self.object.summary or metadata[0]
         context['og_image'] = self.object.og_image or metadata[1]
 
+        context['problem_code'] = self.object.code
+
         context['can_vote'] = self.object.can_vote(user)  # if this problem is votable by this user
         # the vote this user has already cast on this problem
         if context['can_vote']:
