@@ -327,8 +327,7 @@ class ProblemDetail(ProblemMixin, SolvedProblemMixin, CommentedDetailView):
             return super().post(request, *args, **kwargs)
 
 class DeleteVote(ProblemMixin, View):
-    def __init__(self):
-        print('i was made apparently?')
+    context_object_name = 'problem'
 
     def post(self, request, *args, **kwargs):
         self.object = self.get_object()
