@@ -39,8 +39,9 @@
 
 {% if not in_contest %}
     <hr style="padding-top: 0.1em">
-    {% include 'lightbox.html' %}
 {% endif %}
+
+{% include 'lightbox.html' %}
 
 {% if can_vote %}
     <div class="vote-form" id="id_vote_form">
@@ -97,27 +98,36 @@
         </form>
     </div>
 
-    <a class="form-button" id="id_vote_button">{% if has_voted %}{{ _('Change vote') }}{% else %}{{ _('Vote on problem points') }}{% endif %}</a>
-    {% if has_voted %}
-        <form method="post" action="{{ problem_code }}/delete_vote" id="id_delete_vote_form"> {% csrf_token %}
-            <a class="form-button" id="id_delete_vote_button">{{ _('Delete vote') }}</a>
-        </form>
-        <script>
-            const delete_vote_form = document.getElementById('id_delete_vote_form')
-            const delete_vote_button = document.getElementById('id_delete_vote_button')
-            delete_vote_button.onclick = function (){
-                $.ajax({
-                    url: '{{ problem_code }}/delete_vote',
-                    type: 'POST',
-                    data: $('#id_delete_vote_form').serialize(),
-                    success: function (data, textStatus, jqXHR) {
-                        alert('vote deleted !')
-                        console.log(data)
-                    }
-                })
-            }
-        </script>
-    {% endif %}
+    <a class="form-button" id="id_vote_button"></a>
+    <script>
+        let change_vote_text = {{ _('Change vote') }};
+        let vote_text = {{ _('Vote on problem points') }};
+        let has_voted = {{ has_voted|lower }};
+        if(has_voted) {
+            $('#id_vote_button').innerText = change_vote_text;
+        } else {
+            $('#id_vote_button').innerText = vote_text;
+        }
+    </script>
+
+    <form method="post" action="{{ problem_code }}/delete_vote" id="id_delete_vote_form"> {% csrf_token %}
+        <a class="form-button" id="id_delete_vote_button">{{ _('Delete vote') }}</a>
+    </form>
+    <script>
+        if(!has_voted) $('#id_delete_vote_form').hidden = true;
+        $('#id_delete_vote_button').onclick = function (){
+            $.ajax({
+                url: '{{ problem_code }}/delete_vote',
+                type: 'POST',
+                data: $('#id_delete_vote_form').serialize(),
+                success: () => {
+                    has_voted = false;
+                    $('#id_delete_vote_form').hidden = true;
+                    $('#id_vote_button').innerText = vote_text;
+                }
+            })
+        }
+    </script>
 
     <script defer>
         const voting_lightbox = createLightbox('id_voting_lightbox', 'id_vote_form')
@@ -134,9 +144,7 @@
 {% endif %}
 
 {% if not in_contest %}
-    <script>
-        let vote_stats_lightbox = null
-    </script>
+    <script>let vote_stats_lightbox = null;</script>
 
     {% include 'problem/voting-stats.html' %}
     <a class="form-button" id="id_vote_stats_button">{{ _('Voting statistics') }}</a>
