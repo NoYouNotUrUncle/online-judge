@@ -325,6 +325,9 @@ class ProblemDetail(ProblemMixin, SolvedProblemMixin, CommentedDetailView):
             return super().post(request, *args, **kwargs)
 
 class DeleteVote(ProblemMixin, View):
+    def __init__(self):
+        print('i was made apparently?')
+
     def post(self, request, *args, **kwargs):
         self.object = self.get_object()
         if request.user.is_authenticated and self.object.can_vote(request.user):
