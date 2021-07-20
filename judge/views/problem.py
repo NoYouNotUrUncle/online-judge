@@ -12,7 +12,7 @@ from django.core.exceptions import ObjectDoesNotExist, PermissionDenied
 from django.db import transaction
 from django.db.models import Count, F, Prefetch, Q
 from django.db.utils import ProgrammingError
-from django.http import Http404, HttpResponse, HttpResponseForbidden, HttpResponseRedirect
+from django.http import Http404, HttpResponse, HttpResponseForbidden, HttpResponseRedirect, JsonResponse
 from django.shortcuts import get_object_or_404
 from django.template.loader import get_template
 from django.urls import reverse
@@ -329,7 +329,7 @@ class DeleteVote(ProblemMixin, SingleObjectMixin, View):
         self.object = self.get_object()
         if request.user.is_authenticated and self.object.can_vote(request.user):
             ProblemPointsVote.objects.filter(voter=request.user.profile, problem=self.object).delete()
-            return HttpResponse('')
+            return HttpResponse('success', content_type='text/plain')
         else:
             return HttpResponseForbidden()
 

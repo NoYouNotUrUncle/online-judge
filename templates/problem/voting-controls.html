@@ -106,7 +106,15 @@
             const delete_vote_form = document.getElementById('id_delete_vote_form')
             const delete_vote_button = document.getElementById('id_delete_vote_button')
             delete_vote_button.onclick = function (){
-                delete_vote_form.submit()
+                $.ajax({
+                    url: '{{ problem_code }}/delete_vote',
+                    type: 'POST',
+                    data: $('#id_delete_vote_form').serialize(),
+                    success: function (data, textStatus, jqXHR) {
+                        alert('vote deleted !')
+                        console.log(data)
+                    }
+                })
             }
         </script>
     {% endif %}
