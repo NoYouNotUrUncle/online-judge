@@ -324,6 +324,13 @@ class ProblemDetail(ProblemMixin, SolvedProblemMixin, CommentedDetailView):
         else:  # forward to next level of post request (comment post request as of writing)
             return super().post(request, *args, **kwargs)
 
+class DeleteVote(ProblemMixin, View):
+    def post(self, request, *args, **kwargs):
+        self.object = self.get_object()
+        if request.user.is_authenticated and self.object.can_vote(request.user):
+            ProblemPointsVote.objects.filter(voter=request.user.profile, problem=self.object).delete()
+        else:
+            return HttpResponseForbidden()
 
 class LatexError(Exception):
     pass

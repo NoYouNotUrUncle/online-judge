@@ -35,10 +35,6 @@
     .form-button {
         cursor: pointer;
     }
-
-    .errorlist {
-        list-style: none;
-    }
 </style>
 
 {% if not in_contest %}
@@ -103,10 +99,16 @@
 
     <a class="form-button" id="id_vote_button">{% if has_voted %}{{ _('Change vote') }}{% else %}{{ _('Vote on problem points') }}{% endif %}</a>
     {% if has_voted %}
-        <form method="post" id="id_delete_vote_form"> {% csrf_token %}
+        <form method="post" action="delete_vote" id="id_delete_vote_form"> {% csrf_token %}
             <a class="form-button" id="id_delete_vote_button">{{ _('Delete vote') }}</a>
-            <input type="hidden" name="delete_confirmation"/>
         </form>
+        <script>
+            const delete_vote_form = document.getElementById('id_delete_vote_form')
+            const delete_vote_button = document.getElementById('id_delete_vote_button')
+            delete_vote_button.onclick = function (){
+                delete_vote_form.submit()
+            }
+        </script>
     {% endif %}
 
     <script defer>
@@ -120,14 +122,6 @@
         vote_button.onclick = function () {
             activateLightbox(voting_lightbox)
         }
-
-        {% if has_voted %}
-            const delete_vote_form = document.getElementById('id_delete_vote_form')
-            const delete_vote_button = document.getElementById('id_delete_vote_button')
-            delete_vote_button.onclick = function (){
-                delete_vote_form.submit()
-            }
-        {% endif %}
     </script>
 {% endif %}
 
