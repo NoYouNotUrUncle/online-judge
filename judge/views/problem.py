@@ -313,25 +313,19 @@ class ProblemDetail(ProblemMixin, SolvedProblemMixin, CommentedDetailView):
                     )
                     return self.render_to_response(context)
 
-        elif 'delete_confirmation' in request.POST:
-            if not request.user.is_authenticated:  # un authed person tries to find a way to delete
-                return HttpResponseForbidden()
-            if not self.object.can_vote(request.user):  # if the user is banned from voting, they can't delete their votes.
-                return HttpResponseForbidden()
-            # delete anything that matches (if nothing matches it doesn't matter)
-            ProblemPointsVote.objects.filter(voter=request.user.profile, problem=self.object).delete()
-            return self.get(request, *args, **kwargs)
         else:  # forward to next level of post request (comment post request as of writing)
             return super().post(request, *args, **kwargs)
 
 class DeleteVote(ProblemMixin, SingleObjectMixin, View):
     def post(self, request, *args, **kwargs):
         self.object = self.get_object()
-        if request.user.is_authenticated and self.object.can_vote(request.user):
+        if not request.user.is_authenticated:
+            HttpResponseForbidden('not signed in', content_type='text/plain')
+        elif self.object.can_vote(request.user):
             ProblemPointsVote.objects.filter(voter=request.user.profile, problem=self.object).delete()
             return HttpResponse('success', content_type='text/plain')
         else:
-            return HttpResponseForbidden()
+            return HttpResponseForbidden('not allowed to delete votes on this problem', content_type='text/plain')
 
 class LatexError(Exception):
     pass

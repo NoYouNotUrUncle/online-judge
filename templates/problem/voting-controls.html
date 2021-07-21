@@ -45,91 +45,132 @@
 
 {% if can_vote %}
     <div class="vote-form" id="id_vote_form">
-        {% if has_voted %}
+        <div id="id_has_voted_prompt">
             <span class="vote-form-info">{{ _('Current Vote:') }}</span>
-            <span class="vote-form-value">{{ voted_points|floatformat }}</span>
-            <br/> <br/>
+            <span id="id_current_vote_value" class="vote-form-value"></span>
+            <br/>
+            <br/>
             <span class="vote-form-text">{{  _('Change your vote below!') }}</span>
-        {% else %}
+        </div>
+        <div id="id_has_not_voted_prompt">
             <span class="vote-form-text">{{ _("Cast your vote on this problem's weightage below!") }}</span>
-        {% endif %}
-        <br/> <br/>
-        <form method="post"> {% csrf_token %}
+        </div>
+        <br/>
+        <br/>
+        <form method="post">
+            {% csrf_token %}
             <span class="vote-form-info">{{ _('Points') }}</span>
-            <input class="vote-form-value" type="number" step="any" name="points" id="id_points" {% if has_errors or has_voted %}value{% else %}placeholder{% endif %}={{ points_placeholder }}>
+            <input id="id_points" class="vote-form-value" type="number" step="any" name="points">
             <script>
-                document.getElementById('id_points').addEventListener('keydown', e => {
-                    //do not allow characters that are allowed by number field but not integer
+                $('#id_points').addEventListener('keydown', e => {
                     let invalidChars = ['e','+','-','.'];
                     if(invalidChars.includes(e.key)){
-                        //stops character from being entered
                         e.preventDefault();
                     }
                 });
             </script>
-            {% if has_errors and 'points' in problem_points_vote_form.errors %}
-                <br/>
-                <span class="voting-form-error">{{ _(problem_points_vote_form.errors['points'][0]) }}</span>
-                <br/>
-            {% else %}
-                <br/> <br/>
-            {% endif %}
+            <br/>
+            <span id="id_points_error" class="voting-form-error"></span>
+            <br/>
             <span class="vote-form-info">{{ _('Note') }}</span>
             <br/>
-            <textarea class="vote-form-text" name="note" id="id_note" rows="6" cols="80"></textarea>
-            <script>
-                //use JS to edit HTML for raw strings
-                const note_field = document.getElementById('id_note');
-                {% if has_errors or has_voted %}
-                    note_field.innerHTML = `{{ note_placeholder }}`;
-                {% else %}
-                    note_field.setAttribute('placeholder', `{{ note_placeholder }}`);
-                {% endif %}
-            </script>
-            {% if has_errors and 'note' in problem_points_vote_form.errors %}
-                <br/>
-                <span class="voting-form-error">{{  _(problem_points_vote_form.errors['note'][0]) }}</span>
-                <br/>
-            {% else %}
-                <br/> <br/>
-            {% endif %}
-            <input type="submit" value="{{  _('Vote') }}" class="vote-button"/>
+            <textarea id="id_note" class="vote-form-text" name="note" rows="6" cols="80"></textarea>
+            <br/>
+            <span id="id_note_error" class="voting-form-error"></span>
+            <br/>
+            <button id="id_vote_form_submit_button" class="vote-button">{{ _('Vote') }}</button>
             <input type="hidden" name="vote_confirmation"/>
         </form>
     </div>
 
     <a class="form-button" id="id_vote_button"></a>
-    <script>
-        let change_vote_text = {{ _('Change vote') }};
-        let vote_text = {{ _('Vote on problem points') }};
-        let has_voted = {{ has_voted|lower }};
-        if(has_voted) {
-            $('#id_vote_button').innerText = change_vote_text;
-        } else {
-            $('#id_vote_button').innerText = vote_text;
-        }
-    </script>
 
-    <form method="post" action="{{ problem_code }}/delete_vote" id="id_delete_vote_form"> {% csrf_token %}
+    <form id="id_delete_vote_form">
+        {% csrf_token %}
         <a class="form-button" id="id_delete_vote_button">{{ _('Delete vote') }}</a>
     </form>
+
     <script>
-        if(!has_voted) $('#id_delete_vote_form').hidden = true;
+        {% if has_voted %}
+            let has_voted = true;
+        {% else %}
+            let has_voted = false;
+        {% endif %}
+        let voted_points = {{ vote_placeholder }};
+        let voted_note = {{ note_placeholder }};
+        if(has_voted){
+            voted_points = {{ voted_points }};
+        }
+
+        function voteUpdate(){
+            $('#id_has_voted_prompt').hidden = false;
+            $('#id_current_vote_value').innerText = voted_points
+            $('#id_has_not_voted_prompt').hidden = true;
+            $('#id_delete_vote_form').hidden = false;
+            if(has_voted) $('#id_vote_button').innerText = {{ _('Change vote') }};
+            if(has_voted){
+                $('#id_points').value = voted_points;
+                $('#id_note').innerText = voted_note;
+            } else {
+                $('#id_points').value = '';
+                $('#id_points').setAttribute('placeholder', voted_points);
+                $('#id_note').innerText = '';
+                $('#id_note').setAttribute('placeholder', voted_note);
+            }
+            $('#id_points_error').hidden = true;
+            $('#id_note_error').hidden = true;
+            has_voted = true;
+        }
+
+        function deleteVoteUpdate(){
+            $('#id_has_voted_prompt').hidden = true;
+            $('#id_has_not_voted_prompt').hidden = false;
+            $('#id_delete_vote_form').hidden = true;
+            $('#id_vote_button').innerText = {{ _('Vote on problem points') }};
+            $('#id_points_error').hidden = true;
+            $('#id_note_error').hidden = true;
+            has_voted = false;
+        }
+
+        {% if has_errors and 'points' in problem_points_vote_form.errors %}
+            //{{ _(problem_points_vote_form.errors['points'][0]) }}
+        {% endif %}
+
+        {% if has_errors and 'note' in problem_points_vote_form.errors %}
+            //<span class="voting-form-error">{{  _(problem_points_vote_form.errors['note'][0]) }}</span>
+        {% endif %}
+
+        if(has_voted) voteUpdate();
+        else deleteVoteUpdate();
+
         $('#id_delete_vote_button').onclick = function (){
             $.ajax({
                 url: '{{ problem_code }}/delete_vote',
                 type: 'POST',
                 data: $('#id_delete_vote_form').serialize(),
-                success: () => {
-                    has_voted = false;
-                    $('#id_delete_vote_form').hidden = true;
-                    $('#id_vote_button').innerText = vote_text;
-                }
-            })
+                success: deleteVoteUpdate(),
+                error: (data) => {
+                    alert('Unable to delete vote: '+String(data));
+                },
+            });
         }
-    </script>
 
-    <script defer>
+        $('#id_vote_form_submit_button').onclick = function(){
+            $.ajax({
+                url: '{{ problem_code }}',
+                type: 'POST',
+                data: $('#id_vote_form').serialize(),
+                success: () => {
+                    voted_note = $('#id_note').innerText;
+                    voted_points = $('#id_points').value;
+                    voteUpdate();
+                },
+                error: (data) => {
+                    alert(data)
+                }
+            });
+        }
+
         const voting_lightbox = createLightbox('id_voting_lightbox', 'id_vote_form')
 
         {% if has_errors %}
