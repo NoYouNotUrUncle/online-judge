@@ -93,11 +93,11 @@
 
     <script>
         let voted_points = {{ points_placeholder }};
-        let voted_note = {{ note_placeholder }};
+        let voted_note = `{{ note_placeholder }}`;
         {% if has_voted %}
             let has_voted = true;
             voted_points = {{ voted_points }};
-            voted_note = {{ voted_note }};
+            voted_note = `{{ voted_note }}`;
         {% else %}
             let has_voted = false;
         {% endif %}
