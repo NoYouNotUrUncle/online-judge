@@ -126,7 +126,7 @@
             $('#id_has_voted_prompt').get(0).hidden = true;
             $('#id_has_not_voted_prompt').get(0).hidden = false;
             $('#id_delete_vote_form').get(0).hidden = true;
-            $('#id_vote_button').get(0).innerText = {{ _('Vote on problem points') }};
+            $('#id_vote_button').get(0).innerText = `{{ _('Vote on problem points') }}`;
             $('#id_points_error').get(0).hidden = true;
             $('#id_note_error').get(0).hidden = true;
             has_voted = false;
