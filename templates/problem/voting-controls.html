@@ -107,7 +107,7 @@
             $('#id_current_vote_value').get(0).innerText = voted_points
             $('#id_has_not_voted_prompt').get(0).hidden = true;
             $('#id_delete_vote_form').get(0).hidden = false;
-            if(has_voted) $('#id_vote_button').get(0).innerText = {{ _('Change vote') }};
+            if(has_voted) $('#id_vote_button').get(0).innerText = `{{ _('Change vote') }}`;
             if(has_voted){
                 $('#id_points').get(0).value = voted_points;
                 $('#id_note').get(0).innerText = voted_note;
