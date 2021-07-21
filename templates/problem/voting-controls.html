@@ -62,6 +62,7 @@
             <span class="vote-form-info">{{ _('Points') }}</span>
             <input id="id_points" class="vote-form-value" type="number" step="any" name="points">
             <script>
+                console.log($('#id_points').get())
                 $('#id_points').get().addEventListener('keydown', e => {
                     let invalidChars = ['e','+','-','.'];
                     if(invalidChars.includes(e.key)){
