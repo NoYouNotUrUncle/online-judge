@@ -112,9 +112,9 @@
                 $('#id_points').get(0).value = voted_points;
                 $('#id_note').get(0).innerText = voted_note;
             } else {
-                $('#id_points').get(0).value = '';
+                $('#id_points').get(0).removeAttribute('value');
                 $('#id_points').get(0).setAttribute('placeholder', voted_points);
-                $('#id_note').get(0).innerText = '';
+                $('#id_note').get(0).removeAttribute('innerText')
                 $('#id_note').get(0).setAttribute('placeholder', voted_note);
             }
             $('#id_points_error').get(0).hidden = true;
