@@ -91,7 +91,7 @@
         <a class="form-button" id="id_delete_vote_button">{{ _('Delete vote') }}</a>
     </form>
 
-    <script>
+    <script defer>
         let voted_points = {{ points_placeholder }};
         let voted_note = `{{ note_placeholder }}`;
         {% if has_voted %}
@@ -112,10 +112,10 @@
                 $('#id_points').get(0).value = voted_points;
                 $('#id_note').get(0).innerText = voted_note;
             } else {
-                //$('#id_points').get(0).removeAttribute('value');
-                $('#id_points').get(0).setAttribute('placeholder', voted_points);
-                //$('#id_note').get(0).removeAttribute('innerText')
-                //$('#id_note').get(0).setAttribute('placeholder', voted_note);
+                $('#id_points').get(0).value = '';
+                $('#id_points').get(0).placeholder = voted_points;
+                $('#id_note').get(0).innerText = '';
+                $('#id_note').get(0).placeholder = voted_note;
             }
             $('#id_points_error').get(0).hidden = true;
             $('#id_note_error').get(0).hidden = true;
@@ -185,7 +185,7 @@
 {% endif %}
 
 {% if not in_contest %}
-    <script>let vote_stats_lightbox = null;</script>
+    <script defer>let vote_stats_lightbox = null;</script>
 
     {% include 'problem/voting-stats.html' %}
     <a class="form-button" id="id_vote_stats_button">{{ _('Voting statistics') }}</a>
