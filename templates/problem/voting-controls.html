@@ -92,16 +92,15 @@
     </form>
 
     <script>
+        let voted_points = {{ points_placeholder }};
+        let voted_note = {{ note_placeholder }};
         {% if has_voted %}
             let has_voted = true;
+            voted_points = {{ voted_points }};
+            voted_note = {{ voted_note }};
         {% else %}
             let has_voted = false;
         {% endif %}
-        let voted_points = {{ vote_placeholder }};
-        let voted_note = {{ note_placeholder }};
-        if(has_voted){
-            voted_points = {{ voted_points }};
-        }
 
         function voteUpdate(){
             $('#id_has_voted_prompt').get(0).hidden = false;
