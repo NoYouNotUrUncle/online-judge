@@ -62,7 +62,7 @@
             <span class="vote-form-info">{{ _('Points') }}</span>
             <input id="id_points" class="vote-form-value" type="number" step="any" name="points">
             <script>
-                $('#id_points').addEventListener('keydown', e => {
+                $('#id_points').get().addEventListener('keydown', e => {
                     let invalidChars = ['e','+','-','.'];
                     if(invalidChars.includes(e.key)){
                         e.preventDefault();
@@ -103,32 +103,32 @@
         }
 
         function voteUpdate(){
-            $('#id_has_voted_prompt').hidden = false;
-            $('#id_current_vote_value').innerText = voted_points
-            $('#id_has_not_voted_prompt').hidden = true;
-            $('#id_delete_vote_form').hidden = false;
-            if(has_voted) $('#id_vote_button').innerText = {{ _('Change vote') }};
+            $('#id_has_voted_prompt').get().hidden = false;
+            $('#id_current_vote_value').get().innerText = voted_points
+            $('#id_has_not_voted_prompt').get().hidden = true;
+            $('#id_delete_vote_form').get().hidden = false;
+            if(has_voted) $('#id_vote_button').get().innerText = {{ _('Change vote') }};
             if(has_voted){
-                $('#id_points').value = voted_points;
-                $('#id_note').innerText = voted_note;
+                $('#id_points').get().value = voted_points;
+                $('#id_note').get().innerText = voted_note;
             } else {
-                $('#id_points').value = '';
-                $('#id_points').setAttribute('placeholder', voted_points);
-                $('#id_note').innerText = '';
-                $('#id_note').setAttribute('placeholder', voted_note);
+                $('#id_points').get().value = '';
+                $('#id_points').get().setAttribute('placeholder', voted_points);
+                $('#id_note').get().innerText = '';
+                $('#id_note').get().setAttribute('placeholder', voted_note);
             }
-            $('#id_points_error').hidden = true;
-            $('#id_note_error').hidden = true;
+            $('#id_points_error').get().hidden = true;
+            $('#id_note_error').get().hidden = true;
             has_voted = true;
         }
 
         function deleteVoteUpdate(){
-            $('#id_has_voted_prompt').hidden = true;
-            $('#id_has_not_voted_prompt').hidden = false;
-            $('#id_delete_vote_form').hidden = true;
-            $('#id_vote_button').innerText = {{ _('Vote on problem points') }};
-            $('#id_points_error').hidden = true;
-            $('#id_note_error').hidden = true;
+            $('#id_has_voted_prompt').get().hidden = true;
+            $('#id_has_not_voted_prompt').get().hidden = false;
+            $('#id_delete_vote_form').get().hidden = true;
+            $('#id_vote_button').get().innerText = {{ _('Vote on problem points') }};
+            $('#id_points_error').get().hidden = true;
+            $('#id_note_error').get().hidden = true;
             has_voted = false;
         }
 
@@ -143,7 +143,7 @@
         if(has_voted) voteUpdate();
         else deleteVoteUpdate();
 
-        $('#id_delete_vote_button').onclick = function (){
+        $('#id_delete_vote_button').get().onclick = function (){
             $.ajax({
                 url: '{{ problem_code }}/delete_vote',
                 type: 'POST',
@@ -155,7 +155,7 @@
             });
         }
 
-        $('#id_vote_form_submit_button').onclick = function(){
+        $('#id_vote_form_submit_button').get().onclick = function(){
             $.ajax({
                 url: '{{ problem_code }}',
                 type: 'POST',
