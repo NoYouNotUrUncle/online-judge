@@ -335,6 +335,7 @@ class Vote(ProblemMixin, SingleObjectMixin, View):
             print('ajax says ur invalid')
             return HttpResponseForbidden('Not allowed to vote on this problem.', content_type='text/plain')
         else:
+            print(request.POST)
             form = ProblemPointsVoteForm(request.POST)
             if form.is_valid():
                 print('form says ur good bro')
