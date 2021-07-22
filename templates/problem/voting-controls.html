@@ -79,7 +79,7 @@
             <br/>
             <span id="id_note_error" class="voting-form-error"></span>
             <br/>
-            <button id="id_vote_form_submit_button" class="vote-button">{{ _('Vote') }}</button>
+            <input type="submit" id="id_vote_form_submit_button" class="vote-button" value="{{ _('Vote') }}">
             <input type="hidden" name="vote_confirmation"/>
         </form>
     </div>
@@ -155,7 +155,8 @@
             });
         }//change
 
-        $('#id_vote_form_submit_button').get(0).onclick = function(){
+        $('#id_vote_form').get(0).addEventListener('submit', e => {
+            e.preventDefault()
             $.ajax({
                 url: '{{ problem_code }}/vote',
                 type: 'POST',
@@ -169,7 +170,7 @@
                     alert(data)
                 }
             });
-        }
+        })
 
         const voting_lightbox = createLightbox('id_voting_lightbox', 'id_vote_form')
 
