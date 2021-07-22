@@ -341,6 +341,7 @@ class Vote(ProblemMixin, SingleObjectMixin, View):
                 vote.voter = request.profile
                 vote.problem = self.object
                 vote.note = vote.note.strip()
+                print(vote.points)
                 vote.save()
                 return HttpResponse('success', content_type='text/plain')
             else:
