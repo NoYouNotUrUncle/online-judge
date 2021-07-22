@@ -157,7 +157,7 @@
 
         $('#id_vote_form_submit_button').get(0).onclick = function(){
             $.ajax({
-                url: '{{ problem_code }}',
+                url: '{{ problem_code }}/vote',
                 type: 'POST',
                 data: $('#id_vote_form').serialize(),
                 success: () => {

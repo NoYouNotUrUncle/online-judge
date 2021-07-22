@@ -327,6 +327,25 @@ class DeleteVote(ProblemMixin, SingleObjectMixin, View):
         else:
             return HttpResponseForbidden('not allowed to delete votes on this problem', content_type='text/plain')
 
+class Vote(ProblemMixin, SingleObjectMixin, View):
+    def post(self, request, *args, **kwargs):
+        self.object = self.get_object()
+        if not self.object.can_vote(request.user): # not allowed to vote for some reason
+            return HttpResponseForbidden('Not allowed to vote on this problem.', content_type='text/plain')
+        else:
+            form = ProblemPointsVoteForm(request.POST)
+            if form.is_valid():
+                # delete any pre existing votes (will be replaced by new one)
+                ProblemPointsVote.objects.filter(voter=request.user.profile, problem=self.object).delete()
+                vote = form.save(commit=False)
+                vote.voter = request.profile
+                vote.problem = self.object
+                vote.note = vote.note.strip()
+                vote.save()
+                return HttpResponse('success', content_type='text/plain')
+            else:
+                return JsonResponse({'problem_points_vote_form': form}, status=400)
+
 class LatexError(Exception):
     pass
 
