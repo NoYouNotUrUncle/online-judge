@@ -289,7 +289,6 @@ class ProblemDetail(ProblemMixin, SolvedProblemMixin, CommentedDetailView):
         self.object = self.get_object()
 
         if 'vote_confirmation' in request.POST:  # deal with request as problem points vote
-            print('processing vote non ajax')
             if not self.object.can_vote(request.user):  # not allowed to vote for some reason
                 return HttpResponseForbidden()
             else:
@@ -333,10 +332,12 @@ class Vote(ProblemMixin, SingleObjectMixin, View):
         print('processing vote ajax')
         self.object = self.get_object()
         if not self.object.can_vote(request.user): # not allowed to vote for some reason
+            print('ajax says ur invalid')
             return HttpResponseForbidden('Not allowed to vote on this problem.', content_type='text/plain')
         else:
             form = ProblemPointsVoteForm(request.POST)
             if form.is_valid():
+                print('form says ur good bro')
                 # delete any pre existing votes (will be replaced by new one)
                 ProblemPointsVote.objects.filter(voter=request.user.profile, problem=self.object).delete()
                 vote = form.save(commit=False)
@@ -347,6 +348,7 @@ class Vote(ProblemMixin, SingleObjectMixin, View):
                 vote.save()
                 return HttpResponse('success', content_type='text/plain')
             else:
+                print('form says ur invalid')
                 return JsonResponse({'problem_points_vote_form': form}, status=400)
 
 class LatexError(Exception):
