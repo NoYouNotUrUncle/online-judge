@@ -44,7 +44,7 @@
 {% include 'lightbox.html' %}
 
 {% if can_vote %}
-    <div class="vote-form" id="id_vote_form">
+    <div class="vote-form" id="id_vote_form_box">
         <div id="id_has_voted_prompt">
             <span class="vote-form-info">{{ _('Current Vote:') }}</span>
             <span id="id_current_vote_value" class="vote-form-value"></span>
@@ -57,7 +57,7 @@
         </div>
         <br/>
         <br/>
-        <form method="post">
+        <form id="id_vote_form" method="post">
             {% csrf_token %}
             <span class="vote-form-info">{{ _('Points') }}</span>
             <input id="id_points" class="vote-form-value" type="number" step="any" name="points">
@@ -173,7 +173,7 @@
             });
         })
 
-        const voting_lightbox = createLightbox('id_voting_lightbox', 'id_vote_form')
+        const voting_lightbox = createLightbox('id_voting_lightbox', 'id_vote_form_box')
 
         {% if has_errors %}
             activateLightbox(voting_lightbox)
