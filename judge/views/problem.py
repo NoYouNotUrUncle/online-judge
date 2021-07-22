@@ -349,8 +349,7 @@ class Vote(ProblemMixin, SingleObjectMixin, View):
                 return HttpResponse('success', content_type='text/plain')
             else:
                 print('form says ur invalid')
-                print(form)
-                return JsonResponse({'error': 'hello um idk what error is but ik ur bad lmao'}, status=400)
+                return JsonResponse(form.errors, status=400)
 
 class LatexError(Exception):
     pass
