@@ -156,6 +156,7 @@
         }//change
 
         $('#id_vote_form').get(0).addEventListener('submit', e => {
+            console.log('submitting')
             e.preventDefault()
             $.ajax({
                 url: '{{ problem_code }}/vote',
