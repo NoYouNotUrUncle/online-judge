@@ -287,7 +287,7 @@ class ProblemDetail(ProblemMixin, SolvedProblemMixin, CommentedDetailView):
 
     def post(self, request, *args, **kwargs):
         self.object = self.get_object()
-
+        print('non ajax running :ib:')
         if 'vote_confirmation' in request.POST:  # deal with request as problem points vote
             if not self.object.can_vote(request.user):  # not allowed to vote for some reason
                 return HttpResponseForbidden()
