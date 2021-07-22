@@ -156,6 +156,10 @@
         }//change
 
         $('#id_vote_form').get(0).addEventListener('submit', e => {
+            e.preventDefault();
+        })
+
+        $('#id_vote_form_submit_button').get(0).onclick = e => {
             console.log('submitting')
             e.preventDefault()
             $.ajax({
@@ -172,7 +176,8 @@
                     console.log(data)
                 }
             });
-        })
+            $('#id_vote_form_submit_button').get(0).removeAttribute('disabled')
+        }
 
         const voting_lightbox = createLightbox('id_voting_lightbox', 'id_vote_form_box')
 
