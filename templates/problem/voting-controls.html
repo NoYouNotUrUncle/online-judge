@@ -166,8 +166,9 @@
                     voted_points = $('#id_points').value;
                     voteUpdate();
                 },
-                error: (data) => {
+                error: data => {
                     alert(data)
+                    console.log(data)
                 }
             });
         })
