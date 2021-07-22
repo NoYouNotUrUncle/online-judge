@@ -289,6 +289,7 @@ class ProblemDetail(ProblemMixin, SolvedProblemMixin, CommentedDetailView):
         self.object = self.get_object()
 
         if 'vote_confirmation' in request.POST:  # deal with request as problem points vote
+            print('processing vote non ajax')
             if not self.object.can_vote(request.user):  # not allowed to vote for some reason
                 return HttpResponseForbidden()
             else:
@@ -329,6 +330,7 @@ class DeleteVote(ProblemMixin, SingleObjectMixin, View):
 
 class Vote(ProblemMixin, SingleObjectMixin, View):
     def post(self, request, *args, **kwargs):
+        print('processing vote ajax')
         self.object = self.get_object()
         if not self.object.can_vote(request.user): # not allowed to vote for some reason
             return HttpResponseForbidden('Not allowed to vote on this problem.', content_type='text/plain')
