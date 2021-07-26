@@ -14,7 +14,8 @@ from django.urls import reverse_lazy
 from django.utils.translation import gettext_lazy as _
 
 from django_ace import AceWidget
-from judge.models import Contest, Language, Organization, Problem, Profile, Submission, WebAuthnCredential
+from judge.models import Contest, Language, Organization, Problem, ProblemPointsVote, Profile, Submission, \
+    WebAuthnCredential
 from judge.utils.subscription import newsletter_id
 from judge.widgets import HeavyPreviewPageDownWidget, Select2MultipleWidget, Select2Widget
 
@@ -284,3 +285,9 @@ class ContestCloneForm(Form):
         if Contest.objects.filter(key=key).exists():
             raise ValidationError(_('Contest with key already exists.'))
         return key
+
+
+class ProblemPointsVoteForm(ModelForm):
+    class Meta:
+        model = ProblemPointsVote
+        fields = ['points', 'note']

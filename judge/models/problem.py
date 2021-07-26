@@ -442,6 +442,43 @@ class Problem(models.Model):
 
     save.alters_data = True
 
+    def user_has_full_ac(self, user):
+        # The points of all ac submissions in decreasing order.
+        ac_sub_points = list(self.submission_set.filter(user=user.profile, result='AC')
+                                 .order_by('-points')
+                                 .values_list('points', flat=True))
+        # if the first ac is a full ac, < 0.1 instead of == for pointer precision
+        return len(ac_sub_points) > 0 and ac_sub_points[0] > self.points - 0.1
+
+    def user_banned_voting(self, user):
+        # If user is unlisted
+        if user.profile.is_unlisted:
+            return True
+
+        # Site wide voting ban.
+        if user.profile.is_banned_problem_voting:
+            return True
+
+        return False
+
+    def can_vote(self, user):
+        if not user.is_authenticated:
+            return False
+
+        # If the user is in contest, nothing should be shown.
+        if user.profile.current_contest:
+            return False
+
+        # If the user is not allowed to vote
+        if self.user_banned_voting(user):
+            return False
+
+        # If the user is banned from submitting to the problem.
+        if self.banned_users.filter(pk=user.pk).exists():
+            return False
+
+        return self.user_has_full_ac(user)
+
     class Meta:
         permissions = (
             ('see_private_problem', _('See hidden problems')),
@@ -525,3 +562,32 @@ class Solution(models.Model):
         )
         verbose_name = _('solution')
         verbose_name_plural = _('solutions')
+
+
+class ProblemPointsVote(models.Model):
+    points = models.IntegerField(
+        verbose_name=_('How much this vote is worth'),
+        help_text=_('The amount of points you think this problem deserves.'),
+        validators=[
+            MinValueValidator(settings.DMOJ_PROBLEM_MIN_USER_POINTS_VOTE),
+            MaxValueValidator(settings.DMOJ_PROBLEM_MAX_USER_POINTS_VOTE),
+        ],
+    )
+
+    voter = models.ForeignKey(Profile, related_name='problem_points_votes', on_delete=CASCADE, db_index=True)
+    problem = models.ForeignKey(Problem, related_name='problem_points_votes', on_delete=CASCADE, db_index=True)
+
+    note = models.TextField(
+        verbose_name=_('note to go along with vote'),
+        help_text=_('Justification for problem points value.'),
+        max_length=2048,
+        blank=True,
+        default='',
+    )
+
+    class Meta:
+        verbose_name = _('Vote')
+        verbose_name_plural = _('Votes')
+
+    def __str__(self):
+        return f'{self.voter}: {self.points} for {self.problem.code} - "{self.note}"'

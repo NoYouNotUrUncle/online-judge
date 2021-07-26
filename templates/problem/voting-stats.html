@@ -1,0 +1,181 @@
+<style>
+    .vote-stats-background{
+        background-color: rgb(255,255,255);
+        padding: 20px;
+        border-radius: 25px;
+        justify-content: center;
+        align-items: center;
+        margin: auto;
+        text-align: center;
+    }
+
+    .canvas{
+        border: 1px;
+        border: solid;
+        border: #000000;
+    }
+
+    .vote-stats-value{
+        font-size: 24px;
+        font-family: "Segoe UI", "Lucida Grande", Arial, sans-serif;
+    }
+
+    .vote-stats-info{
+        font-size: 24px;
+        font-weight: 500;
+        font-family: "Segoe UI", "Lucida Grande", Arial, sans-serif;
+        padding: 10px;
+    }
+
+    .vote-stats-prompt{
+        font-size: 18px;
+        font-weight: 500;
+        font-family: "Segoe UI", "Lucida Grande", Arial, sans-serif;
+        padding: 10px;
+    }
+
+    a.vote-stats-prompt{
+        cursor: pointer;
+    }
+</style>
+
+<div class="vote-stats-background" id="id_vote_stats">
+    <script src={{ static('libs/chart.js/Chart.js') }}></script>
+    <span class="vote-stats-info">{{ _('Voting Statistics') }}</span>
+    <br/>
+    <canvas class="canvas" id="id_vote_chart"></canvas>
+    <span id="id_no_votes_error" class="vote-stats-info">{{ _('No Votes Available!') }}</span>
+    <br/>
+    <div id="id_has_votes_footer">
+        <span class="vote-stats-info">{{ _('Median Vote:') }}</span>
+        <span class="vote-stats-value" id="id_median_vote"></span>
+        <span class="vote-stats-info">{{ _('Mean Vote:') }}</span>
+        <span class="vote-stats-value" id="id_mean_vote"></span>
+        <span class="vote-stats-info">{{ _('Number of Votes:') }}</span>
+        <span class="vote-stats-value" id="id_num_of_votes"></span>
+    </div>
+    <div id="id_no_votes_footer">
+        <br/>
+        {% if can_vote %}
+            <a id="id_forward_vote" class="vote-stats-prompt">Be the first to vote!</a>
+            <script>
+                $('#id_forward_vote').on('click', () => {
+                    closeLightbox('id_vote_stats_lightbox');
+                    activateLightbox('id_voting_lightbox');
+                });
+            </script>
+        {% elif not authed %}
+            <a href="../accounts/login/?next=/problem/{{ problem_code }}/submit" class="vote-stats-prompt">Sign in and solve this problem to vote!</a>
+        {% elif user_banned_voting %}
+            <span class="vote-stats-prompt">No! You don't get to vote!</span>
+        {% else %}
+            <a href="{{ problem_code }}/submit" class="vote-stats-prompt">Solve this problem to vote!</a>
+        {% endif %}
+    </div>
+</div>
+
+<script>
+    let voteChart = null;
+    let data = [];
+    {% for vote in all_votes %}
+        data.push({{ vote }});
+    {% endfor %}
+    function reload_vote_graph() {
+        if (voteChart != null) voteChart.destroy();
+
+        if (data.length === 0) {
+            $('#id_no_votes_footer').prop('hidden', false);
+            $('#id_vote_chart').prop('hidden', true);
+            $('#id_has_votes_footer').prop('hidden', true);
+            $('#id_no_votes_error').prop('hidden', false);
+        } else {
+            $('#id_no_votes_footer').prop('hidden', true);
+            $('#id_vote_chart').prop('hidden', false);
+            $('#id_has_votes_footer').prop('hidden', false);
+            $('#id_no_votes_error').prop('hidden', true);
+
+            data.sort();
+            let min_points = data[0];
+            let max_points = data[data.length - 1];
+
+            // give the graph some padding on both sides
+            min_points = Math.max(min_points - 2, {{ min_possible_vote }});
+            max_points = Math.min({{ max_possible_vote }}, max_points + 2);
+
+            let xlabels = [];
+            let voteFreq = [];
+            for (let i = min_points; i <= max_points; i++) {
+                xlabels.push(i);
+                voteFreq.push(0);
+            }
+
+            let max_number_of_votes = 0;
+            let total_votes = 0;
+            let mean = 0;
+
+            for (let i = 0; i < data.length; i++) {
+                // assume data is valid
+                voteFreq[data[i] - min_points]++;
+                max_number_of_votes = Math.max(max_number_of_votes, voteFreq[data[i] - min_points]);
+                mean += data[i];
+                total_votes++;
+            }
+
+            mean = mean / total_votes;
+            let half = Math.floor(total_votes / 2);
+            let median = data[half];
+            if (total_votes % 2 === 0) {
+                median = (median + data[half - 1]) / 2;
+            }
+
+            $('#id_mean_vote').prop('innerText', mean.toFixed(2));
+            $('#id_median_vote').prop('innerText', median.toFixed(2));
+            $('#id_num_of_votes').prop('innerText', total_votes);
+
+            const voteData = {
+                labels: xlabels,
+                datasets: [{
+                    label: 'Number of votes for this point value',
+                    data: voteFreq,
+                    borderColor: 'red',
+                    backgroundColor: 'pink',
+                }]
+            };
+
+            const voteDataConfig = {
+                type: 'bar',
+                data: voteData,
+                options: {
+                    responsive: true,
+                    scales: {
+                        yAxes: [{
+                            ticks: {
+                                precision: 0,
+                                suggestedMax: Math.ceil(max_number_of_votes * 1.2),
+                                beginAtZero: true,
+                            }
+                        }],
+                        xAxes: [{
+                            ticks: {
+                                beginAtZero: false,
+                            }
+                        }]
+                    }
+                }
+            };
+            voteChart = new Chart($('#id_vote_chart').get(0), voteDataConfig);
+        }
+    }
+
+    function updateUserVote(prev_voted_points, voted_points) {
+        let index = data.indexOf(prev_voted_points);
+        if (index > -1) {
+            data.splice(index, 1);
+        }
+        data.push(voted_points);
+    }
+
+    function deleteUserVote(prev_voted_points) {
+        data.splice(data.indexOf(prev_voted_points), 1);
+    }
+</script>

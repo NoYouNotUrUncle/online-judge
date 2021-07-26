@@ -1,0 +1,36 @@
+<style>
+    .lightbox {
+        position: fixed;
+        z-index: 1000;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(22,27,34,0.8);
+        display: none;
+    }
+
+    .lightbox-active {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+</style>
+<script>
+    function closeLightbox(id_lightbox){
+        $('#'+id_lightbox).removeClass('lightbox-active')
+    }
+
+    function createLightbox(id_lightbox, id_content) {
+        $(`<div id="${id_lightbox}" class="lightbox"/>`)
+        .appendTo($('body'))
+        .append($('#'+id_content))
+        .on('click', e => {
+            if (e.target !== e.currentTarget) return;
+            closeLightbox(id_lightbox);
+        });
+    }
+
+    function activateLightbox(id_lightbox) {
+        $('#'+id_lightbox).addClass('lightbox-active')
+    }
+</script>

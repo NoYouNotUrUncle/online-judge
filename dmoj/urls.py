@@ -135,6 +135,9 @@ urlpatterns = [
         url(r'^/tickets$', ticket.ProblemTicketListView.as_view(), name='problem_ticket_list'),
         url(r'^/tickets/new$', ticket.NewProblemTicketView.as_view(), name='new_problem_ticket'),
 
+        url(r'^/delete_vote$', problem.DeleteVote.as_view(), name='delete_vote'),
+        url(r'^/vote$', problem.Vote.as_view(), name='vote'),
+
         url(r'^/manage/submission', include([
             url('^$', problem_manage.ManageProblemSubmissionView.as_view(), name='problem_manage_submissions'),
             url('^/rejudge$', problem_manage.RejudgeSubmissionsView.as_view(), name='problem_submissions_rejudge'),
