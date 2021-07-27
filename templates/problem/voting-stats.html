@@ -76,12 +76,9 @@
 
 <script>
     let voteChart = null;
-    let data = [];
-    {% for vote in all_votes %}
-        data.push({{ vote }});
-    {% endfor %}
+    let data = {{ all_votes }};
     function reload_vote_graph() {
-        if (voteChart != null) voteChart.destroy();
+        if (voteChart !== null) voteChart.destroy();
 
         if (data.length === 0) {
             $('#id_no_votes_footer').prop('hidden', false);
@@ -95,12 +92,9 @@
             $('#id_no_votes_error').prop('hidden', true);
 
             data.sort();
-            let min_points = data[0];
-            let max_points = data[data.length - 1];
-
             // give the graph some padding on both sides
-            min_points = Math.max(min_points - 2, {{ min_possible_vote }});
-            max_points = Math.min({{ max_possible_vote }}, max_points + 2);
+            let min_points = Math.max(data[0] - 2, {{ min_possible_vote }});
+            let max_points = Math.min(data[data.length - 1] + 2, {{ max_possible_vote }});
 
             let xlabels = [];
             let voteFreq = [];

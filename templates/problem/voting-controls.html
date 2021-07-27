@@ -66,7 +66,7 @@
             <script>
                 $('#id_points').keydown(e => {
                     const invalidChars = ['e','+','-','.'];
-                    if(invalidChars.includes(e.key)){
+                    if (invalidChars.includes(e.key)) {
                         e.preventDefault();
                     }
                 });
@@ -139,7 +139,7 @@
             has_voted = false;
         }
 
-        if(has_voted) voteUpdate();
+        if (has_voted) voteUpdate();
         else deleteVoteUpdate();
 
         $('#id_delete_vote_button').on('click', () => {
