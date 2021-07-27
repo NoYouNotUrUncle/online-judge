@@ -451,7 +451,7 @@ class Problem(models.Model):
         return len(ac_sub_points) > 0 and ac_sub_points[0] > self.points - 0.1
 
     def user_banned_voting(self, user):
-        # If user is unlisted
+        # If user is unlisted.
         if user.profile.is_unlisted:
             return True
 
@@ -586,8 +586,8 @@ class ProblemPointsVote(models.Model):
     )
 
     class Meta:
-        verbose_name = _('Vote')
-        verbose_name_plural = _('Votes')
+        verbose_name = _('vote')
+        verbose_name_plural = _('votes')
 
     def __str__(self):
-        return f'{self.voter}: {self.points} for {self.problem.code} - "{self.note}"'
+        return f'{self.voter}: {self.points} for {self.problem.code}'

@@ -37,6 +37,8 @@ Disallow: /problem/*/submissions
 Disallow: /problem/*/submit
 Disallow: /problem/*/test_data
 Disallow: /problem/*/tickets
+Disallow: /problem/*/delete_vote
+Disallow: /problem/*/vote
 Disallow: /src
 Disallow: /stats
 Disallow: /submission
