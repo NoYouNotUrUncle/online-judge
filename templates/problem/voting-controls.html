@@ -171,7 +171,8 @@
                     voted_note = data.note;
                     voted_points = data.points;
                     voteUpdate();
-                    $('#id_vote_form_submit_button').removeAttr('disabled'); //dmoj auto disables to prevent resubmission
+                    // Forms are auto disabled to prevent resubmission, but we need to allow resubmission here.
+                    $('#id_vote_form_submit_button').removeAttr('disabled');
                     closeLightbox('id_voting_lightbox');
                 },
                 error: data => {
