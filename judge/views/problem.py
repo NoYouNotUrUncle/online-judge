@@ -259,12 +259,12 @@ class DeleteVote(ProblemMixin, SingleObjectMixin, View):
     def post(self, request, *args, **kwargs):
         self.object = self.get_object()
         if not request.user.is_authenticated:
-            HttpResponseForbidden('not signed in', content_type='text/plain')
+            HttpResponseForbidden('Not signed in.', content_type='text/plain')
         elif self.object.can_vote(request.user):
             ProblemPointsVote.objects.filter(voter=request.user.profile, problem=self.object).delete()
             return HttpResponse('success', content_type='text/plain')
         else:
-            return HttpResponseForbidden('not allowed to delete votes on this problem', content_type='text/plain')
+            return HttpResponseForbidden('Not allowed to delete votes on this problem.', content_type='text/plain')
 
 
 class Vote(ProblemMixin, SingleObjectMixin, View):
