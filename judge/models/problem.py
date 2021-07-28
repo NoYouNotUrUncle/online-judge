@@ -444,11 +444,13 @@ class Problem(models.Model):
 
     def user_has_full_ac(self, user):
         # The points of all ac submissions in decreasing order.
-        ac_sub_points = list(self.submission_set.filter(user=user.profile, result='AC')
-                                 .order_by('-points')
-                                 .values_list('points', flat=True))
-        # if the first ac is a full ac, < 0.1 instead of == for pointer precision
-        return len(ac_sub_points) > 0 and ac_sub_points[0] > self.points - 0.1
+        # ac_sub_points = list(self.submission_set.filter(user=user.profile, result='AC')
+        #                         .order_by('-points')
+        #                         .values_list('points', flat=True))
+
+        # If the first ac is a full ac, < 0.1 instead of == for pointer precision.
+        # return len(ac_sub_points) > 0 and ac_sub_points[0] > self.points - 0.1
+        return self.submission_set.filter(user=user.profile, result='AC', points=F('problem__points')).eixsts()
 
     def user_banned_voting(self, user):
         # If user is unlisted.
@@ -566,7 +568,7 @@ class Solution(models.Model):
 
 class ProblemPointsVote(models.Model):
     points = models.IntegerField(
-        verbose_name=_('How much this vote is worth'),
+        verbose_name=_('how much this vote is worth'),
         help_text=_('The amount of points you think this problem deserves.'),
         validators=[
             MinValueValidator(settings.DMOJ_PROBLEM_MIN_USER_POINTS_VOTE),
