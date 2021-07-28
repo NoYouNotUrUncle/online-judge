@@ -5,7 +5,6 @@ class VoteAdmin(admin.ModelAdmin):
     list_display = ('points', 'voter', 'problem', 'note')
     search_fields = ('voter', 'problem')
 
-    # if the user has edit all problem or other editing permissions, so superusers
     def has_change_permission(self, request, obj=None):
         if obj is None:
             return request.user.has_perm('judge.edit_own_problem')

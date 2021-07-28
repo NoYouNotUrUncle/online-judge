@@ -92,7 +92,7 @@
             $('#id_no_votes_error').prop('hidden', true);
 
             data.sort();
-            // give the graph some padding on both sides
+            // Give the graph some padding on both sides.
             let min_points = Math.max(data[0] - 2, {{ min_possible_vote }});
             let max_points = Math.min(data[data.length - 1] + 2, {{ max_possible_vote }});
 
@@ -108,7 +108,7 @@
             let mean = 0;
 
             for (let i = 0; i < data.length; i++) {
-                // assume data is valid
+                // Assume the data is valid.
                 voteFreq[data[i] - min_points]++;
                 max_number_of_votes = Math.max(max_number_of_votes, voteFreq[data[i] - min_points]);
                 mean += data[i];
