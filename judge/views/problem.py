@@ -228,7 +228,7 @@ class ProblemDetail(ProblemMixin, SolvedProblemMixin, CommentedDetailView):
         context['problem_code'] = self.object.code
 
         context['can_vote'] = self.object.can_vote(user)
-        # the vote this user has already cast on this problem
+        # The vote this user has already cast on this problem.
         if context['can_vote']:
             try:
                 vote = ProblemPointsVote.objects.get(voter=user.profile, problem=self.object)
@@ -237,7 +237,7 @@ class ProblemDetail(ProblemMixin, SolvedProblemMixin, CommentedDetailView):
 
         context['has_voted'] = context['can_vote'] and vote is not None
         if context['has_voted']:
-            context['voted_points'] = vote.points  # the previous vote's points
+            context['voted_points'] = vote.points  # The previous vote's points.
             context['voted_note'] = vote.note
 
         all_votes = list(self.object.problem_points_votes.order_by('points').values_list('points', flat=True))
@@ -261,7 +261,7 @@ class DeleteVote(ProblemMixin, SingleObjectMixin, View):
         if not request.user.is_authenticated:
             HttpResponseForbidden('Not signed in.', content_type='text/plain')
         elif self.object.can_vote(request.user):
-            ProblemPointsVote.objects.filter(voter=request.user.profile, problem=self.object).delete()
+            ProblemPointsVote.objects.filter(voter=request.profile, problem=self.object).delete()
             return HttpResponse('success', content_type='text/plain')
         else:
             return HttpResponseForbidden('Not allowed to delete votes on this problem.', content_type='text/plain')
@@ -270,12 +270,12 @@ class DeleteVote(ProblemMixin, SingleObjectMixin, View):
 class Vote(ProblemMixin, SingleObjectMixin, View):
     def post(self, request, *args, **kwargs):
         self.object = self.get_object()
-        if not self.object.can_vote(request.user):  # not allowed to vote for some reason
+        if not self.object.can_vote(request.user):  # Not allowed to vote for some reason.
             return HttpResponseForbidden('Not allowed to vote on this problem.', content_type='text/plain')
         else:
             form = ProblemPointsVoteForm(request.POST)
             if form.is_valid():
-                # delete any pre existing votes
+                # Delete any pre existing votes.
                 ProblemPointsVote.objects.filter(voter=request.user.profile, problem=self.object).delete()
                 vote = form.save(commit=False)
                 vote.voter = request.profile
