@@ -276,7 +276,7 @@ class Vote(ProblemMixin, SingleObjectMixin, View):
             form = ProblemPointsVoteForm(request.POST)
             if form.is_valid():
                 # Delete any pre existing votes.
-                ProblemPointsVote.objects.filter(voter=request.profile, problem=self.object).delete()
+                ProblemPointsVote.objects.filter(voter=request.user.profile, problem=self.object).delete()
                 vote = form.save(commit=False)
                 vote.voter = request.profile
                 vote.problem = self.object
