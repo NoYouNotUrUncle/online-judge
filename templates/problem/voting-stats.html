@@ -91,7 +91,18 @@
             $('#id_has_votes_footer').prop('hidden', false);
             $('#id_no_votes_error').prop('hidden', true);
 
+            console.log("before");
+            for(let i=0; i<data.length; i++) {
+                console.log("i", i);
+                console.log("data[i]", data[i]);
+            }
             data.sort();
+            console.log("after");
+            for(let i=0; i<data.length; i++) {
+                console.log("i", i);
+                console.log("data[i]", data[i]);
+            }
+            console.log("end");
             // Give the graph some padding on both sides.
             let min_points = Math.max(data[0] - 2, {{ min_possible_vote }});
             let max_points = Math.min(data[data.length - 1] + 2, {{ max_possible_vote }});
