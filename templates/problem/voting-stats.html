@@ -126,6 +126,9 @@
             $('#id_median_vote').prop('innerText', median.toFixed(2));
             $('#id_num_of_votes').prop('innerText', total_votes);
 
+            console.log(xlabels);
+            console.log(data);
+            console.log(max_number_of_votes);
             const voteData = {
                 labels: xlabels,
                 datasets: [{
@@ -135,6 +138,7 @@
                     backgroundColor: 'pink',
                 }]
             };
+
 
             const voteDataConfig = {
                 type: 'bar',
