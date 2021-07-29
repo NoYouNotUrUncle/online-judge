@@ -107,14 +107,19 @@
             let total_votes = 0;
             let mean = 0;
 
+            console.log("min points", min_points);
+            console.log("max points", max_points);
+
             for (let i = 0; i < data.length; i++) {
                 // Assume the data is valid.
                 voteFreq[data[i] - min_points]++;
                 max_number_of_votes = Math.max(max_number_of_votes, voteFreq[data[i] - min_points]);
+                console.log("voteFreq", voteFreq[data[i]-min_points]);
+                console.log("max number of votes:", max_number_of_votes);
                 mean += data[i];
                 total_votes++;
             }
-
+            console.log("max number of votes:", max_number_of_votes);
             mean = mean / total_votes;
             let half = Math.floor(total_votes / 2);
             let median = data[half];
@@ -126,9 +131,13 @@
             $('#id_median_vote').prop('innerText', median.toFixed(2));
             $('#id_num_of_votes').prop('innerText', total_votes);
 
-            console.log(xlabels);
-            console.log(data);
+
+            for(let i=min_points; i<=max_points; i++) {
+
+            }
+
             console.log(max_number_of_votes);
+
             const voteData = {
                 labels: xlabels,
                 datasets: [{
