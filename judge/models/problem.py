@@ -450,7 +450,7 @@ class Problem(models.Model):
 
         # If the first ac is a full ac, < 0.1 instead of == for pointer precision.
         # return len(ac_sub_points) > 0 and ac_sub_points[0] > self.points - 0.1
-        return self.submission_set.filter(user=user.profile, result='AC', points=F('problem__points')).eixsts()
+        return self.submission_set.filter(user=user.profile, result='AC', points=F('problem__points')).exists()
 
     def user_banned_voting(self, user):
         # If user is unlisted.
