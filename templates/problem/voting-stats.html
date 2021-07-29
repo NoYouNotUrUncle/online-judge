@@ -96,7 +96,7 @@
                 console.log("i", i);
                 console.log("data[i]", data[i]);
             }
-            data.sort();
+            data.sort(function(a, b){return a-b});
             console.log("after");
             for(let i=0; i<data.length; i++) {
                 console.log("i", i);
