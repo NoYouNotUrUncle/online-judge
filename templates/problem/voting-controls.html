@@ -191,7 +191,7 @@
     </script>
 {% endif %}
 
-{% if not in_contest %}
+{% if not request.in_contest %}
     {% include 'problem/voting-stats.html' %}
     <a class="form-button" id="id_vote_stats_button">{{ _('Voting statistics') }}</a>
     <script>
