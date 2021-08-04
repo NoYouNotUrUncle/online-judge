@@ -65,11 +65,11 @@
                 });
             </script>
         {% elif not authed %}
-            <a href="../accounts/login/?next=/problem/{{ problem_code }}/submit" class="vote-stats-prompt">Sign in and solve this problem to vote!</a>
+            <a href="../accounts/login/?next=/problem/{{ object.code }}/submit" class="vote-stats-prompt">Sign in and solve this problem to vote!</a>
         {% elif user_banned_voting %}
             <span class="vote-stats-prompt">No! You don't get to vote!</span>
         {% else %}
-            <a href="{{ problem_code }}/submit" class="vote-stats-prompt">Solve this problem to vote!</a>
+            <a href="{{ object.code }}/submit" class="vote-stats-prompt">Solve this problem to vote!</a>
         {% endif %}
     </div>
 </div>
@@ -81,8 +81,6 @@
 
 
     function reload_vote_graph() {
-        console.log({{ object.code }});
-
         if (voteChart !== null) voteChart.destroy();
 
         if (data.length === 0) {

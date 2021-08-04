@@ -137,7 +137,7 @@
 
         $('#id_delete_vote_button').on('click', () => {
             $.ajax({
-                url: '{{ url('delete_vote', problem_code) }}',
+                url: '{{ url('delete_vote', object.code) }}',
                 type: 'POST',
                 data: $('#id_delete_vote_form').serialize(),
                 success: () => {
@@ -156,7 +156,7 @@
         $('#id_vote_form_submit_button').on('click', e => {
             e.preventDefault()
             $.ajax({
-                url: '{{ url('vote', problem_code) }}',
+                url: '{{ url('vote', object.code) }}',
                 type: 'POST',
                 data: $('#id_vote_form').serialize(),
                 success: data => {
