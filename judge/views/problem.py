@@ -221,6 +221,7 @@ class ProblemDetail(ProblemMixin, SolvedProblemMixin, CommentedDetailView):
         context['og_image'] = self.object.og_image or metadata[1]
 
         context['authed'] = user.is_authenticated
+
         if context['authed']:
             context['ac'] = self.object.user_has_full_ac(user)
             context['user_banned_voting'] = self.object.user_banned_voting(user)
@@ -259,7 +260,7 @@ class DeleteVote(ProblemMixin, SingleObjectMixin, View):
     def post(self, request, *args, **kwargs):
         self.object = self.get_object()
         if not request.user.is_authenticated:
-            HttpResponseForbidden('Not signed in.', content_type='text/plain')
+            return HttpResponseForbidden('Not signed in.', content_type='text/plain')
         elif self.object.can_vote(request.user):
             ProblemPointsVote.objects.filter(voter=request.profile, problem=self.object).delete()
             return HttpResponse('success', content_type='text/plain')
