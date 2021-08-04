@@ -233,8 +233,10 @@ class ProblemDetail(ProblemMixin, SolvedProblemMixin, CommentedDetailView):
                 vote = ProblemPointsVote.objects.get(voter=user.profile, problem=self.object)
             except ObjectDoesNotExist:
                 vote = None
+            context['has_voted'] = vote is not None
+        else:
+            context['has_voted'] = False
 
-        context['has_voted'] = context['can_vote'] and vote is not None
         if context['has_voted']:
             context['voted_points'] = vote.points  # The previous vote's points.
             context['voted_note'] = vote.note
