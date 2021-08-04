@@ -163,7 +163,7 @@
         $('#id_vote_form_submit_button').on('click', e => {
             e.preventDefault()
             $.ajax({
-                url: '{{ problem_code }}/vote',
+                url: '{{ url('vote', problem_code) }}',
                 type: 'POST',
                 data: $('#id_vote_form').serialize(),
                 success: data => {
