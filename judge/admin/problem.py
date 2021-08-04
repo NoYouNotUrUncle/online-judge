@@ -247,7 +247,7 @@ class ProblemAdmin(NoBatchDeleteMixin, VersionAdmin):
         return super(ProblemAdmin, self).construct_change_message(request, form, *args, **kwargs)
 
 
-class VoteAdmin(admin.ModelAdmin):
+class ProblemPointsVoteAdmin(admin.ModelAdmin):
     list_display = ('points', 'voter', 'problem', 'note')
     search_fields = ('voter', 'problem')
 
