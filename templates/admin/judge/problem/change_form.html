@@ -7,6 +7,11 @@
             $('.submissions-link').appendTo('div#bottombar').show();
         });
     </script>
+    <script>
+        django.jQuery(function ($) {
+            $('.votes-link').appendTo('div#bottombar').show();
+        });
+    </script>
 {% endblock extrahead %}
 
 {% block after_field_sets %}{{ block.super }}
@@ -16,7 +21,7 @@
             <i class="fa fa-lg fa-search-plus"></i>
             <span class="text">{{  _('View submissions') }}</span>
         </a>
-        <a style="display: none" title="{{ _('View votes') }}" class="button submissions-link"
+        <a style="display: none" title="{{ _('View votes') }}" class="button votes-link"
            href="{% url 'admin:judge_problempointsvote_changelist' %}?problem__code={{ original.code }}">
            <i class="fa fa-lg fa-envelope"></i>
            <span class="text">{{  _('View votes') }}</span>
