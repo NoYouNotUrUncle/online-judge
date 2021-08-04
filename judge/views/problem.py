@@ -243,8 +243,9 @@ class ProblemDetail(ProblemMixin, SolvedProblemMixin, CommentedDetailView):
 
         context['has_votes'] = len(all_votes) > 0
 
-        # If the user is not currently in contest.
-        if user.is_authenticated and user.profile.current_contest is not None:
+        context['in_contest'] = user.is_authenticated and user.profile.current_contest is not None
+
+        if not context['in_contest']:
             context['all_votes'] = all_votes
 
         context['max_possible_vote'] = settings.DMOJ_PROBLEM_MAX_USER_POINTS_VOTE
@@ -273,6 +274,7 @@ class Vote(ProblemMixin, SingleObjectMixin, View):
         else:
             form = ProblemPointsVoteForm(request.POST)
             if form.is_valid():
+
                 with transaction.atomic():
                     # Delete any pre existing votes.
                     ProblemPointsVote.objects.filter(voter=request.profile, problem=self.object).delete()

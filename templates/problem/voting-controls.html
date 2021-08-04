@@ -37,7 +37,7 @@
     }
 </style>
 
-{% if not request.in_contest %}
+{% if not in_contest %}
     <hr style="padding-top: 0.1em">
 {% endif %}
 
@@ -191,7 +191,7 @@
     </script>
 {% endif %}
 
-{% if not request.in_contest %}
+{% if not in_contest %}
     {% include 'problem/voting-stats.html' %}
     <a class="form-button" id="id_vote_stats_button">{{ _('Voting statistics') }}</a>
     <script>
