@@ -144,7 +144,7 @@
 
         $('#id_delete_vote_button').on('click', () => {
             $.ajax({
-                url: '{{ url('delete_vote', problem_code) }}',
+                url: '{{ problem_code }}/delete_vote',
                 type: 'POST',
                 data: $('#id_delete_vote_form').serialize(),
                 success: () => {
