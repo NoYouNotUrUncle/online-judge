@@ -226,8 +226,6 @@ class ProblemDetail(ProblemMixin, SolvedProblemMixin, CommentedDetailView):
             context['ac'] = self.object.user_has_full_ac(user)
             context['user_banned_voting'] = self.object.user_banned_voting(user)
 
-        context['problem_code'] = self.object.code
-
         context['can_vote'] = self.object.can_vote(user)
         # The vote this user has already cast on this problem.
         if context['can_vote']:
