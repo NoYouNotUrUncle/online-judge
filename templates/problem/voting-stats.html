@@ -78,9 +78,11 @@
     let voteChart = null;
     let data = {{ all_votes }};
 
-    console.log({{ original.code }});
+
 
     function reload_vote_graph() {
+        console.log({{ original.code }});
+
         if (voteChart !== null) voteChart.destroy();
 
         if (data.length === 0) {
