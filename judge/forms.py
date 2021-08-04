@@ -14,7 +14,7 @@ from django.urls import reverse_lazy
 from django.utils.translation import gettext_lazy as _
 
 from django_ace import AceWidget
-from judge.models import Contest, Language, Organization, Problem, ProblemPointsVote, Profile, Submission, \
+from judge.models import Contest, Language, Organization, Problem, ProblemPointsVoteAdmin, Profile, Submission, \
     WebAuthnCredential
 from judge.utils.subscription import newsletter_id
 from judge.widgets import HeavyPreviewPageDownWidget, Select2MultipleWidget, Select2Widget
@@ -289,5 +289,5 @@ class ContestCloneForm(Form):
 
 class ProblemPointsVoteForm(ModelForm):
     class Meta:
-        model = ProblemPointsVote
+        model = ProblemPointsVoteAdmin
         fields = ['points', 'note']
