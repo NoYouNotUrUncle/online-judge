@@ -90,13 +90,13 @@
             $('#id_vote_chart').prop('hidden', false);
             $('#id_has_votes_footer').prop('hidden', false);
             $('#id_no_votes_error').prop('hidden', true);
-
+            data.push(46);
             console.log("before");
             for(let i=0; i<data.length; i++) {
                 console.log("i", i);
                 console.log("data[i]", data[i]);
             }
-            data.push(46);
+
             data.sort();
             console.log("after");
             for(let i=0; i<data.length; i++) {
