@@ -559,7 +559,7 @@ class Solution(models.Model):
         verbose_name_plural = _('solutions')
 
 
-class ProblemPointsVote(models.Model):
+class ProblemPointsVoteAdmin(models.Model):
     points = models.IntegerField(
         verbose_name=_('how much this vote is worth'),
         help_text=_('The amount of points you think this problem deserves.'),
