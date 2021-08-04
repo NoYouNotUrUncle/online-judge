@@ -274,13 +274,14 @@ class Vote(ProblemMixin, SingleObjectMixin, View):
         else:
             form = ProblemPointsVoteForm(request.POST)
             if form.is_valid():
-                # Delete any pre existing votes.
-                ProblemPointsVote.objects.filter(voter=request.profile, problem=self.object).delete()
-                vote = form.save(commit=False)
-                vote.voter = request.profile
-                vote.problem = self.object
-                vote.note = vote.note.strip()
-                vote.save()
+                with transaction.atomic():
+                    # Delete any pre existing votes.
+                    ProblemPointsVote.objects.filter(voter=request.profile, problem=self.object).delete()
+                    vote = form.save(commit=False)
+                    vote.voter = request.profile
+                    vote.problem = self.object
+                    vote.note = vote.note.strip()
+                    vote.save()
                 return JsonResponse({'points': vote.points, 'note': vote.note})
             else:
                 return JsonResponse(form.errors, status=400)
