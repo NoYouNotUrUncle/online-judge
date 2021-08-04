@@ -18,7 +18,7 @@ class Migration(migrations.Migration):
                                       verbose_name='banned from voting'),
         ),
         migrations.CreateModel(
-            name='ProblemPointsVote',
+            name='ProblemPointsVoteAdmin',
             fields=[
                 ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
                 ('points', models.IntegerField(help_text='The amount of points you think this problem deserves.',
