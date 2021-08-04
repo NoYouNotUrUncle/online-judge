@@ -96,9 +96,6 @@
             let min_points = Math.max(data[0] - 2, {{ min_possible_vote }});
             let max_points = Math.min(data[data.length - 1] + 2, {{ max_possible_vote }});
 
-            console.log({{ min_possible_vote }});
-            console.log({{ max_possible_vote }});
-
             let xlabels = [];
             let voteFreq = [];
             for (let i = min_points; i <= max_points; i++) {
