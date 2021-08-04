@@ -27,7 +27,7 @@ from reversion import revisions
 
 from judge.comments import CommentedDetailView
 from judge.forms import ProblemCloneForm, ProblemPointsVoteForm, ProblemSubmitForm
-from judge.models import ContestSubmission, Judge, Language, Problem, ProblemGroup, ProblemPointsVote, \
+from judge.models import ContestSubmission, Judge, Language, Problem, ProblemGroup, ProblemPointsVoteAdmin, \
     ProblemTranslation, ProblemType, RuntimeVersion, Solution, Submission, SubmissionSource, \
     TranslatedProblemForeignKeyQuerySet
 from judge.pdf_problems import DefaultPdfMaker, HAS_PDF
@@ -231,7 +231,7 @@ class ProblemDetail(ProblemMixin, SolvedProblemMixin, CommentedDetailView):
         # The vote this user has already cast on this problem.
         if context['can_vote']:
             try:
-                vote = ProblemPointsVote.objects.get(voter=user.profile, problem=self.object)
+                vote = ProblemPointsVoteAdmin.objects.get(voter=user.profile, problem=self.object)
             except ObjectDoesNotExist:
                 vote = None
 
@@ -261,7 +261,7 @@ class DeleteVote(ProblemMixin, SingleObjectMixin, View):
         if not request.user.is_authenticated:
             HttpResponseForbidden('Not signed in.', content_type='text/plain')
         elif self.object.can_vote(request.user):
-            ProblemPointsVote.objects.filter(voter=request.profile, problem=self.object).delete()
+            ProblemPointsVoteAdmin.objects.filter(voter=request.profile, problem=self.object).delete()
             return HttpResponse('success', content_type='text/plain')
         else:
             return HttpResponseForbidden('Not allowed to delete votes on this problem.', content_type='text/plain')
@@ -276,7 +276,7 @@ class Vote(ProblemMixin, SingleObjectMixin, View):
             form = ProblemPointsVoteForm(request.POST)
             if form.is_valid():
                 # Delete any pre existing votes.
-                ProblemPointsVote.objects.filter(voter=request.profile, problem=self.object).delete()
+                ProblemPointsVoteAdmin.objects.filter(voter=request.profile, problem=self.object).delete()
                 vote = form.save(commit=False)
                 vote.voter = request.profile
                 vote.problem = self.object

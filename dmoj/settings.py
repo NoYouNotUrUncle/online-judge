@@ -188,7 +188,7 @@ else:
                     ],
                 },
                 {
-                    'model': 'judge.ProblemPointsVote',
+                    'model': 'judge.ProblemPointsVoteAdmin',
                     'icon': 'fa-envelope',
                 },
                 {
