@@ -444,12 +444,12 @@ class Problem(models.Model):
 
     def user_has_full_ac(self, user):
 
-        ac_sub_points = list(self.submission_set.filter(user=user.profile, result='AC')
-                                 .order_by('-points')
-                                 .values_list('points', flat=True))
+        #ac_sub_points = list(self.submission_set.filter(user=user.profile, result='AC')
+        #                         .order_by('-points')
+        #                         .values_list('points', flat=True))
 
-        return len(ac_sub_points) > 0 and ac_sub_points[0] > self.points - 0.1
-        # return self.submission_set.filter(user=user.profile, result='AC', points=F('problem__points')).exists()
+        #return len(ac_sub_points) > 0 and ac_sub_points[0] > self.points - 0.1
+        return self.submission_set.filter(user=user.profile, result='AC', points=F('problem__points')).exists()
 
     def user_banned_voting(self, user):
         # If user is unlisted.
