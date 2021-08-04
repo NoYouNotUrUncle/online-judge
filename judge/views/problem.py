@@ -243,9 +243,8 @@ class ProblemDetail(ProblemMixin, SolvedProblemMixin, CommentedDetailView):
 
         context['has_votes'] = len(all_votes) > 0
 
-        context['in_contest'] = user.is_authenticated and user.profile.current_contest is not None
-
-        if not context['in_contest']:
+        # If the user is not currently in contest and is authenticated.
+        if not user.is_authenticated or user.profile.current_contest is None:
             context['all_votes'] = all_votes
 
         context['max_possible_vote'] = settings.DMOJ_PROBLEM_MAX_USER_POINTS_VOTE
