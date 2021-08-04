@@ -90,20 +90,8 @@
             $('#id_vote_chart').prop('hidden', false);
             $('#id_has_votes_footer').prop('hidden', false);
             $('#id_no_votes_error').prop('hidden', true);
-            data.push(2);
-            console.log("before");
-            for(let i=0; i<data.length; i++) {
-                console.log("i", i);
-                console.log("data[i]", data[i]);
-            }
 
             data.sort(function(a, b){return a - b});
-            console.log("after");
-            for(let i=0; i<data.length; i++) {
-                console.log("i", i);
-                console.log("data[i]", data[i]);
-            }
-            console.log("end");
             // Give the graph some padding on both sides.
             let min_points = Math.max(data[0] - 2, {{ min_possible_vote }});
             let max_points = Math.min(data[data.length - 1] + 2, {{ max_possible_vote }});
@@ -129,13 +117,9 @@
                 // Assume the data is valid.
                 voteFreq[data[i] - min_points]++;
                 max_number_of_votes = Math.max(max_number_of_votes, voteFreq[data[i] - min_points]);
-                console.log("data[i]", data[i]);
-                console.log("voteFreq", voteFreq[data[i]-min_points]);
-                console.log("max number of votes:", max_number_of_votes);
                 mean += data[i];
                 total_votes++;
             }
-            console.log("max number of votes:", max_number_of_votes);
             mean = mean / total_votes;
             let half = Math.floor(total_votes / 2);
             let median = data[half];
@@ -146,13 +130,7 @@
             $('#id_mean_vote').prop('innerText', mean.toFixed(2));
             $('#id_median_vote').prop('innerText', median.toFixed(2));
             $('#id_num_of_votes').prop('innerText', total_votes);
-
-
-            for(let i=min_points; i<=max_points; i++) {
-
-            }
-
-            console.log(max_number_of_votes);
+            
 
             const voteData = {
                 labels: xlabels,
