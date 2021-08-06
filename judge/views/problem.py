@@ -220,9 +220,7 @@ class ProblemDetail(ProblemMixin, SolvedProblemMixin, CommentedDetailView):
         context['meta_description'] = self.object.summary or metadata[0]
         context['og_image'] = self.object.og_image or metadata[1]
 
-        context['authed'] = user.is_authenticated
-
-        if context['authed']:
+        if authed:
             context['ac'] = self.object.user_has_full_ac(user)
             context['user_banned_voting'] = self.object.user_banned_voting(user)
 
