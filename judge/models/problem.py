@@ -450,15 +450,12 @@ class Problem(models.Model):
         if user.profile.current_contest:
             return False
 
-        # If the user is not allowed to vote (either to the problem or in general).
-        if self.user_banned_voting(user) or user.profile.is_banned_problem_voting:
+        # If the user is not allowed to vote
+        if user.profile.is_unlisted or user.profile.is_banned_problem_voting:
             return False
 
         # If the user is banned from submitting to the problem.
         if self.banned_users.filter(pk=user.pk).exists():
-            return False
-
-        if user.profile.is_unlisted:
             return False
 
         # If the user has a full AC submission to the problem (solved the problem).
