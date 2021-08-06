@@ -72,6 +72,7 @@
             </div>
             <br/>
             <span class="vote-form-info">{{ _('Note') }}</span>
+            {{ voted_note|json_script('voted-note')}}
             <br/>
             <textarea id="id_note" class="vote-form-text" name="note" rows="6" cols="80"></textarea>
             <br/>
@@ -92,9 +93,6 @@
         {% csrf_token %}
         <a class="form-button" id="id_delete_vote_button">{{ _('Delete vote') }}</a>
     </form>
-    {% if has_voted %}
-        {{ voted_note|json_script('voted-note')}}
-    {% endif %}
     <script>
         let voted_points = null;
         let voted_note = null;
