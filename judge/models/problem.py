@@ -442,20 +442,6 @@ class Problem(models.Model):
 
     save.alters_data = True
 
-    def user_has_full_ac(self, user):
-        return self.submission_set.filter(user=user.profile, result='AC', points=F('problem__points')).exists()
-
-    def user_banned_voting(self, user):
-        # If user is unlisted.
-        if user.profile.is_unlisted:
-            return True
-
-        # Site wide voting ban.
-        if user.profile.is_banned_problem_voting:
-            return True
-
-        return False
-
     def can_vote(self, user):
         if not user.is_authenticated:
             return False
@@ -464,15 +450,19 @@ class Problem(models.Model):
         if user.profile.current_contest:
             return False
 
-        # If the user is not allowed to vote
-        if self.user_banned_voting(user):
+        # If the user is not allowed to vote (either to the problem or in general).
+        if self.user_banned_voting(user) or user.profile.is_banned_problem_voting:
             return False
 
         # If the user is banned from submitting to the problem.
         if self.banned_users.filter(pk=user.pk).exists():
             return False
 
-        return self.user_has_full_ac(user)
+        if user.profile.is_unlisted:
+            return False
+
+        # If the user has a full AC submission to the problem (solved the problem).
+        return self.submission_set.filter(user=user.profile, result='AC', points=F('problem__points')).exists()
 
     class Meta:
         permissions = (

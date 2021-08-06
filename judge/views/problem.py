@@ -220,10 +220,6 @@ class ProblemDetail(ProblemMixin, SolvedProblemMixin, CommentedDetailView):
         context['meta_description'] = self.object.summary or metadata[0]
         context['og_image'] = self.object.og_image or metadata[1]
 
-        if authed:
-            context['ac'] = self.object.user_has_full_ac(user)
-            context['user_banned_voting'] = self.object.user_banned_voting(user)
-
         context['can_vote'] = self.object.can_vote(user)
         # The vote this user has already cast on this problem.
         if context['can_vote']:
