@@ -93,7 +93,7 @@
         <a class="form-button" id="id_delete_vote_button">{{ _('Delete vote') }}</a>
     </form>
     {% if has_voted %}
-        {{ voted_note|json_script('voted-note')}}
+        {{ voted_note|json_script('voted_note')}}
     {% endif %}
     <script>
         let voted_points = null;
