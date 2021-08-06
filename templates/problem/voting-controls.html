@@ -92,13 +92,14 @@
         {% csrf_token %}
         <a class="form-button" id="id_delete_vote_button">{{ _('Delete vote') }}</a>
     </form>
-    {{ voted_note|json_script:"voted_note" }};
+
     <script>
         let voted_points = null;
         let voted_note = null;
         {% if has_voted %}
             let has_voted = true;
             voted_points = {{ voted_points }};
+            {{ voted_note|json_script:"voted_note" }};
             voted_note = JSON.parse(document.getElementById('voted_note').textContent);
         {% else %}
             let has_voted = false;
