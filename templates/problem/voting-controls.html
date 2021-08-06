@@ -99,7 +99,6 @@
         {% if has_voted %}
             let has_voted = true;
             voted_points = {{ voted_points }};
-            {{ voted_note|json_script:"voted_note" }};
             voted_note = JSON.parse(document.getElementById('voted_note').textContent);
         {% else %}
             let has_voted = false;
